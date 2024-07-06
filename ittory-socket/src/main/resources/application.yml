@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: api
+  profiles:
+    active: local
+  config:
+    import:
+      - domain.yml
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  security:
+    user:
+      name: user
+      password: 1234
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod

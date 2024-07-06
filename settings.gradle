@@ -1,0 +1,6 @@
+rootProject.name = 'ittory'
+include 'ittory-api'
+include 'ittory-domain'
+include 'ittory-socket'
+include 'ittory-common'
+include 'ittory-infra'
