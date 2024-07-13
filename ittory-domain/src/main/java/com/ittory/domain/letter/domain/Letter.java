@@ -45,17 +45,17 @@ public class Letter extends BaseEntity {
 
     private String title;
 
-    private String coverPhoto;
+    private String coverPhotoUrl;
 
     public static Letter toEntity(CoverType coverType, Font font, String receiverName, LocalDateTime deliveryDate,
-                                  String title, String coverPhoto) {
+                                  String title, String coverPhotoUrl) {
         return Letter.builder()
                 .coverType(coverType)
                 .font(font)
                 .receiverName(receiverName)
                 .deliveryDate(deliveryDate)
                 .title(title)
-                .coverPhoto(coverPhoto)
+                .coverPhotoUrl(coverPhotoUrl)
                 .build();
     }
 
