@@ -1,4 +1,4 @@
-package com.ittory.api;
+package com.ittory.socket;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
