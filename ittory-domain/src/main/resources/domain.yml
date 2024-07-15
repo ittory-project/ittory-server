@@ -2,7 +2,7 @@ spring:
   application:
     name: domain
   config:
-    import: optional:file:env/.env[.properties]
+    import: optional:classpath:env/.env[.properties]
   profiles:
     active: local
 
