@@ -1,23 +1,23 @@
 spring:
   application:
-    name: api
+    name: infra
+  config:
+    import: optional:classpath:env/.env[.properties]
   profiles:
     active: local
-  config:
-    import:
-      - domain.yml
-      - infra.yml
+
+aws:
+  s3:
+    accessKey: ${S3_ACCESS_KEY}
+    secretKey: ${S3_SECRET_KEY}
+    bucketName: ${S3_BUCKET_NAME}
+    baseUrl: ${S3_BASE_URL}
 
 ---
 spring:
   config:
     activate:
       on-profile: local
-
-  security:
-    user:
-      name: user
-      password: 1234
 
 ---
 spring:
