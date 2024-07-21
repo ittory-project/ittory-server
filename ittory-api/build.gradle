@@ -9,4 +9,7 @@ dependencies {
     implementation project(':ittory-domain')
 
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // swager
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 }

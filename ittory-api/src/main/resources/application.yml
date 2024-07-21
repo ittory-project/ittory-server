@@ -29,3 +29,4 @@ spring:
   config:
     activate:
       on-profile: prod
+
