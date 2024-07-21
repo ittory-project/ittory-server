@@ -1,9 +1,11 @@
-package com.ittory.domain.member.domain;
+package com.ittory.domain.letter.domain;
 
 import com.ittory.domain.common.BaseEntity;
-import com.ittory.domain.letter.domain.Letter;
-import jakarta.persistence.Column;
+import com.ittory.domain.letter.enums.LetterBoxType;
+import com.ittory.domain.member.domain.Member;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,16 +18,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "participant")
+@Entity(name = "letter_box")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Participant extends BaseEntity {
+public class LetterBox extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "participant_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,12 +37,14 @@ public class Participant extends BaseEntity {
     @JoinColumn(name = "letter_id")
     private Letter letter;
 
-    private String nickname;
-
-    public static Participant create(Member member, Letter letter) {
-        return Participant.builder()
+    @Enumerated(EnumType.STRING)
+    private LetterBoxType letterBoxType;
+    
+    public static LetterBox create(Member member, Letter letter, LetterBoxType type) {
+        return LetterBox.builder()
                 .member(member)
                 .letter(letter)
+                .letterBoxType(type)
                 .build();
     }
 

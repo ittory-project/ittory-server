@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Entity(name = "member")
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member extends BaseEntity {
 
     @Id
@@ -36,7 +37,7 @@ public class Member extends BaseEntity {
     private MemberStatus memberStatus;
 
 
-    public static Member toEntity(String email, String name, String profileImage) {
+    public static Member create(String email, String name, String profileImage) {
         return Member.builder()
                 .email(email)
                 .name(name)
