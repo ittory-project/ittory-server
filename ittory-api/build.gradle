@@ -21,5 +21,3 @@ dependencies {
     implementation project(':ittory-infra')
 
     testImplementation 'org.springframework.security:spring-security-test'
-}
-
