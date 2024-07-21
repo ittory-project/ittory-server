@@ -1,3 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group 'com.ittory'
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
 bootJar.enabled = true
 
 jar.enabled = false
@@ -7,6 +18,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation project(':ittory-domain')
+    implementation project(':ittory-infra')
 
     testImplementation 'org.springframework.security:spring-security-test'
 
