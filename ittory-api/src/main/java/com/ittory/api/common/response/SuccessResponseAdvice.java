@@ -22,6 +22,12 @@ public class SuccessResponseAdvice implements ResponseBodyAdvice {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
                                   Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
 
+        if (request.getURI().getPath().contains("/swagger") ||
+                request.getURI().getPath().contains("/v3/api-docs") ||
+                request.getURI().getPath().contains("/swagger-ui")) {
+            return body;
+        }
+
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
 
         int status = servletResponse.getStatus();
