@@ -6,6 +6,7 @@ import com.ittory.domain.member.domain.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,15 +29,23 @@ public class LetterBox extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "letter_id")
     private Letter letter;
 
     @Enumerated(EnumType.STRING)
     private LetterBoxType letterBoxType;
+    
+    public static LetterBox create(Member member, Letter letter, LetterBoxType type) {
+        return LetterBox.builder()
+                .member(member)
+                .letter(letter)
+                .letterBoxType(type)
+                .build();
+    }
 
 }
