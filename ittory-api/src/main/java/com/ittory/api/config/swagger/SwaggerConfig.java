@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "Ittory", description = "Ittory API 명세서", version = "v1")) // v1 VS 0.1
-//        contact = @Contact(name = "JamJamyy", email = "jamjamyy@kau.kr")
+@OpenAPIDefinition(info = @Info(title = "Ittory", description = "Ittory API 명세서", version = "v1"))
 @SecurityScheme(
         name = "bearerAuth",
         type = SecuritySchemeType.HTTP,
