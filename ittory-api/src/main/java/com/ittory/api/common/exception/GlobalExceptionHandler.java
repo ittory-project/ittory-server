@@ -2,6 +2,7 @@ package com.ittory.api.common.exception;
 
 import static com.ittory.common.exception.ErrorStatus.BAD_REQUEST;
 import static com.ittory.common.exception.ErrorStatus.INTERNAL_SERVER;
+import static com.ittory.common.exception.ErrorStatus.NOT_FOUND;
 
 import com.ittory.common.exception.CommonErrorCode;
 import com.ittory.common.exception.ErrorInfo;
@@ -10,9 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 @Slf4j
@@ -20,6 +23,33 @@ public class GlobalExceptionHandler {
 
     private static final String LOG_FORMAT = "Error: {}, Class : {}, Message : {}";
     private static final String LOG_CODE_FORMAT = "Error: {}, Class : {}, Code : {}, Message : {}";
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse<?>> notFoundException(NoResourceFoundException exception) {
+
+        log.error(LOG_FORMAT, "Not Found", exception.getClass().getSimpleName(), exception.getMessage());
+
+        CommonErrorCode errorCode = CommonErrorCode.NOT_FOUND_ERROR;
+        ErrorInfo<?> errorInfo = new ErrorInfo<>(errorCode.getCode(), errorCode.getMessage(),
+                exception.getResourcePath());
+
+        return ResponseEntity.status(errorCode.getStatus().getValue())
+                .body(ErrorResponse.of(NOT_FOUND, errorInfo));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse<?>> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
+
+        log.error(LOG_FORMAT, "MethodArgumentNotValidException", exception.getClass().getSimpleName(),
+                exception.getMessage());
+
+        CommonErrorCode errorCode = CommonErrorCode.INVALID_REQUEST_CONTENT;
+        ErrorInfo<?> errorInfo = new ErrorInfo<>(errorCode.getCode(), errorCode.getMessage(),
+                exception.getDetailMessageArguments());
+
+        return ResponseEntity.status(errorCode.getStatus().getValue())
+                .body(ErrorResponse.of(BAD_REQUEST, errorInfo));
+    }
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<ErrorResponse<?>> applicationException(GlobalException exception) {
@@ -93,18 +123,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse<?>> handleException(Exception exception) {
 
-        log.error(
-                LOG_FORMAT,
-                "Exception",
-                exception.getClass().getSimpleName(),
-                exception.getMessage()
-        );
+        log.error(LOG_FORMAT, "Exception", exception.getClass().getSimpleName(), exception.getMessage());
 
         CommonErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
         ErrorInfo<?> errorInfo = new ErrorInfo<>(errorCode.getCode(), errorCode.getMessage(), null);
 
-        return ResponseEntity.internalServerError()
-                .body(ErrorResponse.of(INTERNAL_SERVER, errorInfo));
+        return ResponseEntity.internalServerError().body(ErrorResponse.of(INTERNAL_SERVER, errorInfo));
     }
 
 }
