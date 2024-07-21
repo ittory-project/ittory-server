@@ -24,7 +24,7 @@ public class LetterImage extends BaseEntity {
 
     private String url;
 
-    public static LetterImage toEntity(String url) {
+    public static LetterImage create(String url) {
         return LetterImage.builder()
                 .url(url)
                 .build();

@@ -37,7 +37,7 @@ public class Member extends BaseEntity {
     private MemberStatus memberStatus;
 
 
-    public static Member toEntity(String email, String name, String profileImage) {
+    public static Member create(String email, String name, String profileImage) {
         return Member.builder()
                 .email(email)
                 .name(name)

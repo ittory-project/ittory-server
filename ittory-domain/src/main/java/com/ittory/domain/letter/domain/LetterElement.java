@@ -39,7 +39,7 @@ public class LetterElement extends BaseEntity {
 
     private String content;
 
-    public static LetterElement toEntity(Letter letter, LetterImage letterImage, Integer sort, String content) {
+    public static LetterElement create(Letter letter, LetterImage letterImage, Integer sort, String content) {
         return LetterElement.builder()
                 .letter(letter)
                 .letterImage(letterImage)

@@ -37,7 +37,7 @@ public class MemberWithdraw extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private WithdrawReason withdrawReason;
 
-    public static MemberWithdraw toEntity(Member member, WithdrawReason withdrawReason) {
+    public static MemberWithdraw create(Member member, WithdrawReason withdrawReason) {
         return MemberWithdraw.builder()
                 .member(member)
                 .withdrawReason(withdrawReason)

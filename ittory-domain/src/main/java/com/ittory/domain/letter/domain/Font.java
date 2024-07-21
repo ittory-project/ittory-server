@@ -26,7 +26,7 @@ public class Font extends BaseEntity {
 
     private String name;
 
-    public static Font toEntity(String name) {
+    public static Font create(String name) {
         return Font.builder()
                 .name(name)
                 .build();

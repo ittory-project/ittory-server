@@ -49,8 +49,8 @@ public class Letter extends BaseEntity {
 
     private String coverPhotoUrl;
 
-    public static Letter toEntity(CoverType coverType, Font font, String receiverName, LocalDateTime deliveryDate,
-                                  String title, String coverPhotoUrl) {
+    public static Letter create(CoverType coverType, Font font, String receiverName, LocalDateTime deliveryDate,
+                                String title, String coverPhotoUrl) {
         return Letter.builder()
                 .coverType(coverType)
                 .font(font)

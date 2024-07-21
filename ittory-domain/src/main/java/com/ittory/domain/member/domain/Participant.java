@@ -38,7 +38,7 @@ public class Participant extends BaseEntity {
 
     private String nickname;
 
-    public static Participant toEntity(Member member, Letter letter) {
+    public static Participant create(Member member, Letter letter) {
         return Participant.builder()
                 .member(member)
                 .letter(letter)

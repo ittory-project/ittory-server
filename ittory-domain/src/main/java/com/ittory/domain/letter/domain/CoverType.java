@@ -28,7 +28,7 @@ public class CoverType extends BaseEntity {
 
     private String url;
 
-    public static CoverType toEntity(String name, String url) {
+    public static CoverType create(String name, String url) {
         return CoverType.builder()
                 .name(name)
                 .url(url)
