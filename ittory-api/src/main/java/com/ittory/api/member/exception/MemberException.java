@@ -1,11 +1,11 @@
 package com.ittory.api.member.exception;
 
+import static com.ittory.api.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
+
 import com.ittory.common.exception.ErrorInfo;
 import com.ittory.common.exception.ErrorStatus;
 import com.ittory.common.exception.GlobalException;
-import lombok.Getter;
 
-@Getter
 public class MemberException extends GlobalException {
 
     public MemberException(ErrorStatus status, ErrorInfo<?> errorInfo) {
@@ -13,8 +13,9 @@ public class MemberException extends GlobalException {
     }
 
     public static class MemberNotFoundException extends MemberException {
-        public MemberNotFoundException(MemberErrorCode errorCode, Long memberId) {
-            super(errorCode.getStatus(), new ErrorInfo<>(errorCode.getCode(), errorCode.getMessage(), memberId));
+        public MemberNotFoundException(Long memberId) {
+            super(MEMBER_NOT_FOUND.getStatus(),
+                    new ErrorInfo<>(MEMBER_NOT_FOUND.getCode(), MEMBER_NOT_FOUND.getMessage(), memberId));
         }
     }
 }

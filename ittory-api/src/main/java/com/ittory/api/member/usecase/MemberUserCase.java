@@ -15,11 +15,11 @@ public class MemberUserCase {
 
     public MemberCreateResponse registerMember(String email, String name) {
         Member newMember = memberDomainService.saveMember(email, name);
-        return MemberCreateResponse.of(newMember);
+        return MemberCreateResponse.from(newMember);
     }
 
     public MemberSearchResponse searchMemberById(Long memberId) {
         Member member = memberDomainService.findMemberById(memberId);
-        return MemberSearchResponse.of(member);
+        return MemberSearchResponse.from(member);
     }
 }

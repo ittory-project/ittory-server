@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: domain
+  config:
+    import: optional:classpath:env/.env[.properties]
+  profiles:
+    active: local
+  jwt:
+    type: Bearer
+    secret: ${JWT_SECRET_KEY}
+    token:
+      access-expiration-time: ${JWT_ACCESS_EXPIRATION_TIME}
+      refresh-expiration-time: ${JWT_REFRESH_EXPIRATION_TIME}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
