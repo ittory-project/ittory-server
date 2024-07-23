@@ -15,7 +15,7 @@ public class MemberCreateResponse {
     private String email;
     private String name;
 
-    public static MemberCreateResponse of (Member member) {
+    public static MemberCreateResponse from(Member member) {
         return MemberCreateResponse.builder()
                 .id(member.getId())
                 .email(member.getEmail())

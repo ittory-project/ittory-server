@@ -15,7 +15,7 @@ public class MemberSearchResponse {
     private String email;
     private String name;
 
-    public static MemberSearchResponse of (Member member) {
+    public static MemberSearchResponse from(Member member) {
         return MemberSearchResponse.builder()
                 .id(member.getId())
                 .email(member.getEmail())

@@ -36,6 +36,8 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus;
 
+    private String refreshToken;
+
 
     public static Member create(String email, String name, String profileImage) {
         return Member.builder()
@@ -48,6 +50,10 @@ public class Member extends BaseEntity {
 
     public void changeStatus(MemberStatus memberStatus) {
         this.memberStatus = memberStatus;
+    }
+
+    public void changeRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
 }

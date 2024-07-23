@@ -7,17 +7,17 @@ spring:
     import:
       - domain.yml
       - infra.yml
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
+      - common.yml
 
   security:
     user:
       name: user
       password: 1234
+---
+spring:
+  config:
+    activate:
+      on-profile: local
 
 ---
 spring:
