@@ -13,8 +13,8 @@ public class MemberUserCase {
 
     private final MemberDomainService memberDomainService;
 
-    public MemberCreateResponse registerMember(Long socialId, String name) {
-        Member newMember = memberDomainService.saveMember(socialId, name);
+    public MemberCreateResponse registerMember(Long socialId, String name, String profileImage) {
+        Member newMember = memberDomainService.saveMember(socialId, name, profileImage);
         return MemberCreateResponse.from(newMember);
     }
 

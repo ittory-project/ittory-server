@@ -6,7 +6,6 @@ spring:
   profiles:
     active: local
   jwt:
-    type: Bearer
     secret: ${JWT_SECRET_KEY}
     token:
       access-expiration-time: ${JWT_ACCESS_EXPIRATION_TIME}

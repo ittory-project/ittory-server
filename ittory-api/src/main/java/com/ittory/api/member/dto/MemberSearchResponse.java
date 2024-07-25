@@ -14,12 +14,14 @@ public class MemberSearchResponse {
     private Long id;
     private Long socialId;
     private String name;
+    private String refreshToken;
 
     public static MemberSearchResponse from(Member member) {
         return MemberSearchResponse.builder()
                 .id(member.getId())
                 .socialId(member.getSocialId())
                 .name(member.getName())
+                .refreshToken(member.getRefreshToken())
                 .build();
     }
 }

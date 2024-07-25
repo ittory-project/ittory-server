@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class MemberCreateRequest {
     private Long socialId;
     private String name;
+    private String profileImage;
 }
