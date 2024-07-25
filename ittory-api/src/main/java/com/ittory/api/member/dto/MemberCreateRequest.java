@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MemberCreateRequest {
-    private String email;
+    private Long socialId;
     private String name;
 }

@@ -11,8 +11,8 @@ public class MemberDomainService {
 
     private final MemberRepository memberDomainRepository;
 
-    public Member saveMember(String email, String name) {
-        return memberDomainRepository.save(Member.create(email, name, null));
+    public Member saveMember(Long socialId, String name) {
+        return memberDomainRepository.save(Member.create(socialId, name, null));
     }
 
     public Member findMemberById(Long memberId) {

@@ -23,7 +23,7 @@ public class MemberController {
     @PostMapping("")
     public ResponseEntity<MemberCreateResponse> createMember(@RequestBody MemberCreateRequest memberCreateRequest) {
         MemberCreateResponse response = memberUserCase.registerMember(
-                memberCreateRequest.getEmail(),
+                memberCreateRequest.getSocialId(),
                 memberCreateRequest.getName()
         );
         return ResponseEntity.ok().body(response);

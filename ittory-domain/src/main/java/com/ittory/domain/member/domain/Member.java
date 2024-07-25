@@ -27,7 +27,7 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    private String email;
+    private Long socialId;
 
     private String name;
 
@@ -39,9 +39,9 @@ public class Member extends BaseEntity {
     private String refreshToken;
 
 
-    public static Member create(String email, String name, String profileImage) {
+    public static Member create(Long socialId, String name, String profileImage) {
         return Member.builder()
-                .email(email)
+                .socialId(socialId)
                 .name(name)
                 .profileImage(profileImage)
                 .memberStatus(MemberStatus.ACTIVE)
