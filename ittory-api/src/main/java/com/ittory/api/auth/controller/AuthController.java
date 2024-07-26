@@ -9,6 +9,7 @@ import com.ittory.api.auth.usecase.KaKaoLoginUseCase;
 import com.ittory.api.auth.usecase.LogoutUseCase;
 import com.ittory.api.auth.usecase.TokenRefreshUseCase;
 import com.ittory.domain.member.domain.Member;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class AuthController {
     private final TokenRefreshUseCase tokenRefreshUseCase;
     private final LogoutUseCase logoutUseCase;
 
+    @Operation(summary = "카카오 소셜 로그인")
     @PostMapping("/login/kakao")
     public ResponseEntity<AuthTokenResponse> loginByKaKao(@Valid @RequestBody KaKaoLoginRequest request) {
         AuthTokenResponse response = kaKaoLoginUseCase.execute(request.getCode());
@@ -36,6 +38,7 @@ public class AuthController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Access Token 갱신")
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshMemberToken(@Valid @RequestBody TokenRefreshRequest request) {
         TokenRefreshResponse response = tokenRefreshUseCase.execute(request.getAccessToken(),
@@ -43,6 +46,7 @@ public class AuthController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "로그아웃", description = "Authenticated")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@AuthMember Member member) {
         logoutUseCase.execute(member);
