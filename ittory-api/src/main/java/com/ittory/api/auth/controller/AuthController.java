@@ -1,11 +1,14 @@
 package com.ittory.api.auth.controller;
 
+import com.ittory.api.annotation.AuthMember;
 import com.ittory.api.auth.dto.AuthTokenResponse;
 import com.ittory.api.auth.dto.KaKaoLoginRequest;
 import com.ittory.api.auth.dto.TokenRefreshRequest;
 import com.ittory.api.auth.dto.TokenRefreshResponse;
 import com.ittory.api.auth.usecase.KaKaoLoginUseCase;
+import com.ittory.api.auth.usecase.LogoutUseCase;
 import com.ittory.api.auth.usecase.TokenRefreshUseCase;
+import com.ittory.domain.member.domain.Member;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class AuthController {
 
     private final KaKaoLoginUseCase kaKaoLoginUseCase;
     private final TokenRefreshUseCase tokenRefreshUseCase;
+    private final LogoutUseCase logoutUseCase;
 
     @PostMapping("/login/kakao")
     public ResponseEntity<AuthTokenResponse> loginByKaKao(@Valid @RequestBody KaKaoLoginRequest request) {
@@ -37,6 +41,12 @@ public class AuthController {
         TokenRefreshResponse response = tokenRefreshUseCase.execute(request.getAccessToken(),
                 request.getRefreshToken());
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@AuthMember Member member) {
+        logoutUseCase.execute(member);
+        return ResponseEntity.ok().build();
     }
 
 }
