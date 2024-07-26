@@ -7,7 +7,6 @@ import com.ittory.common.jwt.JwtProvider;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.service.MemberDomainService;
 import com.ittory.infra.oauth.kakao.KaKaoPlatformClient;
-import com.ittory.infra.oauth.kakao.dto.KaKaoTokenResponse;
 import com.ittory.infra.oauth.kakao.dto.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +21,10 @@ public class KaKaoLoginUseCase {
     private final MemberDomainService memberDomainService;
 
     public AuthTokenResponse execute(String code) {
-        KaKaoTokenResponse kaKaoToken = kaKaoPlatformClient.getToken(code);
-        MemberInfo memberInfo = kaKaoPlatformClient.getMemberInfo(kaKaoToken.getAccessToken());
+//        KaKaoTokenResponse kaKaoToken = kaKaoPlatformClient.getToken(code);
+//        System.out.println(kaKaoToken.getAccessToken());
+//        MemberInfo memberInfo = kaKaoPlatformClient.getMemberInfo(kaKaoToken.getAccessToken());
+        MemberInfo memberInfo = kaKaoPlatformClient.getMemberInfo(code);
         Member member = memberDomainService.findMemberBySocialId(memberInfo.getSocialId());
 
         if (member == null) {

@@ -2,6 +2,8 @@ package com.ittory.common.jwt;
 
 import static com.ittory.common.constant.TokenConstant.TOKEN_TYPER;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ittory.common.jwt.exception.JwtException;
 import com.ittory.common.jwt.exception.JwtException.InvalidateTokenException;
 import com.ittory.common.jwt.exception.JwtException.UnSupportedTokenException;
@@ -92,6 +94,20 @@ public class JwtProvider {
             throw new UnSupportedTokenException(token);
         }
         return splitToken[1];
+    }
+
+    public Long getSubByExpiredToken(String token) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String[] splitToken = token.split("\\.");
+            String base64EncodedBody = splitToken[1];
+            String body = new String(Base64.getUrlDecoder().decode(base64EncodedBody));
+            JsonNode payloadJson = objectMapper.readTree(body);
+            return Long.parseLong(payloadJson.get("sub").asText());
+        } catch (Exception exception) {
+            throw new InvalidateTokenException(token);
+        }
     }
 
 }
