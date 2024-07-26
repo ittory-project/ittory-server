@@ -6,6 +6,7 @@ import com.ittory.api.auth.dto.TokenRefreshRequest;
 import com.ittory.api.auth.dto.TokenRefreshResponse;
 import com.ittory.api.auth.usecase.KaKaoLoginUseCase;
 import com.ittory.api.auth.usecase.TokenRefreshUseCase;
+import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +26,14 @@ public class AuthController {
     private final TokenRefreshUseCase tokenRefreshUseCase;
 
     @PostMapping("/login/kakao")
-    public ResponseEntity<AuthTokenResponse> loginByKaKao(@RequestBody KaKaoLoginRequest request) {
+    public ResponseEntity<AuthTokenResponse> loginByKaKao(@Valid @RequestBody KaKaoLoginRequest request) {
         AuthTokenResponse response = kaKaoLoginUseCase.execute(request.getCode());
         log.info("Login with {} in {}", response.getAccessToken(), LocalDateTime.now());
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenRefreshResponse> refreshMemberToken(@RequestBody TokenRefreshRequest request) {
+    public ResponseEntity<TokenRefreshResponse> refreshMemberToken(@Valid @RequestBody TokenRefreshRequest request) {
         TokenRefreshResponse response = tokenRefreshUseCase.execute(request.getAccessToken(),
                 request.getRefreshToken());
         return ResponseEntity.ok().body(response);

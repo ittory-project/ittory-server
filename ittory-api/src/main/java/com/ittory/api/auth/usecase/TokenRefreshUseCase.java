@@ -3,6 +3,8 @@ package com.ittory.api.auth.usecase;
 import static com.ittory.common.constant.MemberRole.MEMBER;
 
 import com.ittory.api.auth.dto.TokenRefreshResponse;
+import com.ittory.api.auth.exception.AuthException.NoRefreshTokenException;
+import com.ittory.api.auth.exception.AuthException.RefreshTokenNotMatchException;
 import com.ittory.common.jwt.JwtProvider;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.service.MemberDomainService;
@@ -21,11 +23,11 @@ public class TokenRefreshUseCase {
         Member member = memberDomainService.findMemberById(memberId);
 
         if (member.getRefreshToken() == null) {
-            throw new IllegalArgumentException();
+            throw new NoRefreshTokenException();
         }
 
         if (!member.getRefreshToken().equals(refreshToken)) {
-            throw new IllegalArgumentException();
+            throw new RefreshTokenNotMatchException(refreshToken);
         }
 
         String newCreatedAccessToken = newCreatedAccessToken(memberId);
