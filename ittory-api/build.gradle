@@ -27,5 +27,5 @@ dependencies {
 }
 
 tasks.named('test') {
-    dependsOn ':ittory-domain:test', ':ittory-common:test'
+    dependsOn ':ittory-domain:test', ':ittory-common:test', ':ittory-infra:test'
 }
