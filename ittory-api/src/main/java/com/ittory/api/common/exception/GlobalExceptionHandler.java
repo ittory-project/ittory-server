@@ -43,6 +43,8 @@ public class GlobalExceptionHandler {
         log.error(LOG_FORMAT, "MethodArgumentNotValidException", exception.getClass().getSimpleName(),
                 exception.getMessage());
 
+        System.out.println(exception.getMessage());
+
         CommonErrorCode errorCode = CommonErrorCode.INVALID_REQUEST_CONTENT;
         ErrorInfo<?> errorInfo = new ErrorInfo<>(errorCode.getCode(), errorCode.getMessage(),
                 exception.getDetailMessageArguments());

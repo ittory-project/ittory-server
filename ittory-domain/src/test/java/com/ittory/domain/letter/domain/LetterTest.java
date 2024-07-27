@@ -15,7 +15,7 @@ public class LetterTest {
         // given
         Letter letter = Letter.create(null, null, null, null, "test-letter", null);
         String memberName = "test member";
-        Member member = Member.create("test@email.com", memberName, "http://member.Image");
+        Member member = Member.create(1L, memberName, "http://member.Image");
 
         // when
         letter.changeReceiver(member);

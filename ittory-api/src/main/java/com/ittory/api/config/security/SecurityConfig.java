@@ -1,5 +1,7 @@
 package com.ittory.api.config.security;
 
+import static com.ittory.common.constant.DBConstant.H2_PATH;
+
 import com.ittory.api.config.security.filter.CustomAuthenticationEntryPoint;
 import com.ittory.api.config.security.filter.ExceptionHandlerFilter;
 import com.ittory.api.config.security.filter.JwtAuthenticationFilter;
@@ -10,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -28,15 +31,17 @@ public class SecurityConfig {
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers(header -> header.frameOptions(FrameOptionsConfig::sameOrigin))
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(H2_PATH).permitAll()
+                        .requestMatchers("/api/auth/login/**", "/api/auth/refresh").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .exceptionHandling(
-                        (config) -> config.authenticationEntryPoint(customAuthenticationEntryPoint)
-                )
+                .exceptionHandling((config) -> config.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);

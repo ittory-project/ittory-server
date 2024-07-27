@@ -1,5 +1,7 @@
 package com.ittory.api.config.security.filter;
 
+import static com.ittory.common.constant.TokenConstant.ACCESS_TOKEN_HEADER;
+
 import com.ittory.api.auth.dto.MemberDetails;
 import com.ittory.common.jwt.AccessTokenInfo;
 import com.ittory.common.jwt.JwtProvider;
@@ -34,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getTokenByHeader(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+        return request.getHeader(ACCESS_TOKEN_HEADER);
     }
 
     private Authentication getAuthentication(String accessToken) {

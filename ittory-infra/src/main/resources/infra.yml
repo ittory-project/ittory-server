@@ -13,6 +13,11 @@ aws:
     bucketName: ${S3_BUCKET_NAME}
     baseUrl: ${S3_BASE_URL}
 
+kakao:
+  clientId: ${KAKAO_CLIENT_ID}
+  redirectUri: ${KAKAO_REDIRECT_URI}
+  clientSecret: ${KAKAO_CLIENT_SECRET}
+
 ---
 spring:
   config:

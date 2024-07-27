@@ -1,5 +1,9 @@
 package com.ittory.common.jwt;
 
+import static com.ittory.common.constant.TokenConstant.TOKEN_TYPER;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ittory.common.jwt.exception.JwtException;
 import com.ittory.common.jwt.exception.JwtException.InvalidateTokenException;
 import com.ittory.common.jwt.exception.JwtException.UnSupportedTokenException;
@@ -26,9 +30,6 @@ public class JwtProvider {
     @Value("${spring.jwt.secret}")
     private String SECRET_KEY;
 
-    @Value("${spring.jwt.type}")
-    private String TOKEN_TYPE;
-
     @Value("${spring.jwt.token.access-expiration-time}")
     private Long ACCESS_TOKEN_EXPIRATION_TIME;
 
@@ -41,7 +42,6 @@ public class JwtProvider {
     }
 
     private Key getSecretKey() {
-        System.out.println(SECRET_KEY);
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -89,11 +89,25 @@ public class JwtProvider {
     }
 
     private String getClaimsJws(String token) {
-        String[] splitToken = token.split(TOKEN_TYPE + " ");
-        if (!token.startsWith(TOKEN_TYPE + " ") && splitToken.length != 2) {
+        String[] splitToken = token.split(TOKEN_TYPER + " ");
+        if (!token.startsWith(TOKEN_TYPER + " ") && splitToken.length != 2) {
             throw new UnSupportedTokenException(token);
         }
         return splitToken[1];
+    }
+
+    public Long getSubByExpiredToken(String token) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String[] splitToken = token.split("\\.");
+            String base64EncodedBody = splitToken[1];
+            String body = new String(Base64.getUrlDecoder().decode(base64EncodedBody));
+            JsonNode payloadJson = objectMapper.readTree(body);
+            return Long.parseLong(payloadJson.get("sub").asText());
+        } catch (Exception exception) {
+            throw new InvalidateTokenException(token);
+        }
     }
 
 }

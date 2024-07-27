@@ -13,7 +13,7 @@ public class MemberTest {
     @Test
     void changeMemberStatusTest() {
         // given
-        Member member = Member.create("test@email.com", "test member", "http://member.Image");
+        Member member = Member.create(1L, "test member", "http://member.Image");
 
         // when
         member.changeStatus(MemberStatus.BANDED);
@@ -26,7 +26,7 @@ public class MemberTest {
     @Test
     void changeMemberRefreshTokenTest() {
         // given
-        Member member = Member.create("test@email.com", "test member", "http://member.Image");
+        Member member = Member.create(1L, "test member", "http://member.Image");
         String refreshToken = "changed.refresh.token";
 
         // when

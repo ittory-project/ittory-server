@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberCreateResponse {
     private Long id;
-    private String email;
+    private Long socialId;
     private String name;
 
     public static MemberCreateResponse from(Member member) {
         return MemberCreateResponse.builder()
                 .id(member.getId())
-                .email(member.getEmail())
+                .socialId(member.getSocialId())
                 .name(member.getName())
                 .build();
     }

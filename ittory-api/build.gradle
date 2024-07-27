@@ -25,3 +25,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
 }
+
+tasks.named('test') {
+    dependsOn ':ittory-domain:test', ':ittory-common:test', ':ittory-infra:test'
+}
