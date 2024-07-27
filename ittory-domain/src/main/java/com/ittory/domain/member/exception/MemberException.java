@@ -1,6 +1,6 @@
-package com.ittory.api.member.exception;
+package com.ittory.domain.member.exception;
 
-import static com.ittory.api.member.exception.MemberErrorCode.MEMBER_NOT_FOUND_ERROR;
+import static com.ittory.domain.member.exception.MemberErrorCode.MEMBER_NOT_FOUND_ERROR;
 
 import com.ittory.common.exception.ErrorInfo;
 import com.ittory.common.exception.ErrorStatus;

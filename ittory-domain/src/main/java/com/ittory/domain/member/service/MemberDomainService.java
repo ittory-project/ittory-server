@@ -1,6 +1,7 @@
 package com.ittory.domain.member.service;
 
 import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
 import com.ittory.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class MemberDomainService {
 
     @Transactional(readOnly = true)
     public Member findMemberById(Long memberId) {
-        return memberDomainRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
+        return memberDomainRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
     }
 
     @Transactional(readOnly = true)

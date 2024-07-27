@@ -1,12 +1,11 @@
 package com.ittory.infra.oauth.kakao.dto;
 
 import com.ittory.infra.oauth.kakao.dto.KaKaoMemberInfo.KaKaoProfile;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class MemberInfo {
 
     private Long socialId;
