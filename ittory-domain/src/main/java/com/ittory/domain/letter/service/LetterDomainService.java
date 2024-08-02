@@ -3,6 +3,8 @@ package com.ittory.domain.letter.service;
 import com.ittory.domain.letter.domain.CoverType;
 import com.ittory.domain.letter.domain.Font;
 import com.ittory.domain.letter.domain.Letter;
+import com.ittory.domain.letter.exception.CoverTypeException;
+import com.ittory.domain.letter.exception.FontException;
 import com.ittory.domain.letter.repository.CoverTypeRepository;
 import com.ittory.domain.letter.repository.FontRepository;
 import com.ittory.domain.letter.repository.LetterRepository;
@@ -23,10 +25,9 @@ public class LetterDomainService {
     private final MemberDomainService memberDomainService;
 
     public Letter saveLetter(Long coverTypeId, Long fontId, Long receiverId, String receiverName, LocalDateTime deliveryDate, String title, String coverPhotoUrl) {
-        CoverType coverType = coverTypeRepository.findById(coverTypeId).orElseThrow(IllegalArgumentException::new);
-        Font font = fontRepository.findById(fontId).orElseThrow(IllegalArgumentException::new);
+        CoverType coverType = coverTypeRepository.findById(coverTypeId) .orElseThrow(() -> new CoverTypeException.CoverTypeNotFoundException(coverTypeId));
+        Font font = fontRepository.findById(fontId).orElseThrow(() -> new FontException.FontNotFoundException(fontId));
 
-        Member receiver = memberDomainService.findMemberById(receiverId);
 
         Letter letter = Letter.create(
                 coverType,
@@ -36,8 +37,6 @@ public class LetterDomainService {
                 title,
                 coverPhotoUrl
         );
-
-        letter.changeReceiver(receiver);
 
         return letterRepository.save(letter);
     }

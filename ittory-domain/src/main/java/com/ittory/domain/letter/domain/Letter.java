@@ -61,9 +61,6 @@ public class Letter extends BaseEntity {
                 .build();
     }
 
-    public void changeReceiver(Member receiver) {
-        this.receiver = receiver;
-    }
 
 
 }

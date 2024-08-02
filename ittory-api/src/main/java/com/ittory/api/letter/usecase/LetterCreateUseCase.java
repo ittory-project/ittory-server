@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LetterUseCase {
+public class LetterCreateUseCase {
 
     private final LetterDomainService letterDomainService;
 
-    public LetterCreateResponse createLetter(LetterCreateRequest request) {
+    public LetterCreateResponse execute(LetterCreateRequest request) {
         Letter letter = letterDomainService.saveLetter(
                 request.getCoverTypeId(),
                 request.getFontId(),
@@ -23,7 +23,6 @@ public class LetterUseCase {
                 request.getTitle(),
                 request.getCoverPhotoUrl()
         );
-
         return LetterCreateResponse.from(letter);
     }
 }

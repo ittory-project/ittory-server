@@ -1,13 +1,12 @@
 package com.ittory.api.cover.dto;
 
 import com.ittory.domain.letter.domain.CoverType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@NoArgsConstructor
 @Builder
 @AllArgsConstructor
 public class CoverTypeCreateResponse {

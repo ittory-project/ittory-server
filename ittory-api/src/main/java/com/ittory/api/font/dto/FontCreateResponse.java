@@ -1,13 +1,12 @@
 package com.ittory.api.font.dto;
 
 import com.ittory.domain.letter.domain.Font;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@NoArgsConstructor
 @Builder
 @AllArgsConstructor
 public class FontCreateResponse {
