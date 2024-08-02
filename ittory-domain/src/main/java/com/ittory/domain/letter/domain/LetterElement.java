@@ -32,11 +32,12 @@ public class LetterElement extends BaseEntity {
     @JoinColumn(name = "letter_id")
     private Letter letter;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "letter_image_id")
     private LetterImage letterImage;
 
