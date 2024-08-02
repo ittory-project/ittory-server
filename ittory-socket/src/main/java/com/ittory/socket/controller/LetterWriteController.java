@@ -1,7 +1,6 @@
 package com.ittory.socket.controller;
 
-import com.ittory.domain.member.domain.Member;
-import com.ittory.socket.annotation.MessageMember;
+import com.ittory.common.annotation.CurrentMemberId;
 import com.ittory.socket.dto.ElementRequest;
 import com.ittory.socket.dto.ElementResponse;
 import com.ittory.socket.usecase.LetterWriteUseCase;
@@ -20,9 +19,10 @@ public class LetterWriteController {
     private final LetterWriteUseCase letterWriteUseCase;
 
     @MessageMapping("/letter/{letterId}/elements")
-    public void sendElement(@MessageMember Member member, @DestinationVariable Long letterId, ElementRequest request) {
+    public void sendElement(@CurrentMemberId Long memberId, @DestinationVariable Long letterId,
+                            ElementRequest request) {
         String destination = "/topic/letter/" + letterId;
-        ElementResponse response = letterWriteUseCase.execute(member, request);
+        ElementResponse response = letterWriteUseCase.execute(memberId, request);
         messagingTemplate.convertAndSend(destination, response);
     }
 

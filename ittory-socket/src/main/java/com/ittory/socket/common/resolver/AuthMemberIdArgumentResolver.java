@@ -1,8 +1,7 @@
 package com.ittory.socket.common.resolver;
 
-import com.ittory.domain.member.domain.Member;
+import com.ittory.common.annotation.CurrentMemberId;
 import com.ittory.domain.member.service.MemberDomainService;
-import com.ittory.socket.annotation.MessageMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -20,8 +19,8 @@ public class AuthMemberIdArgumentResolver implements HandlerMethodArgumentResolv
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(MessageMember.class) &&
-                parameter.getParameterType().equals(Member.class);
+        return parameter.hasParameterAnnotation(CurrentMemberId.class) &&
+                parameter.getParameterType().equals(Long.class);
     }
 
     @Override
@@ -33,7 +32,7 @@ public class AuthMemberIdArgumentResolver implements HandlerMethodArgumentResolv
 //            throw new WebSocketMessageSendingException("No member_id found in session attributes");
         }
 
-        return memberDomainService.findMemberById(memberId);
+        return memberId;
     }
 
 }
