@@ -1,8 +1,6 @@
 package com.ittory.api.auth.util;
 
-import com.ittory.api.annotation.AuthMember;
-import com.ittory.api.auth.dto.LoginInfo;
-import com.ittory.domain.member.domain.Member;
+import com.ittory.common.annotation.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
@@ -19,8 +17,8 @@ public class AuthUserIdArgumentResolver implements HandlerMethodArgumentResolver
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(AuthMember.class) &&
-                parameter.getParameterType().equals(Member.class);
+        return parameter.hasParameterAnnotation(CurrentMemberId.class) &&
+                parameter.getParameterType().equals(Long.class);
     }
 
     @Override
@@ -30,8 +28,8 @@ public class AuthUserIdArgumentResolver implements HandlerMethodArgumentResolver
                                   WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            long memberId = Long.parseLong(authentication.getName());
-            return LoginInfo.create(memberId);
+            return Long.parseLong(authentication.getName());
+//            return com.ittory.common.dto.LoginInfo.create(memberId);
         }
         return null;
     }

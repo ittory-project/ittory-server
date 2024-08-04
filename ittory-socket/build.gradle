@@ -6,4 +6,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     implementation project(':ittory-domain')
+    implementation project(':ittory-common')
+}
+
+tasks.named('test') {
+    dependsOn ':ittory-domain:test', ':ittory-common:test'
 }
