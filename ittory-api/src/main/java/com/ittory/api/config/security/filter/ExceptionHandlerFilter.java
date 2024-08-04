@@ -1,7 +1,7 @@
 package com.ittory.api.config.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ittory.api.common.exception.ErrorResponse;
+import com.ittory.common.exception.ErrorResponse;
 import com.ittory.common.jwt.exception.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,10 +1,8 @@
-package com.ittory.api.common.exception;
+package com.ittory.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.ittory.common.exception.ErrorInfo;
-import com.ittory.common.exception.ErrorStatus;
 import lombok.Builder;
 import lombok.Getter;
 
