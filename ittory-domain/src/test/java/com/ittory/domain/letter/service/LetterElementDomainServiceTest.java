@@ -66,6 +66,7 @@ public class LetterElementDomainServiceTest {
         Letter letter = Letter.create(coverType, font, "receiver", LocalDateTime.now(), "title", "image");
         LetterElement element = LetterElement.create(letter, null, letterImage, 0, null);
 
+        memberRepository.save(member);
         coverTypeRepository.save(coverType);
         fontRepository.save(font);
         letterImageRepository.save(letterImage);
