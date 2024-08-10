@@ -20,7 +20,7 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
         Participant fetch = jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.letter, letter).fetchJoin()
                 .leftJoin(participant.member, member).fetchJoin()
-                .where(participant.letter.Id.eq(letterId)
+                .where(participant.letter.id.eq(letterId)
                         .and(participant.member.id.eq(memberId))
                 )
                 .fetchOne();
