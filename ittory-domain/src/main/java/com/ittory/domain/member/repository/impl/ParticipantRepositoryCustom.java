@@ -1,0 +1,8 @@
+package com.ittory.domain.member.repository.impl;
+
+import com.ittory.domain.member.domain.Participant;
+import java.util.Optional;
+
+public interface ParticipantRepositoryCustom {
+    Optional<Participant> findByLetterIdAndMemberId(Long letterId, Long memberId);
+}
