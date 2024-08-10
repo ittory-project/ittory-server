@@ -2,6 +2,7 @@ package com.ittory.socket.controller;
 
 import com.ittory.common.annotation.CurrentMemberId;
 import com.ittory.socket.dto.EnterResponse;
+import com.ittory.socket.dto.ExitResponse;
 import com.ittory.socket.usecase.LetterEnterUseCase;
 import com.ittory.socket.usecase.LetterExitUseCase;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,15 @@ public class LetterConnectController {
 
     @MessageMapping("/letter/enter/{letterId}")
     public void enterMember(@CurrentMemberId Long memberId, @DestinationVariable Long letterId) {
-        String destination = "/topic/letter/" + letterId;
         EnterResponse response = letterEnterUseCase.execute(memberId, letterId);
+        String destination = "/topic/letter/" + letterId;
+        messagingTemplate.convertAndSend(destination, response);
+    }
+
+    @MessageMapping("/letter/exit/{letterId}")
+    public void exitMember(@CurrentMemberId Long memberId, @DestinationVariable Long letterId) {
+        ExitResponse response = letterExitUseCase.execute(memberId, letterId);
+        String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
     }
 
