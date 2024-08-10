@@ -1,7 +1,7 @@
 package com.ittory.socket.dto;
 
 import com.ittory.domain.letter.domain.LetterElement;
-import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.domain.Participant;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,16 +18,16 @@ public class ElementResponse {
     private Integer sort;
     private String imageUrl;
     private String content;
-    private String name;
+    private String nickname;
 
 
-    public static ElementResponse of(Member member, LetterElement letterElement) {
+    public static ElementResponse of(Participant participant, LetterElement letterElement) {
         return ElementResponse.builder()
                 .elementId(letterElement.getId())
                 .sort(letterElement.getSort())
                 .imageUrl(letterElement.getLetterImage().getUrl())
                 .content(letterElement.getContent())
-                .name(member.getName())
+                .nickname(participant.getNickname())
                 .build();
     }
 

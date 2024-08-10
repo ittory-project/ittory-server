@@ -17,13 +17,13 @@ import lombok.NoArgsConstructor;
 public class ExitResponse {
 
     private Long memberId;
-    private String name;
+    private String nickname;
     private ConnectAction action;
 
     public static ExitResponse from(Participant participant) {
         return ExitResponse.builder()
                 .memberId(participant.getMember().getId())
-                .name(participant.getNickname())
+                .nickname(participant.getNickname())
                 .action(EXIT)
                 .build();
     }

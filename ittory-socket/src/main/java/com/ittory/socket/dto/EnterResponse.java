@@ -17,14 +17,14 @@ import lombok.NoArgsConstructor;
 public class EnterResponse {
 
     private Long memberId;
-    private String name;
+    private String nickname;
     private String imageUrl;
     private ConnectAction action;
 
     public static EnterResponse from(Participant participant) {
         return EnterResponse.builder()
                 .memberId(participant.getMember().getId())
-                .name(participant.getNickname())
+                .nickname(participant.getNickname())
                 .imageUrl(participant.getMember().getProfileImage())
                 .action(ENTER)
                 .build();
