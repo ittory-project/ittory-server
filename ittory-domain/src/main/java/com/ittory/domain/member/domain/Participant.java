@@ -1,7 +1,10 @@
 package com.ittory.domain.member.domain;
 
+import static com.ittory.domain.member.enums.ParticipantStatus.PROGRESS;
+
 import com.ittory.domain.common.BaseEntity;
 import com.ittory.domain.letter.domain.Letter;
+import com.ittory.domain.member.enums.ParticipantStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,10 +41,16 @@ public class Participant extends BaseEntity {
 
     private String nickname;
 
-    public static Participant create(Member member, Letter letter) {
+    private Integer sort;
+
+    private ParticipantStatus participantStatus;
+
+    public static Participant create(Member member, Letter letter, Integer sort) {
         return Participant.builder()
                 .member(member)
                 .letter(letter)
+                .sort(sort)
+                .participantStatus(PROGRESS)
                 .build();
     }
 
