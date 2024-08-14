@@ -18,11 +18,8 @@ public class ParticipantSetSortUseCase {
 
     public ParticipantSortResponse execute(SortRandomRequest request) {
         List<Participant> participants = getShuffledParticipants(request);
-        givenSort(participants);
-        List<MemberLetterProfile> profiles = participantDomainService.saveAllParticipant(participants)
-                .stream()
-                .map(MemberLetterProfile::from)
-                .toList();
+        List<Participant> savedParticipants = givenSort(participants);
+        List<MemberLetterProfile> profiles = savedParticipants.stream().map(MemberLetterProfile::from).toList();
         return ParticipantSortResponse.of(request.getLetterId(), profiles);
     }
 
@@ -33,10 +30,11 @@ public class ParticipantSetSortUseCase {
         return participants;
     }
 
-    private void givenSort(List<Participant> participants) {
+    private List<Participant> givenSort(List<Participant> participants) {
         for (int sort = 0; sort < participants.size(); sort++) {
             participants.get(sort).changeSort(sort + 1);
         }
+        return participantDomainService.saveAllParticipant(participants);
     }
 
 }
