@@ -48,17 +48,20 @@ public class Participant extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ParticipantStatus participantStatus;
 
-    public static Participant create(Member member, Letter letter, Integer sort) {
+    public static Participant create(Member member, Letter letter) {
         return Participant.builder()
                 .member(member)
                 .letter(letter)
-                .sort(sort)
                 .participantStatus(PROGRESS)
                 .build();
     }
 
     public void changeSort(int sort) {
         this.sort = sort;
+    }
+
+    public void changeParticipantStatus(ParticipantStatus status) {
+        this.participantStatus = status;
     }
 
 }
