@@ -7,6 +7,8 @@ import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.member.enums.ParticipantStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,6 +45,7 @@ public class Participant extends BaseEntity {
 
     private Integer sort;
 
+    @Enumerated(EnumType.STRING)
     private ParticipantStatus participantStatus;
 
     public static Participant create(Member member, Letter letter, Integer sort) {
@@ -52,6 +55,10 @@ public class Participant extends BaseEntity {
                 .sort(sort)
                 .participantStatus(PROGRESS)
                 .build();
+    }
+
+    public void changeSort(int sort) {
+        this.sort = sort;
     }
 
 }
