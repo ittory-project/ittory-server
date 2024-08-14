@@ -3,7 +3,9 @@ package com.ittory.socket.usecase;
 import com.ittory.domain.letter.domain.LetterElement;
 import com.ittory.domain.letter.service.LetterElementDomainService;
 import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.domain.Participant;
 import com.ittory.domain.member.service.MemberDomainService;
+import com.ittory.domain.member.service.ParticipantDomainService;
 import com.ittory.socket.dto.ElementRequest;
 import com.ittory.socket.dto.ElementResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +17,14 @@ public class LetterWriteUseCase {
 
     private final MemberDomainService memberDomainService;
     private final LetterElementDomainService letterElementDomainService;
+    private final ParticipantDomainService participantDomainService;
 
     public ElementResponse execute(Long memberId, ElementRequest request) {
         Member member = memberDomainService.findMemberById(memberId);
         LetterElement element = letterElementDomainService.changeContent(member, request.getElementId(),
                 request.getContent());
-        return ElementResponse.of(member, element);
+        Participant participant = participantDomainService.findParticipant(request.getElementId(), memberId);
+        return ElementResponse.of(participant, element);
     }
 
 }

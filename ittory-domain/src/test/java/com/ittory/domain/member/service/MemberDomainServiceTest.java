@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-public class MemberServiceTest {
+public class MemberDomainServiceTest {
 
     @Autowired
     private MemberDomainService memberDomainService;
