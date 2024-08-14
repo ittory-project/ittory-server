@@ -31,10 +31,10 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     }
 
     @Override
-    public List<Participant> findAllCurrentByIdWithMember(List<Long> participantIds) {
+    public List<Participant> findAllCurrentByIdWithMember(Long letterId) {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.member, member).fetchJoin()
-                .where(participant.participantStatus.eq(PROGRESS).and(participant.id.in(participantIds)))
+                .where(participant.participantStatus.eq(PROGRESS).and(participant.letter.id.in(letterId)))
                 .fetch();
     }
 

@@ -14,13 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParticipantSortResponse {
 
-    private Long letterId;
-
     private List<MemberLetterProfile> participants;
 
-    public static ParticipantSortResponse of(Long letterId, List<MemberLetterProfile> participants) {
+    public static ParticipantSortResponse of(List<MemberLetterProfile> participants) {
         return ParticipantSortResponse.builder()
-                .letterId(letterId)
                 .participants(participants)
                 .build();
     }

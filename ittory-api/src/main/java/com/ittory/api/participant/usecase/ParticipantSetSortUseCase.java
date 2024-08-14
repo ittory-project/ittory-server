@@ -17,15 +17,14 @@ public class ParticipantSetSortUseCase {
     private final ParticipantDomainService participantDomainService;
 
     public ParticipantSortResponse execute(SortRandomRequest request) {
-        List<Participant> participants = getShuffledParticipants(request);
+        List<Participant> participants = getShuffledParticipants(request.getLetterId());
         List<Participant> savedParticipants = givenSort(participants);
         List<MemberLetterProfile> profiles = savedParticipants.stream().map(MemberLetterProfile::from).toList();
-        return ParticipantSortResponse.of(request.getLetterId(), profiles);
+        return ParticipantSortResponse.of(profiles);
     }
 
-    private List<Participant> getShuffledParticipants(SortRandomRequest request) {
-        List<Participant> participants
-                = participantDomainService.findAllCurrentParticipant(request.getParticipantIds());
+    private List<Participant> getShuffledParticipants(Long letterId) {
+        List<Participant> participants = participantDomainService.findAllCurrentParticipant(letterId);
         Collections.shuffle(participants);
         return participants;
     }

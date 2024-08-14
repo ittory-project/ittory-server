@@ -18,8 +18,8 @@ public class ParticipantDomainService {
                 .orElseThrow(() -> new ParticipantNotFoundException(letterId, memberId));
     }
 
-    public List<Participant> findAllCurrentParticipant(List<Long> participantIds) {
-        return participantRepository.findAllCurrentByIdWithMember(participantIds);
+    public List<Participant> findAllCurrentParticipant(Long letterId) {
+        return participantRepository.findAllCurrentByIdWithMember(letterId);
     }
 
     public List<Participant> saveAllParticipant(List<Participant> participants) {

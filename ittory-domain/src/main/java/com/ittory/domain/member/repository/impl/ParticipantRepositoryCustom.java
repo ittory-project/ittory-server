@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface ParticipantRepositoryCustom {
     Optional<Participant> findByLetterIdAndMemberId(Long letterId, Long memberId);
 
-    List<Participant> findAllCurrentByIdWithMember(List<Long> participantIds);
+    List<Participant> findAllCurrentByIdWithMember(Long letterId);
 }
