@@ -17,23 +17,27 @@ public class ParticipantSetSortUseCase {
     private final ParticipantDomainService participantDomainService;
 
     public ParticipantSortResponse execute(SortRandomRequest request) {
-        List<Participant> participants = getShuffledParticipants(request.getLetterId());
-        List<Participant> savedParticipants = givenSort(participants);
-        List<MemberLetterProfile> profiles = savedParticipants.stream().map(MemberLetterProfile::from).toList();
+        List<Participant> participants = shuffleParticipants(request.getLetterId());
+        List<Participant> savedParticipants = giveSort(participants);
+        List<MemberLetterProfile> profiles = convertToMemberLetterProfiles(savedParticipants);
         return ParticipantSortResponse.of(profiles);
     }
 
-    private List<Participant> getShuffledParticipants(Long letterId) {
+    private List<Participant> shuffleParticipants(Long letterId) {
         List<Participant> participants = participantDomainService.findAllCurrentParticipant(letterId);
         Collections.shuffle(participants);
         return participants;
     }
 
-    private List<Participant> givenSort(List<Participant> participants) {
+    private List<Participant> giveSort(List<Participant> participants) {
         for (int sort = 0; sort < participants.size(); sort++) {
             participants.get(sort).changeSort(sort + 1);
         }
         return participantDomainService.saveAllParticipant(participants);
+    }
+
+    private List<MemberLetterProfile> convertToMemberLetterProfiles(List<Participant> savedParticipants) {
+        return savedParticipants.stream().map(MemberLetterProfile::from).toList();
     }
 
 }
