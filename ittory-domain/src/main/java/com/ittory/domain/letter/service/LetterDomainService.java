@@ -8,12 +8,11 @@ import com.ittory.domain.letter.exception.FontException;
 import com.ittory.domain.letter.repository.CoverTypeRepository;
 import com.ittory.domain.letter.repository.FontRepository;
 import com.ittory.domain.letter.repository.LetterRepository;
-import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
 import com.ittory.domain.member.service.MemberDomainService;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +23,11 @@ public class LetterDomainService {
     private final FontRepository fontRepository;
     private final MemberDomainService memberDomainService;
 
-    public Letter saveLetter(Long coverTypeId, Long fontId, Long receiverId, String receiverName, LocalDateTime deliveryDate, String title, String coverPhotoUrl) {
-        CoverType coverType = coverTypeRepository.findById(coverTypeId) .orElseThrow(() -> new CoverTypeException.CoverTypeNotFoundException(coverTypeId));
+    public Letter saveLetter(Long coverTypeId, Long fontId, Long receiverId, String receiverName,
+                             LocalDateTime deliveryDate, String title, String coverPhotoUrl) {
+        CoverType coverType = coverTypeRepository.findById(coverTypeId)
+                .orElseThrow(() -> new CoverTypeException.CoverTypeNotFoundException(coverTypeId));
         Font font = fontRepository.findById(fontId).orElseThrow(() -> new FontException.FontNotFoundException(fontId));
-
 
         Letter letter = Letter.create(
                 coverType,
@@ -40,4 +40,9 @@ public class LetterDomainService {
 
         return letterRepository.save(letter);
     }
+
+    public Letter findLetter(Long letterId) {
+        return letterRepository.findById(letterId).orElseThrow(() -> new MemberNotFoundException(letterId));
+    }
+
 }
