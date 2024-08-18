@@ -38,10 +38,11 @@ public class Participant extends BaseEntity {
 
     private String nickname;
 
-    public static Participant create(Member member, Letter letter) {
+    public static Participant create(Member member, Letter letter, String nickname) {
         return Participant.builder()
                 .member(member)
                 .letter(letter)
+                .nickname(nickname)
                 .build();
     }
 

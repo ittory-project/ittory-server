@@ -1,7 +1,7 @@
 package com.ittory.domain.letter.domain;
 
 import com.ittory.domain.common.BaseEntity;
-import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.domain.Participant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,8 +33,8 @@ public class LetterElement extends BaseEntity {
     private Letter letter;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "participant_id")
+    private Participant participant;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -45,11 +45,11 @@ public class LetterElement extends BaseEntity {
 
     private String content;
 
-    public static LetterElement create(Letter letter, Member member, LetterImage letterImage, Integer sort,
+    public static LetterElement create(Letter letter, Participant participant, LetterImage letterImage, Integer sort,
                                        String content) {
         return LetterElement.builder()
                 .letter(letter)
-                .member(member)
+                .participant(participant)
                 .letterImage(letterImage)
                 .sort(sort)
                 .content(content)
@@ -60,8 +60,8 @@ public class LetterElement extends BaseEntity {
         this.content = content;
     }
 
-    public void changeMember(Member member) {
-        this.member = member;
+    public void changeParticipant(Participant participant) {
+        this.participant = participant;
     }
 
 }

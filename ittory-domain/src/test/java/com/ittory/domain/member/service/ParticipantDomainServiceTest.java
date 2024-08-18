@@ -45,7 +45,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        participantRepository.save(Participant.create(member, letter));
+        participantRepository.save(Participant.create(member, letter, "participant"));
 
         //when
         Participant participant = participantDomainService.findParticipant(letter.getId(), member.getId());
@@ -61,7 +61,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        participantRepository.save(Participant.create(member, letter));
+        participantRepository.save(Participant.create(member, letter, "participant"));
 
         //when & then
         assertThatThrownBy(() -> participantDomainService.findParticipant(-1L, member.getId()))
@@ -75,7 +75,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        participantRepository.save(Participant.create(member, letter));
+        participantRepository.save(Participant.create(member, letter, "participant"));
 
         //when & then
         assertThatThrownBy(() -> participantDomainService.findParticipant(letter.getId(), -1L))

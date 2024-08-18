@@ -13,7 +13,9 @@ import com.ittory.domain.letter.repository.LetterElementRepository;
 import com.ittory.domain.letter.repository.LetterImageRepository;
 import com.ittory.domain.letter.repository.LetterRepository;
 import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.domain.Participant;
 import com.ittory.domain.member.repository.MemberRepository;
+import com.ittory.domain.member.repository.ParticipantRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -44,10 +46,14 @@ public class LetterElementDomainServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private ParticipantRepository participantRepository;
+
 
     @AfterEach
     void clean() {
         letterElementRepository.deleteAll();
+        participantRepository.deleteAll();
         letterRepository.deleteAll();
         coverTypeRepository.deleteAll();
         fontRepository.deleteAll();
@@ -65,6 +71,7 @@ public class LetterElementDomainServiceTest {
 
         Letter letter = Letter.create(coverType, font, "receiver", LocalDateTime.now(), "title", "image");
         LetterElement element = LetterElement.create(letter, null, letterImage, 0, null);
+        Participant participant = Participant.create(member, letter, "participant");
 
         memberRepository.save(member);
         coverTypeRepository.save(coverType);
@@ -74,7 +81,7 @@ public class LetterElementDomainServiceTest {
         LetterElement savedLetterElement = letterElementRepository.save(element);
 
         //when
-        letterElementDomainService.changeContent(member, savedLetterElement.getId(), "New Letter Element");
+        letterElementDomainService.changeContent(participant, savedLetterElement.getId(), "New Letter Element");
 
         //then
         LetterElement findElement = letterElementRepository.findById(savedLetterElement.getId()).orElse(null);

@@ -3,6 +3,7 @@ package com.ittory.domain.letter.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.domain.Participant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -30,12 +31,13 @@ public class LetterElementTest {
         // given
         LetterElement element = LetterElement.create(null, null, null, 0, null);
         Member member = Member.create(1L, "member", "image");
+        Participant participant = Participant.create(member, null, "participant");
 
         // when
-        element.changeMember(member);
+        element.changeParticipant(participant);
 
         // then
-        assertThat(element.getMember().getName()).isEqualTo("member");
+        assertThat(element.getParticipant().getNickname()).isEqualTo("participant");
     }
 
 }
