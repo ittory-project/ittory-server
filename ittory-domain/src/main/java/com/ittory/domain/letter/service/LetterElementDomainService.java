@@ -23,4 +23,7 @@ public class LetterElementDomainService {
         return element;
     }
 
+    public Integer countByParticipant(Participant participant) {
+        return letterElementRepository.countByParticipant(participant);
+    }
 }
