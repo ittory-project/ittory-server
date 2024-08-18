@@ -42,4 +42,20 @@ public class ParticipantDomainService {
     public void deleteParticipant(Participant participant) {
         participantRepository.deleteById(participant.getId());
     }
+
+    @Transactional
+    public void changeOrder(Long letterId, Participant participant) {
+        if (participant.getSort() != null) {
+            List<Participant> nextParticipants = participantRepository.findAllOrderNext(letterId,
+                    participant.getSort());
+
+            nextParticipants.forEach(nextParticipant -> {
+                Integer nowSort = nextParticipant.getSort();
+                nextParticipant.changeSort(nowSort - 1);
+            });
+
+            participant.changeSort(null);
+            participantRepository.save(participant);
+        }
+    }
 }

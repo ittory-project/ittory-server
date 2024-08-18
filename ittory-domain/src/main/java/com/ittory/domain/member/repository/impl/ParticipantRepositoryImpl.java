@@ -38,4 +38,13 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 .fetch();
     }
 
+
+    @Override
+    public List<Participant> findAllOrderNext(Long letterId, Integer sort) {
+        return jpaQueryFactory.selectFrom(participant)
+                .where(participant.letter.id.eq(letterId)
+                        .and(participant.sort.gt(sort))
+                        .and(participant.participantStatus.eq(PROGRESS))
+                ).fetch();
+    }
 }

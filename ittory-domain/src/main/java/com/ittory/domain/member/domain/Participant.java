@@ -57,7 +57,7 @@ public class Participant extends BaseEntity {
                 .build();
     }
 
-    public void changeSort(int sort) {
+    public void changeSort(Integer sort) {
         this.sort = sort;
     }
 

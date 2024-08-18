@@ -18,12 +18,17 @@ public class LetterExitUseCase {
 
     public ExitResponse execute(Long memberId, Long letterId) {
         Participant participant = participantDomainService.findParticipant(letterId, memberId);
+        changeParticipantOrder(letterId, participant);
+        exitParticipant(participant);
+        return ExitResponse.from(participant);
+    }
+
+    private void exitParticipant(Participant participant) {
         if (!checkNoElement(participant)) {
             participantDomainService.exitParticipant(participant);
         } else {
             participantDomainService.deleteParticipant(participant);
         }
-        return ExitResponse.from(participant);
     }
 
     private boolean checkNoElement(Participant participant) {
@@ -33,6 +38,10 @@ public class LetterExitUseCase {
             hasNoElement = false;
         }
         return hasNoElement;
+    }
+
+    private void changeParticipantOrder(Long letterId, Participant participant) {
+        participantDomainService.changeOrder(letterId, participant);
     }
 
 }
