@@ -58,4 +58,9 @@ public class ParticipantDomainService {
             participantRepository.save(participant);
         }
     }
+
+    @Transactional
+    public Participant saveParticipant(Participant participant) {
+        return participantRepository.save(participant);
+    }
 }
