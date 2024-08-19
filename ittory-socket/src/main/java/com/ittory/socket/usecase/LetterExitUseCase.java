@@ -41,7 +41,7 @@ public class LetterExitUseCase {
     }
 
     private void changeParticipantOrder(Long letterId, Participant participant) {
-        participantDomainService.changeOrder(letterId, participant);
+        participantDomainService.reorderParticipantsAfterLeave(letterId, participant);
     }
 
 }

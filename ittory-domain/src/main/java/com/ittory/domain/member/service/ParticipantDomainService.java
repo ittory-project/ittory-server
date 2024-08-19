@@ -44,7 +44,7 @@ public class ParticipantDomainService {
     }
 
     @Transactional
-    public void changeOrder(Long letterId, Participant participant) {
+    public void reorderParticipantsAfterLeave(Long letterId, Participant participant) {
         if (participant.getSort() != null) {
             List<Participant> nextParticipants = participantRepository.findAllOrderNext(letterId,
                     participant.getSort());
