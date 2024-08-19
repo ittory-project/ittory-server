@@ -110,11 +110,11 @@ public class ParticipantDomainServiceTest {
         Member member = memberRepository.save(Member.create(1L, "tester1", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
         Participant newParticipant = Participant.create(member, letter, "participant");
-        participantRepository.save(newParticipant);
+        Participant savedParticipant = participantRepository.save(newParticipant);
 
         //when
         participantDomainService.exitParticipant(newParticipant);
-        Participant participant = participantRepository.findById(1L).orElse(null);
+        Participant participant = participantRepository.findById(savedParticipant.getId()).orElse(null);
 
         //then
         assertThat(participant).isNotNull();

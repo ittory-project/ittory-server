@@ -78,6 +78,7 @@ public class LetterElementDomainServiceTest {
         fontRepository.save(font);
         letterImageRepository.save(letterImage);
         letterRepository.save(letter);
+        participantRepository.save(participant);
         LetterElement savedLetterElement = letterElementRepository.save(element);
 
         //when
