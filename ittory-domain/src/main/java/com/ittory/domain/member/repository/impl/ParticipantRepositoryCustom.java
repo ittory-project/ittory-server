@@ -8,4 +8,6 @@ public interface ParticipantRepositoryCustom {
     Optional<Participant> findByLetterIdAndMemberId(Long letterId, Long memberId);
 
     List<Participant> findAllCurrentByIdWithMember(Long letterId);
+
+    List<Participant> findAllOrderNext(Long letterId, Integer sort);
 }

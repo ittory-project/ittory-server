@@ -47,7 +47,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        participantRepository.save(Participant.create(member, letter));
+        participantRepository.save(Participant.create(member, letter, "participant"));
 
         //when
         Participant participant = participantDomainService.findParticipant(letter.getId(), member.getId());
@@ -63,7 +63,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        participantRepository.save(Participant.create(member, letter));
+        participantRepository.save(Participant.create(member, letter, "participant"));
 
         //when & then
         assertThatThrownBy(() -> participantDomainService.findParticipant(-1L, member.getId()))
@@ -77,7 +77,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        participantRepository.save(Participant.create(member, letter));
+        participantRepository.save(Participant.create(member, letter, "participant"));
 
         //when & then
         assertThatThrownBy(() -> participantDomainService.findParticipant(letter.getId(), -1L))
@@ -91,8 +91,8 @@ public class ParticipantDomainServiceTest {
         Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
         Member member2 = memberRepository.save(Member.create(2L, "tester2", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        Participant participant1 = Participant.create(member1, letter);
-        Participant participant2 = Participant.create(member2, letter);
+        Participant participant1 = Participant.create(member1, letter, "participant");
+        Participant participant2 = Participant.create(member2, letter, "participant");
         participant2.changeParticipantStatus(EXITED);
         participantRepository.saveAll(List.of(participant1, participant2));
 
@@ -101,6 +101,50 @@ public class ParticipantDomainServiceTest {
 
         //then
         assertThat(participants.size()).isEqualTo(1);
+    }
+
+    @DisplayName("참여자 퇴장 테스트.")
+    @Test
+    void exitParticipantTest() {
+        //given
+        Member member = memberRepository.save(Member.create(1L, "tester1", null));
+        Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
+        Participant newParticipant = Participant.create(member, letter, "participant");
+        Participant savedParticipant = participantRepository.save(newParticipant);
+
+        //when
+        participantDomainService.exitParticipant(newParticipant);
+        Participant participant = participantRepository.findById(savedParticipant.getId()).orElse(null);
+
+        //then
+        assertThat(participant).isNotNull();
+        assertThat(participant.getParticipantStatus()).isEqualTo(EXITED);
+    }
+
+    @DisplayName("참여자의 순서를 변경한다.")
+    @Test
+    void reorderParticipantsAfterLeaveTest() {
+        //given
+        Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
+        Member member2 = memberRepository.save(Member.create(2L, "tester2", null));
+        Member member3 = memberRepository.save(Member.create(2L, "tester2", null));
+        Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
+        Participant participant1 = Participant.create(member1, letter, "participant1");
+        Participant participant2 = Participant.create(member2, letter, "participant2");
+        Participant participant3 = Participant.create(member3, letter, "participant3");
+        participant1.changeSort(1);
+        participant2.changeSort(2);
+        participant3.changeSort(3);
+        participant1.changeParticipantStatus(EXITED);
+        participantRepository.saveAll(List.of(participant1, participant2, participant3));
+
+        //when
+        participantDomainService.reorderParticipantsAfterLeave(letter.getId(), participant1);
+
+        //then
+        List<Participant> currentParticipant = participantRepository.findAllCurrentByIdWithMember(letter.getId());
+        assertThat(currentParticipant.get(0).getSort()).isEqualTo(1);
+        assertThat(currentParticipant.get(1).getSort()).isEqualTo(2);
     }
 
 }

@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExitResponse {
 
-    private Long memberId;
+    private Long participantId;
     private String nickname;
     private ConnectAction action;
 
     public static ExitResponse from(Participant participant) {
         return ExitResponse.builder()
-                .memberId(participant.getMember().getId())
+                .participantId(participant.getId())
                 .nickname(participant.getNickname())
                 .action(EXIT)
                 .build();
