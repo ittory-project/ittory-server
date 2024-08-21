@@ -10,4 +10,6 @@ public interface ParticipantRepositoryCustom {
     List<Participant> findAllCurrentByIdWithMember(Long letterId);
 
     List<Participant> findAllOrderNext(Long letterId, Integer sequence);
+
+    List<Participant> findAllCurrentByIdWithMemberInOrder(Long letterId, boolean isAsc);
 }

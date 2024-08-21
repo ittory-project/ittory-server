@@ -47,4 +47,12 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 ).fetch();
     }
 
+    @Override
+    public List<Participant> findAllCurrentByIdWithMemberInOrder(Long letterId, boolean isAsc) {
+        return jpaQueryFactory.selectFrom(participant)
+                .leftJoin(participant.member, member).fetchJoin()
+                .where(participant.participantStatus.eq(PROGRESS).and(participant.letter.id.in(letterId)))
+                .orderBy(isAsc ? participant.sequence.asc() : participant.sequence.desc())
+                .fetch();
+    }
 }

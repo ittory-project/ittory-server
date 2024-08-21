@@ -64,4 +64,9 @@ public class ParticipantDomainService {
         return participantRepository.save(participant);
     }
 
+    @Transactional(readOnly = true)
+    public List<Participant> findAllCurrentParticipantInOrder(Long letterId, boolean isAsc) {
+        return participantRepository.findAllCurrentByIdWithMemberInOrder(letterId, isAsc);
+    }
+
 }
