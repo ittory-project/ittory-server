@@ -86,13 +86,13 @@ public class ParticipantDomainServiceTest {
 
     @DisplayName("편지에 현재 참여중인 참여자를 조회한다.")
     @Test
-    void findAllCurrentParticipantTest() {
+    void findAllCurrentParticipantsTest() {
         //given
         Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
         Member member2 = memberRepository.save(Member.create(2L, "tester2", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        Participant participant1 = Participant.create(member1, letter, "participant");
-        Participant participant2 = Participant.create(member2, letter, "participant");
+        Participant participant1 = Participant.create(member1, letter, "participant1");
+        Participant participant2 = Participant.create(member2, letter, "participant2");
         participant2.changeParticipantStatus(EXITED);
         participantRepository.saveAll(List.of(participant1, participant2));
 
@@ -102,6 +102,28 @@ public class ParticipantDomainServiceTest {
 
         //then
         assertThat(participants.size()).isEqualTo(1);
+    }
+
+    @DisplayName("편지에 현재 참여중인 참여자를 순서에 맞게 조회한다.")
+    @Test
+    void findAllCurrentParticipantsOrderedBySequenceTest() {
+        //given
+        Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
+        Member member2 = memberRepository.save(Member.create(2L, "tester2", null));
+        Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
+        Participant participant1 = Participant.create(member1, letter, "participant1");
+        Participant participant2 = Participant.create(member2, letter, "participant2");
+
+        participant1.changeSequence(2);
+        participant2.changeSequence(1);
+        participantRepository.saveAll(List.of(participant1, participant2));
+
+        //when
+        List<Participant> participants = participantDomainService.findAllCurrentParticipantsOrderedBySequence(
+                letter.getId(), true);
+
+        //then
+        assertThat(participants.get(0).getNickname()).isEqualTo("participant2");
     }
 
     @DisplayName("참여자 퇴장 테스트.")
