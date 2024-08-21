@@ -1,6 +1,6 @@
 package com.ittory.socket.usecase;
 
-import com.ittory.domain.letter.service.LetterElementDomainService;
+import com.ittory.domain.letter.service.ElementDomainService;
 import com.ittory.domain.member.service.MemberDomainService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class LetterWriteUseCaseTest {
 
     @Mock
-    private LetterElementDomainService letterElementDomainService;
+    private ElementDomainService elementDomainService;
 
     @Mock
     private MemberDomainService memberDomainService;

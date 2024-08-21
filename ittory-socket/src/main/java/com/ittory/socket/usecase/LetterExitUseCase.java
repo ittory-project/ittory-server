@@ -1,8 +1,8 @@
 package com.ittory.socket.usecase;
 
-import com.ittory.domain.letter.service.LetterElementDomainService;
-import com.ittory.domain.member.domain.Participant;
-import com.ittory.domain.member.service.ParticipantDomainService;
+import com.ittory.domain.letter.service.ElementDomainService;
+import com.ittory.domain.participant.domain.Participant;
+import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.config.handler.WebSocketSessionHandler;
 import com.ittory.socket.dto.ExitResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ public class LetterExitUseCase {
 
     private final WebSocketSessionHandler webSocketSessionHandler;
     private final ParticipantDomainService participantDomainService;
-    private final LetterElementDomainService letterElementDomainService;
+    private final ElementDomainService elementDomainService;
 
     public ExitResponse execute(Long memberId, Long letterId) {
         Participant participant = participantDomainService.findParticipant(letterId, memberId);
@@ -33,7 +33,7 @@ public class LetterExitUseCase {
 
     private boolean checkNoElement(Participant participant) {
         boolean hasNoElement = true;
-        Integer elementCount = letterElementDomainService.countByParticipant(participant);
+        Integer elementCount = elementDomainService.countByParticipant(participant);
         if (elementCount > 0) {
             hasNoElement = false;
         }

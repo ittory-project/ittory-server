@@ -1,6 +1,6 @@
 package com.ittory.api.member.dto;
 
-import com.ittory.domain.member.domain.Participant;
+import com.ittory.domain.participant.domain.Participant;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

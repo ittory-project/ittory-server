@@ -3,8 +3,8 @@ package com.ittory.domain.letter.service;
 import com.ittory.domain.letter.domain.CoverType;
 import com.ittory.domain.letter.domain.Font;
 import com.ittory.domain.letter.domain.Letter;
-import com.ittory.domain.letter.exception.CoverTypeException;
-import com.ittory.domain.letter.exception.FontException;
+import com.ittory.domain.letter.exception.LetterException.CoverTypeNotFoundException;
+import com.ittory.domain.letter.exception.LetterException.FontNotFoundException;
 import com.ittory.domain.letter.repository.CoverTypeRepository;
 import com.ittory.domain.letter.repository.FontRepository;
 import com.ittory.domain.letter.repository.LetterRepository;
@@ -26,8 +26,8 @@ public class LetterDomainService {
     public Letter saveLetter(Long coverTypeId, Long fontId, Long receiverId, String receiverName,
                              LocalDateTime deliveryDate, String title, String coverPhotoUrl) {
         CoverType coverType = coverTypeRepository.findById(coverTypeId)
-                .orElseThrow(() -> new CoverTypeException.CoverTypeNotFoundException(coverTypeId));
-        Font font = fontRepository.findById(fontId).orElseThrow(() -> new FontException.FontNotFoundException(fontId));
+                .orElseThrow(() -> new CoverTypeNotFoundException(coverTypeId));
+        Font font = fontRepository.findById(fontId).orElseThrow(() -> new FontNotFoundException(fontId));
 
         Letter letter = Letter.create(
                 coverType,

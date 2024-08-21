@@ -2,7 +2,7 @@ package com.ittory.socket.dto;
 
 import static com.ittory.socket.enums.ConnectAction.ENTER;
 
-import com.ittory.domain.member.domain.Participant;
+import com.ittory.domain.participant.domain.Participant;
 import com.ittory.socket.enums.ConnectAction;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

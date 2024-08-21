@@ -1,7 +1,7 @@
 package com.ittory.domain.letter.service;
 
 import com.ittory.domain.letter.domain.CoverType;
-import com.ittory.domain.letter.exception.CoverTypeException;
+import com.ittory.domain.letter.exception.LetterException.CoverTypeNotFoundException;
 import com.ittory.domain.letter.repository.CoverTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,6 @@ public class CoverTypeDomainService {
 
     public CoverType getCoverTypeById(Long coverTypeId) {
         return coverTypeRepository.findById(coverTypeId)
-                .orElseThrow(() -> new CoverTypeException.CoverTypeNotFoundException(coverTypeId));
+                .orElseThrow(() -> new CoverTypeNotFoundException(coverTypeId));
     }
 }
