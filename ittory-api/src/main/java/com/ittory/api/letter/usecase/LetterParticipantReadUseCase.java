@@ -13,10 +13,10 @@ public class LetterParticipantReadUseCase {
     private final ParticipantDomainService participantDomainService;
 
     public List<ParticipantProfile> execute(Long letterId) {
-        return participantDomainService.findAllCurrentParticipantInOrder(letterId, true)
+        return participantDomainService.findAllCurrentParticipantsOrderedBySequence(letterId, true)
                 .stream()
                 .map(ParticipantProfile::from)
                 .toList();
     }
-    
+
 }

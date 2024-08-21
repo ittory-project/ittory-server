@@ -23,8 +23,8 @@ public class ParticipantDomainService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> findAllCurrentParticipant(Long letterId) {
-        return participantRepository.findAllCurrentByIdWithMember(letterId);
+    public List<Participant> findAllCurrentParticipantsOrderedBySequence(Long letterId, Boolean isAscending) {
+        return participantRepository.findCurrentParticipantsByLetterIdOrdered(letterId, isAscending);
     }
 
     @Transactional
@@ -62,11 +62,6 @@ public class ParticipantDomainService {
     @Transactional
     public Participant saveParticipant(Participant participant) {
         return participantRepository.save(participant);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Participant> findAllCurrentParticipantInOrder(Long letterId, boolean isAsc) {
-        return participantRepository.findAllCurrentByIdWithMemberInOrder(letterId, isAsc);
     }
 
 }

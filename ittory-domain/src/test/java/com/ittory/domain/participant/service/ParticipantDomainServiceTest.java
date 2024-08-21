@@ -97,7 +97,8 @@ public class ParticipantDomainServiceTest {
         participantRepository.saveAll(List.of(participant1, participant2));
 
         //when
-        List<Participant> participants = participantDomainService.findAllCurrentParticipant(letter.getId());
+        List<Participant> participants = participantDomainService.findAllCurrentParticipantsOrderedBySequence(
+                letter.getId(), null);
 
         //then
         assertThat(participants.size()).isEqualTo(1);
@@ -142,7 +143,8 @@ public class ParticipantDomainServiceTest {
         participantDomainService.reorderParticipantsAfterLeave(letter.getId(), participant1);
 
         //then
-        List<Participant> currentParticipant = participantRepository.findAllCurrentByIdWithMember(letter.getId());
+        List<Participant> currentParticipant = participantRepository.findCurrentParticipantsByLetterIdOrdered(
+                letter.getId(), null);
         assertThat(currentParticipant.get(0).getSequence()).isEqualTo(1);
         assertThat(currentParticipant.get(1).getSequence()).isEqualTo(2);
     }

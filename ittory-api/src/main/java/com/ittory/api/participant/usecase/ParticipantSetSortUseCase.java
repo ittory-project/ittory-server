@@ -24,7 +24,8 @@ public class ParticipantSetSortUseCase {
     }
 
     private List<Participant> shuffleParticipants(Long letterId) {
-        List<Participant> participants = participantDomainService.findAllCurrentParticipant(letterId);
+        List<Participant> participants = participantDomainService.findAllCurrentParticipantsOrderedBySequence(letterId,
+                null);
         Collections.shuffle(participants);
         return participants;
     }
