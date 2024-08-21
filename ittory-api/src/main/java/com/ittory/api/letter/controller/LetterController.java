@@ -6,6 +6,7 @@ import com.ittory.api.letter.usecase.LetterCreateUseCase;
 import com.ittory.api.letter.usecase.LetterParticipantReadUseCase;
 import com.ittory.api.participant.dto.ParticipantProfile;
 import com.ittory.api.participant.dto.ParticipantSortResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class LetterController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "현재 유저를 순서에 맞게 조회", description = "순서를 기준으로 오름차순 정렬")
     @GetMapping("/participant/{letterId}")
     public ResponseEntity<ParticipantSortResponse> getParticipantInLetter(@PathVariable Long letterId) {
         List<ParticipantProfile> profiles = letterParticipantReadUseCase.execute(letterId);
