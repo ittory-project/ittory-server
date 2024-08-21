@@ -30,8 +30,8 @@ public class ParticipantSetSortUseCase {
     }
 
     private List<Participant> giveSort(List<Participant> participants) {
-        for (int sort = 0; sort < participants.size(); sort++) {
-            participants.get(sort).changeSort(sort + 1);
+        for (int sequence = 0; sequence < participants.size(); sequence++) {
+            participants.get(sequence).changeSequence(sequence + 1);
         }
         return participantDomainService.saveAllParticipant(participants);
     }

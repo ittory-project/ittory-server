@@ -132,9 +132,9 @@ public class ParticipantDomainServiceTest {
         Participant participant1 = Participant.create(member1, letter, "participant1");
         Participant participant2 = Participant.create(member2, letter, "participant2");
         Participant participant3 = Participant.create(member3, letter, "participant3");
-        participant1.changeSort(1);
-        participant2.changeSort(2);
-        participant3.changeSort(3);
+        participant1.changeSequence(1);
+        participant2.changeSequence(2);
+        participant3.changeSequence(3);
         participant1.changeParticipantStatus(EXITED);
         participantRepository.saveAll(List.of(participant1, participant2, participant3));
 
@@ -143,8 +143,8 @@ public class ParticipantDomainServiceTest {
 
         //then
         List<Participant> currentParticipant = participantRepository.findAllCurrentByIdWithMember(letter.getId());
-        assertThat(currentParticipant.get(0).getSort()).isEqualTo(1);
-        assertThat(currentParticipant.get(1).getSort()).isEqualTo(2);
+        assertThat(currentParticipant.get(0).getSequence()).isEqualTo(1);
+        assertThat(currentParticipant.get(1).getSequence()).isEqualTo(2);
     }
 
 }

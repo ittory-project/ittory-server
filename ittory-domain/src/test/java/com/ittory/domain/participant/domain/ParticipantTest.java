@@ -18,10 +18,10 @@ public class ParticipantTest {
         Participant participant = Participant.builder().build();
 
         // when
-        participant.changeSort(1);
+        participant.changeSequence(1);
 
         // then
-        Assertions.assertThat(participant.getSort()).isEqualTo(1);
+        Assertions.assertThat(participant.getSequence()).isEqualTo(1);
     }
 
     @DisplayName("참여자의 상태 변경 기능")

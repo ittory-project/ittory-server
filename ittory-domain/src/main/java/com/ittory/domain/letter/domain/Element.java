@@ -41,17 +41,17 @@ public class Element extends BaseEntity {
     @JoinColumn(name = "element_image_id")
     private ElementImage elementImage;
 
-    private Integer sort;
+    private Integer sequence;
 
     private String content;
 
-    public static Element create(Letter letter, Participant participant, ElementImage elementImage, Integer sort,
+    public static Element create(Letter letter, Participant participant, ElementImage elementImage, Integer sequence,
                                  String content) {
         return Element.builder()
                 .letter(letter)
                 .participant(participant)
                 .elementImage(elementImage)
-                .sort(sort)
+                .sequence(sequence)
                 .content(content)
                 .build();
     }

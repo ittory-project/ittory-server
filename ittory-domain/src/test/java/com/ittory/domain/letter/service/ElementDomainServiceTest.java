@@ -73,7 +73,7 @@ public class ElementDomainServiceTest {
 
         Letter letter = Letter.create(coverType, font, "receiver", LocalDateTime.now(), "title", "image");
         Participant participant = Participant.create(member, letter, "participant");
-        Element element = com.ittory.domain.letter.domain.Element.create(letter, participant, elementImage, 0, null);
+        Element element = Element.create(letter, participant, elementImage, 0, null);
 
         memberRepository.save(member);
         coverTypeRepository.save(coverType);

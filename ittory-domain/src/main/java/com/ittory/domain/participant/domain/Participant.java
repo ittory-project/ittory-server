@@ -44,7 +44,7 @@ public class Participant extends BaseEntity {
 
     private String nickname;
 
-    private Integer sort;
+    private Integer sequence;
 
     @Enumerated(EnumType.STRING)
     private ParticipantStatus participantStatus;
@@ -58,8 +58,8 @@ public class Participant extends BaseEntity {
                 .build();
     }
 
-    public void changeSort(Integer sort) {
-        this.sort = sort;
+    public void changeSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 
     public void changeParticipantStatus(ParticipantStatus status) {

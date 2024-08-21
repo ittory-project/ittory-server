@@ -39,10 +39,10 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     }
 
     @Override
-    public List<Participant> findAllOrderNext(Long letterId, Integer sort) {
+    public List<Participant> findAllOrderNext(Long letterId, Integer sequence) {
         return jpaQueryFactory.selectFrom(participant)
                 .where(participant.letter.id.eq(letterId)
-                        .and(participant.sort.gt(sort))
+                        .and(participant.sequence.gt(sequence))
                         .and(participant.participantStatus.eq(PROGRESS))
                 ).fetch();
     }

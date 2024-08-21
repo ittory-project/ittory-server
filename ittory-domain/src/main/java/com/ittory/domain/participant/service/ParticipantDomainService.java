@@ -45,16 +45,16 @@ public class ParticipantDomainService {
 
     @Transactional
     public void reorderParticipantsAfterLeave(Long letterId, Participant participant) {
-        if (participant.getSort() != null) {
+        if (participant.getSequence() != null) {
             List<Participant> nextParticipants = participantRepository.findAllOrderNext(letterId,
-                    participant.getSort());
+                    participant.getSequence());
 
             nextParticipants.forEach(nextParticipant -> {
-                Integer nowSort = nextParticipant.getSort();
-                nextParticipant.changeSort(nowSort - 1);
+                Integer newSequence = nextParticipant.getSequence();
+                nextParticipant.changeSequence(newSequence - 1);
             });
 
-            participant.changeSort(null);
+            participant.changeSequence(null);
             participantRepository.save(participant);
         }
     }

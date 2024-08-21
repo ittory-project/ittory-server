@@ -24,7 +24,7 @@ public class ElementResponse {
     public static ElementResponse of(Participant participant, Element element) {
         return ElementResponse.builder()
                 .elementId(element.getId())
-                .sort(element.getSort())
+                .sort(element.getSequence())
                 .imageUrl(element.getElementImage().getUrl())
                 .content(element.getContent())
                 .nickname(participant.getNickname())
