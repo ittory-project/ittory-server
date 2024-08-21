@@ -1,6 +1,6 @@
 package com.ittory.api.participant.usecase;
 
-import com.ittory.api.member.dto.MemberLetterProfile;
+import com.ittory.api.participant.dto.ParticipantProfile;
 import com.ittory.api.participant.dto.ParticipantSortResponse;
 import com.ittory.api.participant.dto.SortRandomRequest;
 import com.ittory.domain.participant.domain.Participant;
@@ -19,8 +19,8 @@ public class ParticipantSetSortUseCase {
     public ParticipantSortResponse execute(SortRandomRequest request) {
         List<Participant> participants = shuffleParticipants(request.getLetterId());
         List<Participant> savedParticipants = giveSort(participants);
-        List<MemberLetterProfile> profiles = convertToMemberLetterProfiles(savedParticipants);
-        return ParticipantSortResponse.of(profiles);
+        List<ParticipantProfile> profiles = convertToMemberLetterProfiles(savedParticipants);
+        return ParticipantSortResponse.from(profiles);
     }
 
     private List<Participant> shuffleParticipants(Long letterId) {
@@ -36,8 +36,8 @@ public class ParticipantSetSortUseCase {
         return participantDomainService.saveAllParticipant(participants);
     }
 
-    private List<MemberLetterProfile> convertToMemberLetterProfiles(List<Participant> savedParticipants) {
-        return savedParticipants.stream().map(MemberLetterProfile::from).toList();
+    private List<ParticipantProfile> convertToMemberLetterProfiles(List<Participant> savedParticipants) {
+        return savedParticipants.stream().map(ParticipantProfile::from).toList();
     }
 
 }
