@@ -7,6 +7,7 @@ import static com.ittory.domain.participant.domain.QParticipant.participant;
 import static com.ittory.domain.participant.enums.ParticipantStatus.PROGRESS;
 
 import com.ittory.domain.participant.domain.Participant;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +32,19 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     }
 
     @Override
-    public List<Participant> findAllCurrentByIdWithMember(Long letterId) {
+    public List<Participant> findCurrentParticipantsByLetterIdOrdered(Long letterId, Boolean isAscending) {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.member, member).fetchJoin()
                 .where(participant.participantStatus.eq(PROGRESS).and(participant.letter.id.in(letterId)))
+                .orderBy(getOrderParticipant(isAscending))
                 .fetch();
+    }
+
+    private static OrderSpecifier<?> getOrderParticipant(Boolean isAscending) {
+        if (isAscending == null) {
+            return participant.createdAt.asc();
+        }
+        return isAscending ? participant.sequence.asc() : participant.sequence.desc();
     }
 
     @Override
