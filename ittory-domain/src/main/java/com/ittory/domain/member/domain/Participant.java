@@ -44,5 +44,4 @@ public class Participant extends BaseEntity {
                 .letter(letter)
                 .build();
     }
-
 }

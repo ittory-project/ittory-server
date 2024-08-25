@@ -47,4 +47,7 @@ public class LetterElement extends BaseEntity {
                 .content(content)
                 .build();
     }
+    public void ChangeContent(String content) {
+        this.content = content;
+    }
 }
