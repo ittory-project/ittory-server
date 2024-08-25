@@ -2,10 +2,14 @@ package com.ittory.api.letter.controller;
 
 import com.ittory.api.letter.dto.LetterCreateRequest;
 import com.ittory.api.letter.dto.LetterCreateResponse;
+import com.ittory.api.letter.dto.LetterStorageStatusResponse;
 import com.ittory.api.letter.usecase.LetterCreateUseCase;
 import com.ittory.api.letter.usecase.LetterParticipantReadUseCase;
+import com.ittory.api.letter.usecase.LetterStorageStatusCheckUseCase;
+import com.ittory.api.letter.usecase.LetterStoreInLetterBoxUseCase;
 import com.ittory.api.participant.dto.ParticipantProfile;
 import com.ittory.api.participant.dto.ParticipantSortResponse;
+import com.ittory.common.annotation.CurrentMemberId;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,8 @@ public class LetterController {
 
     private final LetterCreateUseCase letterCreateUseCase;
     private final LetterParticipantReadUseCase letterParticipantReadUseCase;
+    private final LetterStorageStatusCheckUseCase letterStorageStatusCheckUseCase;
+    private final LetterStoreInLetterBoxUseCase letterStoreInLetterBoxUseCase;
 
     @PostMapping
     public ResponseEntity<LetterCreateResponse> createLetter(@RequestBody LetterCreateRequest request) {
@@ -36,6 +42,20 @@ public class LetterController {
     public ResponseEntity<ParticipantSortResponse> getParticipantInLetter(@PathVariable Long letterId) {
         List<ParticipantProfile> profiles = letterParticipantReadUseCase.execute(letterId);
         return ResponseEntity.ok().body(ParticipantSortResponse.from(profiles));
+    }
+
+    @Operation(summary = "편지가 저장가능한지 확인", description = "isStored가 false면 저장가능.")
+    @GetMapping("/{letterId}/storage-status")
+    public ResponseEntity<LetterStorageStatusResponse> getLetterStorageStatus(@PathVariable Long letterId) {
+        LetterStorageStatusResponse response = letterStorageStatusCheckUseCase.execute(letterId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "편지를 보관함에 저장")
+    @PostMapping("/{letterId}/store")
+    public ResponseEntity<Void> getLetterStorageStatus(@CurrentMemberId Long memberId, @PathVariable Long letterId) {
+        letterStoreInLetterBoxUseCase.execute(memberId, letterId);
+        return ResponseEntity.ok().build();
     }
 
 }
