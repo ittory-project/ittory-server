@@ -3,7 +3,6 @@ package com.ittory.api.letter.usecase;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.service.LetterDomainService;
 import com.ittory.domain.member.domain.Member;
-import com.ittory.domain.member.enums.LetterBoxType;
 import com.ittory.domain.member.service.LetterBoxDomainService;
 import com.ittory.domain.member.service.MemberDomainService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ public class LetterStoreInLetterBoxUseCase {
     public void execute(Long memberId, Long letterId) {
         Member member = memberDomainService.findMemberById(memberId);
         Letter letter = letterDomainService.findLetter(letterId);
-        letterBoxDomainService.saveInLetterBox(member, letter, LetterBoxType.RECEIVE);
+        letterBoxDomainService.saveInReceiveLetterBox(member, letter);
     }
 
 }

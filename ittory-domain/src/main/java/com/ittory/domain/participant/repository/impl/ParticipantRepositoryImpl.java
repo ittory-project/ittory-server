@@ -56,4 +56,12 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 ).fetch();
     }
 
+    @Override
+    public List<Participant> findAllParticipantsWithMember(Long letterId) {
+        return jpaQueryFactory.selectFrom(participant)
+                .leftJoin(participant.member, member).fetchJoin()
+                .where(participant.letter.id.eq(letterId))
+                .fetch();
+    }
+
 }

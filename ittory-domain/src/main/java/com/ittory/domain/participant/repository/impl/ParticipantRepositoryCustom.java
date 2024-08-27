@@ -11,4 +11,5 @@ public interface ParticipantRepositoryCustom {
 
     List<Participant> findAllOrderNext(Long letterId, Integer sequence);
 
+    List<Participant> findAllParticipantsWithMember(Long letterId);
 }
