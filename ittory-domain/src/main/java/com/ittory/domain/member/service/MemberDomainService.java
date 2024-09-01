@@ -43,12 +43,14 @@ public class MemberDomainService {
         memberDomainRepository.save(member);
     }
 
+    @Transactional(readOnly = true)
     public List<Letter> getParticipatedLetters(Long memberId) {
         return participantRepository.findByMemberId(memberId).stream()
                 .map(Participant::getLetter)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<Letter> getReceivedLetters(Long memberId) {
         return letterRepository.findByReceiverId(memberId);
     }
