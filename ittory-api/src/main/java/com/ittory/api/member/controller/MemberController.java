@@ -4,9 +4,9 @@ import com.ittory.api.member.dto.MemberDetailResponse;
 import com.ittory.api.member.dto.MemberSearchResponse;
 import com.ittory.api.member.dto.ParticipationResponse;
 import com.ittory.api.member.dto.ReceivedLetterResponse;
-import com.ittory.api.member.usecase.MemberDetailUseCase;
+import com.ittory.api.member.usecase.MemberDetailReadUseCase;
 import com.ittory.api.member.usecase.MemberUserCase;
-import com.ittory.api.member.usecase.ParticipationUseCase;
+import com.ittory.api.member.usecase.MemberParticipationReadUseCase;
 import com.ittory.api.member.usecase.ReceivedLetterUseCase;
 import com.ittory.domain.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,8 +26,8 @@ public class MemberController {
 
     private final MemberUserCase memberUserCase;
 
-    private final MemberDetailUseCase memberDetailUseCase;
-    private final ParticipationUseCase participationUseCase;
+    private final MemberDetailReadUseCase memberDetailReadUseCase;
+    private final MemberParticipationReadUseCase memberParticipationReadUseCase;
     private final ReceivedLetterUseCase receivedLetterUseCase;
 
 
@@ -42,14 +42,14 @@ public class MemberController {
     @GetMapping("/mypage")
     // @AuthenticationPrincipal -> 이 부분 체크
     public ResponseEntity<MemberDetailResponse> getMyPage(@AuthenticationPrincipal Member member) {
-        MemberDetailResponse response = memberDetailUseCase.execute(member.getId());
+        MemberDetailResponse response = memberDetailReadUseCase.execute(member.getId());
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "참여한 편지 조회", description = "참여한 모든 편지를 조회합니다.")
     @GetMapping("/participations/{memberId}")
     public ResponseEntity<ParticipationResponse> getParticipations(@PathVariable @Positive Long memberId) {
-        ParticipationResponse response = participationUseCase.execute(memberId);
+        ParticipationResponse response = memberParticipationReadUseCase.execute(memberId);
         return ResponseEntity.ok().body(response);
     }
 

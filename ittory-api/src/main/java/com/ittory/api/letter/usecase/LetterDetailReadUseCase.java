@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class LetterDetailUseCase {
+public class LetterDetailReadUseCase {
 
     private final LetterDomainService letterDomainService;
 

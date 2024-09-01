@@ -35,4 +35,12 @@ public class LetterException extends GlobalException {
                             COVER_TYPE_NOT_FOUND_ERROR.getMessage(), coverTypeId));
         }
     }
+
+    public static class ElementNotFoundException extends LetterException {
+        public ElementNotFoundException(Long letterElementId) {
+            super(LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getStatus(),
+                    new ErrorInfo<>(LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getCode(),
+                            LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getMessage(), letterElementId));
+        }
+    }
 }

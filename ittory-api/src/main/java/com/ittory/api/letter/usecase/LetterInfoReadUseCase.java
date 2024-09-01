@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LetterInfoUseCase {
+public class LetterInfoReadUseCase {
 
     private final LetterDomainService letterDomainService;
 

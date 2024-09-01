@@ -30,8 +30,8 @@ public class LetterController {
     private final LetterDeleteUseCase letterDeleteUseCase;
     private final LetterElementUseCase letterElementUseCase;
     private final LetterRepeatCountUseCase letterRepeatCountUseCase;
-    private final LetterInfoUseCase letterInfoUseCase;
-    private final LetterDetailUseCase letterDetailUseCase;
+    private final LetterInfoReadUseCase letterInfoReadUseCase;
+    private final LetterDetailReadUseCase letterDetailReadUseCase;
     private final LetterParticipantReadUseCase letterParticipantReadUseCase;
     private final LetterStorageStatusCheckUseCase letterStorageStatusCheckUseCase;
     private final LetterStoreInLetterBoxUseCase letterStoreInLetterBoxUseCase;
@@ -64,14 +64,14 @@ public class LetterController {
     // 편지 기본 정보 조회 (대기실)
     @GetMapping("/info/{letterId}")
     public ResponseEntity<LetterInfoResponse> getLetterInfo(@PathVariable("letterId") Long letterId) {
-        LetterInfoResponse response = letterInfoUseCase.execute(letterId);
+        LetterInfoResponse response = letterInfoReadUseCase.execute(letterId);
         return ResponseEntity.ok().body(response);
     }
 
     // 편지 상세 조회 (편지 내용)
     @GetMapping("/detail/{letterId}")
     public ResponseEntity<LetterDetailResponse> getLetterDetail(@PathVariable("letterId") Long letterId) {
-        LetterDetailResponse response = letterDetailUseCase.execute(letterId);
+        LetterDetailResponse response = letterDetailReadUseCase.execute(letterId);
         return ResponseEntity.ok().body(response);
     }
 

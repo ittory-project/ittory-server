@@ -10,13 +10,12 @@ import com.ittory.domain.letter.repository.CoverTypeRepository;
 import com.ittory.domain.letter.repository.FontRepository;
 import com.ittory.domain.letter.repository.LetterRepository;
 import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
-import com.ittory.domain.member.service.MemberDomainService;
+
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -61,9 +60,9 @@ public class LetterDomainService {
 
     public void updateLetterElement(Long letterElementId, String content) {
         Element element = letterElementRepository.findById(letterElementId)
-                .orElseThrow(() -> new LetterElementException.LetterElementNotFoundException(letterElementId));
+                .orElseThrow(() -> new LetterException.ElementNotFoundException(letterElementId));
 
-        element.ChangeContent(content);
+        element.changeContent(content);
         letterElementRepository.save(element);
     }
 
@@ -78,7 +77,7 @@ public class LetterDomainService {
     @Transactional(readOnly = true)
     public Letter findLetterById(Long letterId) {
         return letterRepository.findById(letterId)
-                .orElseThrow(() -> new LetterElementException.LetterElementNotFoundException(letterId));
+                .orElseThrow(() -> new LetterException.ElementNotFoundException(letterId));
     }
 
     @Transactional(readOnly = true)

@@ -55,9 +55,6 @@ public class Element extends BaseEntity {
                 .content(content)
                 .build();
     }
-    public void ChangeContent(String content) {
-        this.content = content;
-    }
 
     public void changeContent(String content) {
         this.content = content;
