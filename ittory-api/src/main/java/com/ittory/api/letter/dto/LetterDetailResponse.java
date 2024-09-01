@@ -1,7 +1,7 @@
 package com.ittory.api.letter.dto;
 
+import com.ittory.domain.letter.domain.Element;
 import com.ittory.domain.letter.domain.Letter;
-import com.ittory.domain.letter.domain.LetterElement;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ public class LetterDetailResponse {
     private String coverPhotoUrl;
     private List<LetterElementResponse> elements;
 
-    public static LetterDetailResponse from(Letter letter, List<LetterElement> elements) {
+    public static LetterDetailResponse from(Letter letter, List<Element> elements) {
         return LetterDetailResponse.builder()
                 .letterId(letter.getId())
                 .receiverName(letter.getReceiverName())

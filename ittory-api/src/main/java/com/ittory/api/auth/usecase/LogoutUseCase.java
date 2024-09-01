@@ -11,7 +11,8 @@ public class LogoutUseCase {
 
     private final MemberDomainService memberDomainService;
 
-    public void execute(Member member) {
+    public void execute(Long memberId) {
+        Member member = memberDomainService.findMemberById(memberId);
         memberDomainService.changeRefreshToken(member, null);
     }
 

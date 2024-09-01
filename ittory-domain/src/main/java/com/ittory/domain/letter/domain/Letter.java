@@ -27,7 +27,7 @@ public class Letter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "letter_id")
-    private Long Id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
@@ -60,7 +60,6 @@ public class Letter extends BaseEntity {
                 .coverPhotoUrl(coverPhotoUrl)
                 .build();
     }
-
 
 
 }

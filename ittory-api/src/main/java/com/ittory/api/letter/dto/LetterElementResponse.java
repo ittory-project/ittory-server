@@ -1,6 +1,6 @@
 package com.ittory.api.letter.dto;
 
-import com.ittory.domain.letter.domain.LetterElement;
+import com.ittory.domain.letter.domain.Element;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +15,7 @@ public class LetterElementResponse {
         this.content = content;
     }
 
-    public static LetterElementResponse from(LetterElement letterElement) {
+    public static LetterElementResponse from(Element letterElement) {
         return new LetterElementResponse(
                 letterElement.getId(),
                 letterElement.getContent()

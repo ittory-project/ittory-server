@@ -3,6 +3,15 @@ package com.ittory.domain.letter.service;
 import com.ittory.domain.letter.domain.*;
 import com.ittory.domain.letter.exception.*;
 import com.ittory.domain.letter.repository.*;
+import com.ittory.domain.letter.domain.CoverType;
+import com.ittory.domain.letter.domain.Font;
+import com.ittory.domain.letter.domain.Letter;
+import com.ittory.domain.letter.repository.CoverTypeRepository;
+import com.ittory.domain.letter.repository.FontRepository;
+import com.ittory.domain.letter.repository.LetterRepository;
+import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
+import com.ittory.domain.member.service.MemberDomainService;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +30,11 @@ public class LetterDomainService {
     private final FontRepository fontRepository;
     private final LetterElementRepository letterElementRepository;
 
-    public Letter saveLetter(Long coverTypeId, Long fontId, Long receiverId, String receiverName, LocalDateTime deliveryDate, String title, String coverPhotoUrl) {
+    public Letter saveLetter(Long coverTypeId, Long fontId, Long receiverId, String receiverName,
+                             LocalDateTime deliveryDate, String title, String coverPhotoUrl) {
         CoverType coverType = coverTypeRepository.findById(coverTypeId)
-                .orElseThrow(() -> new CoverTypeException.CoverTypeNotFoundException(coverTypeId));
-        Font font = fontRepository.findById(fontId)
-                .orElseThrow(() -> new FontException.FontNotFoundException(fontId));
+                .orElseThrow(() -> new LetterException.CoverTypeNotFoundException(coverTypeId));
+        Font font = fontRepository.findById(fontId).orElseThrow(() -> new LetterException.FontNotFoundException(fontId));
 
         Letter letter = Letter.create(
                 coverType,
@@ -43,19 +52,19 @@ public class LetterDomainService {
         Letter letter = letterRepository.findById(letterId)
                 .orElseThrow(() -> new LetterException.LetterNotFoundException(letterId));
 
-        List<LetterElement> elements = IntStream.range(0, repeatCount)
-                .mapToObj(i -> LetterElement.create(letter, null, i, null))
+        List<Element> elements = IntStream.range(0, repeatCount)
+                .mapToObj(i -> Element.create(letter, null, null,i, null))
                 .collect(Collectors.toList());
 
         letterElementRepository.saveAll(elements);
     }
 
     public void updateLetterElement(Long letterElementId, String content) {
-        LetterElement letterElement = letterElementRepository.findById(letterElementId)
+        Element element = letterElementRepository.findById(letterElementId)
                 .orElseThrow(() -> new LetterElementException.LetterElementNotFoundException(letterElementId));
 
-        letterElement.ChangeContent(content);
-        letterElementRepository.save(letterElement);
+        element.ChangeContent(content);
+        letterElementRepository.save(element);
     }
 
     public void deleteLetter(Long letterId) {
@@ -73,7 +82,12 @@ public class LetterDomainService {
     }
 
     @Transactional(readOnly = true)
-    public List<LetterElement> findElementsByLetterId(Long letterId) {
+    public List<Element> findElementsByLetterId(Long letterId) {
         return letterElementRepository.findByLetterId(letterId);
     }
+
+    public Letter findLetter(Long letterId) {
+        return letterRepository.findById(letterId).orElseThrow(() -> new MemberNotFoundException(letterId));
+    }
+
 }

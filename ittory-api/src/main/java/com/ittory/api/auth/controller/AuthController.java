@@ -1,6 +1,5 @@
 package com.ittory.api.auth.controller;
 
-import com.ittory.api.annotation.AuthMember;
 import com.ittory.api.auth.dto.AuthTokenResponse;
 import com.ittory.api.auth.dto.KaKaoLoginRequest;
 import com.ittory.api.auth.dto.TokenRefreshRequest;
@@ -8,7 +7,7 @@ import com.ittory.api.auth.dto.TokenRefreshResponse;
 import com.ittory.api.auth.usecase.KaKaoLoginUseCase;
 import com.ittory.api.auth.usecase.LogoutUseCase;
 import com.ittory.api.auth.usecase.TokenRefreshUseCase;
-import com.ittory.domain.member.domain.Member;
+import com.ittory.common.annotation.CurrentMemberId;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
@@ -48,8 +47,8 @@ public class AuthController {
 
     @Operation(summary = "로그아웃", description = "Authenticated")
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@AuthMember Member member) {
-        logoutUseCase.execute(member);
+    public ResponseEntity<Void> logout(@CurrentMemberId Long memberId) {
+        logoutUseCase.execute(memberId);
         return ResponseEntity.ok().build();
     }
 

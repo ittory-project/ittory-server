@@ -5,11 +5,11 @@ import com.ittory.domain.letter.repository.LetterRepository;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
 import com.ittory.domain.member.repository.MemberRepository;
-import com.ittory.domain.member.repository.ParticipantRepository;
+import com.ittory.domain.participant.repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.ittory.domain.member.domain.Participant;
+import com.ittory.domain.participant.domain.Participant;
 
 
 import java.util.List;

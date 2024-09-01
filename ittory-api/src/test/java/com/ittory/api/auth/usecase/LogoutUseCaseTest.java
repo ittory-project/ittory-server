@@ -1,6 +1,7 @@
 package com.ittory.api.auth.usecase;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.enums.MemberStatus;
@@ -31,8 +32,10 @@ public class LogoutUseCaseTest {
                 .refreshToken("old.refresh.token")
                 .build();
 
+        when(memberDomainService.findMemberById(member.getId())).thenReturn(member);
+
         //when
-        logoutUseCase.execute(member);
+        logoutUseCase.execute(member.getId());
 
         //then
         verify(memberDomainService).changeRefreshToken(member, null);

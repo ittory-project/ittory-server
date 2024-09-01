@@ -6,6 +6,7 @@ import static com.ittory.common.exception.ErrorStatus.NOT_FOUND;
 
 import com.ittory.common.exception.CommonErrorCode;
 import com.ittory.common.exception.ErrorInfo;
+import com.ittory.common.exception.ErrorResponse;
 import com.ittory.common.exception.GlobalException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
