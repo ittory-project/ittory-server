@@ -84,7 +84,7 @@ public class LetterBoxDomainServiceTest {
             int finalI = i;
             executorService.submit(() -> {
                 try {
-                    letterBoxDomainService.saveInLetterBox(members.get(finalI), letter, LetterBoxType.RECEIVE);
+                    letterBoxDomainService.saveInReceiveLetterBox(members.get(finalI), letter);
                 } finally {
                     countDownLatch.countDown();
                 }
@@ -111,10 +111,11 @@ public class LetterBoxDomainServiceTest {
         List<Member> members = List.of(member1, member2);
 
         // 첫번째 정상 저장.
-        letterBoxDomainService.saveInLetterBox(members.get(0), letter, LetterBoxType.RECEIVE);
+        letterBoxDomainService.saveInReceiveLetterBox(members.get(0), letter);
 
         // when&then
-        assertThatThrownBy(() -> letterBoxDomainService.saveInLetterBox(members.get(1), letter, LetterBoxType.RECEIVE))
+        assertThatThrownBy(
+                () -> letterBoxDomainService.saveInReceiveLetterBox(members.get(1), letter))
                 .isInstanceOf(LetterBoxAlreadyStoredException.class);
     }
 

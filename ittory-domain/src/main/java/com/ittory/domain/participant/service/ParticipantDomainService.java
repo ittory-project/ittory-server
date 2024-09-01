@@ -64,4 +64,9 @@ public class ParticipantDomainService {
         return participantRepository.save(participant);
     }
 
+    @Transactional(readOnly = true)
+    public List<Participant> findAllParticipants(Long letterId) {
+        return participantRepository.findAllParticipantsWithMember(letterId);
+    }
+
 }
