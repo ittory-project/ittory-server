@@ -1,6 +1,7 @@
 package com.ittory.domain.member.repository.impl;
 
 import static com.ittory.domain.member.domain.QLetterBox.letterBox;
+import static com.ittory.domain.member.enums.LetterBoxType.PARTICIPATION;
 import static com.ittory.domain.member.enums.LetterBoxType.RECEIVE;
 
 import com.ittory.domain.member.domain.LetterBox;
@@ -32,6 +33,20 @@ public class LetterBoxRepositoryImpl implements LetterBoxRepositoryCustom {
 //                .setLockMode(LockModeType.PESSIMISTIC_READ)
                 .fetchFirst();
         return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Integer countParticipationLetterByMemberId(Long memberId) {
+        return jpaQueryFactory.selectFrom(letterBox)
+                .where(letterBox.member.id.eq(memberId).and(letterBox.letterBoxType.eq(PARTICIPATION)))
+                .fetch().size();
+    }
+
+    @Override
+    public Integer countReceiveLetterByMemberId(Long memberId) {
+        return jpaQueryFactory.selectFrom(letterBox)
+                .where(letterBox.member.id.eq(memberId).and(letterBox.letterBoxType.eq(RECEIVE)))
+                .fetch().size();
     }
 
 }

@@ -1,10 +1,12 @@
 package com.ittory.api.member.controller;
 
 import com.ittory.api.member.dto.MemberDetailResponse;
+import com.ittory.api.member.dto.MemberLetterCountResponse;
 import com.ittory.api.member.dto.MemberWithdrawRequest;
 import com.ittory.api.member.dto.ParticipationResponse;
 import com.ittory.api.member.dto.ReceivedLetterResponse;
 import com.ittory.api.member.usecase.MemberDetailReadUseCase;
+import com.ittory.api.member.usecase.MemberLetterCountReadUseCase;
 import com.ittory.api.member.usecase.MemberParticipationReadUseCase;
 import com.ittory.api.member.usecase.MemberWithdrawUseCase;
 import com.ittory.api.member.usecase.ReceivedLetterUseCase;
@@ -29,6 +31,7 @@ public class MemberController {
     private final MemberParticipationReadUseCase memberParticipationReadUseCase;
     private final ReceivedLetterUseCase receivedLetterUseCase;
     private final MemberWithdrawUseCase memberWithdrawUseCase;
+    private final MemberLetterCountReadUseCase memberLetterCountReadUseCase;
 
     @Operation(summary = "마이페이지 정보 조회", description = "사용자의 마이페이지 정보를 조회합니다.")
     @GetMapping("/mypage")
@@ -56,6 +59,12 @@ public class MemberController {
                                                    @RequestBody MemberWithdrawRequest request) {
         memberWithdrawUseCase.execute(memberId, request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/letter-counts")
+    public ResponseEntity<MemberLetterCountResponse> getMemberLetterCounts(@CurrentMemberId Long memberId) {
+        MemberLetterCountResponse response = memberLetterCountReadUseCase.execute(memberId);
+        return ResponseEntity.ok().body(response);
     }
 
 }

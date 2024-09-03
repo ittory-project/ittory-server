@@ -45,4 +45,13 @@ public class LetterBoxDomainService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public Integer countParticipationLetterByMemberId(Long memberId) {
+        return letterBoxRepository.countParticipationLetterByMemberId(memberId);
+    }
+
+    @Transactional(readOnly = true)
+    public Integer countReceiveLetterByMemberId(Long memberId) {
+        return letterBoxRepository.countReceiveLetterByMemberId(memberId);
+    }
 }
