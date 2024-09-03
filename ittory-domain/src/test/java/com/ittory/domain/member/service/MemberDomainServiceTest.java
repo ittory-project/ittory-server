@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.enums.MemberStatus;
 import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
 import com.ittory.domain.member.repository.MemberRepository;
 import java.util.List;
@@ -131,6 +132,26 @@ public class MemberDomainServiceTest {
         Member member = memberRepository.findById(newMember.getId()).orElse(null);
         assertThat(member).isNotNull();
         assertThat(member.getRefreshToken()).isEqualTo(refreshToken);
+    }
+
+    @DisplayName("사용자 탈퇴 시 SocialId를 null로 변경한다.")
+    @Test
+    void withdrawMemberTest() {
+        //given
+        Long socialId = 1L;
+        String name = "test member";
+        String profileImage = "profile url";
+        Member newMember = Member.create(socialId, name, profileImage);
+        Member saveMember = memberRepository.save(newMember);
+
+        //when
+        memberDomainService.withdrawMember(saveMember);
+
+        //then
+        Member member = memberRepository.findById(saveMember.getId()).orElse(null);
+        assertThat(member).isNotNull();
+        assertThat(member.getSocialId()).isNull();
+        assertThat(member.getMemberStatus()).isEqualTo(MemberStatus.DELETED);
     }
 
 }

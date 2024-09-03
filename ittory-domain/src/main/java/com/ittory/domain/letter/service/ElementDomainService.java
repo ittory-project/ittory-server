@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ElementDomainService {
 
     private final ElementRepository elementRepository;
 
+    @Transactional
     public Element changeContent(Participant participant, Long elementId, String content) {
         Element element = elementRepository.findById(elementId)
                 .orElseThrow(() -> new MemberNotFoundException(elementId));
@@ -25,11 +25,14 @@ public class ElementDomainService {
         return element;
     }
 
+    @Transactional(readOnly = true)
     public Integer countByParticipant(Participant participant) {
         return elementRepository.countByParticipant(participant);
     }
 
+    @Transactional(readOnly = true)
     public Page<Element> findAllByLetterId(Long letterId, Pageable pageable) {
         return elementRepository.findAllByLetterId(letterId, pageable);
     }
+
 }

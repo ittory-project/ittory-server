@@ -37,10 +37,13 @@ public class MemberWithdraw extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private WithdrawReason withdrawReason;
 
-    public static MemberWithdraw create(Member member, WithdrawReason withdrawReason) {
+    private String content;
+
+    public static MemberWithdraw create(Member member, WithdrawReason withdrawReason, String content) {
         return MemberWithdraw.builder()
                 .member(member)
                 .withdrawReason(withdrawReason)
+                .content(content)
                 .build();
     }
 

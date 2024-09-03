@@ -56,4 +56,8 @@ public class Member extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
+    public void changeSocialId(Long socialId) {
+        this.socialId = socialId;
+    }
+
 }
