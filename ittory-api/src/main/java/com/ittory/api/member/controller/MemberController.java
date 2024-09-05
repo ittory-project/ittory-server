@@ -1,10 +1,12 @@
 package com.ittory.api.member.controller;
 
+import com.ittory.api.member.dto.MemberAlreadyVisitResponse;
 import com.ittory.api.member.dto.MemberDetailResponse;
 import com.ittory.api.member.dto.MemberLetterCountResponse;
 import com.ittory.api.member.dto.MemberWithdrawRequest;
 import com.ittory.api.member.dto.ParticipationResponse;
 import com.ittory.api.member.dto.ReceivedLetterResponse;
+import com.ittory.api.member.usecase.MemberAlreadyVisitCheckUseCase;
 import com.ittory.api.member.usecase.MemberDetailReadUseCase;
 import com.ittory.api.member.usecase.MemberLetterCountReadUseCase;
 import com.ittory.api.member.usecase.MemberParticipationReadUseCase;
@@ -32,6 +34,7 @@ public class MemberController {
     private final ReceivedLetterUseCase receivedLetterUseCase;
     private final MemberWithdrawUseCase memberWithdrawUseCase;
     private final MemberLetterCountReadUseCase memberLetterCountReadUseCase;
+    private final MemberAlreadyVisitCheckUseCase memberAlreadyVisitCheckUseCase;
 
     @Operation(summary = "마이페이지 정보 조회", description = "사용자의 마이페이지 정보를 조회합니다.")
     @GetMapping("/mypage")
@@ -64,6 +67,12 @@ public class MemberController {
     @GetMapping("/letter-counts")
     public ResponseEntity<MemberLetterCountResponse> getMemberLetterCounts(@CurrentMemberId Long memberId) {
         MemberLetterCountResponse response = memberLetterCountReadUseCase.execute(memberId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/visit")
+    public ResponseEntity<MemberAlreadyVisitResponse> checkMemberAlreadyVisit(@CurrentMemberId Long memberId) {
+        MemberAlreadyVisitResponse response = memberAlreadyVisitCheckUseCase.execute(memberId);
         return ResponseEntity.ok().body(response);
     }
 
