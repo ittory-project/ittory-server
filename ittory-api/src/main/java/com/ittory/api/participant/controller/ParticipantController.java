@@ -1,6 +1,6 @@
 package com.ittory.api.participant.controller;
 
-import com.ittory.api.participant.dto.NicknameDuplicationResultResponse;
+import com.ittory.api.participant.dto.NicknameDuplicationResponse;
 import com.ittory.api.participant.dto.ParticipantSortResponse;
 import com.ittory.api.participant.dto.SortRandomRequest;
 import com.ittory.api.participant.usecase.ParticipantNickNameCheckUseCase;
@@ -29,9 +29,9 @@ public class ParticipantController {
     }
 
     @GetMapping("/duplicate-nickname")
-    public ResponseEntity<NicknameDuplicationResultResponse> duplicateNickname(
+    public ResponseEntity<NicknameDuplicationResponse> duplicateNickname(
             @RequestParam("letterId") Long letterId, @RequestParam("nickname") String nickname) {
-        NicknameDuplicationResultResponse response = participantNickNameCheckUseCase.execute(letterId, nickname);
+        NicknameDuplicationResponse response = participantNickNameCheckUseCase.execute(letterId, nickname);
         return ResponseEntity.ok().body(response);
     }
 

@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class NicknameDuplicationResultResponse {
+public class NicknameDuplicationResponse {
 
     private Boolean isDuplicate;
 
-    public static NicknameDuplicationResultResponse from(Boolean isDuplicate) {
-        return NicknameDuplicationResultResponse.builder()
+    public static NicknameDuplicationResponse from(Boolean isDuplicate) {
+        return NicknameDuplicationResponse.builder()
                 .isDuplicate(isDuplicate)
                 .build();
     }
