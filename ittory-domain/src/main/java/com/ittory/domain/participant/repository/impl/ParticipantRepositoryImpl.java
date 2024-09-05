@@ -64,4 +64,12 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public Participant findByNickname(Long letterId, String nickname) {
+        return jpaQueryFactory.selectFrom(participant)
+                .where(participant.letter.id.eq(letterId)
+                        .and(participant.nickname.eq(nickname))
+                )
+                .fetchOne();
+    }
 }

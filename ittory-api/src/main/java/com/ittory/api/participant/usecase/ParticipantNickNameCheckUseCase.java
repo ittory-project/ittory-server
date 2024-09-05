@@ -11,8 +11,8 @@ public class ParticipantNickNameCheckUseCase {
 
     private final ParticipantDomainService participantDomainService;
 
-    public NicknameDuplicationResultResponse execute(String nickname) {
-        Boolean isDuplicate = participantDomainService.checkNicknameDuplication(nickname);
+    public NicknameDuplicationResultResponse execute(Long letterId, String nickname) {
+        Boolean isDuplicate = participantDomainService.checkNicknameDuplication(letterId, nickname);
         return NicknameDuplicationResultResponse.from(isDuplicate);
     }
 

@@ -30,8 +30,8 @@ public class ParticipantController {
 
     @GetMapping("/duplicate-nickname")
     public ResponseEntity<NicknameDuplicationResultResponse> duplicateNickname(
-            @RequestParam("nickname") String nickname) {
-        NicknameDuplicationResultResponse response = participantNickNameCheckUseCase.execute(nickname);
+            @RequestParam("letterId") Long letterId, @RequestParam("nickname") String nickname) {
+        NicknameDuplicationResultResponse response = participantNickNameCheckUseCase.execute(letterId, nickname);
         return ResponseEntity.ok().body(response);
     }
 

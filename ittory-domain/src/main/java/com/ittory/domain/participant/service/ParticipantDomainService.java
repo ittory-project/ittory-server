@@ -70,8 +70,8 @@ public class ParticipantDomainService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean checkNicknameDuplication(String nickname) {
-        Participant participant = participantRepository.findByNickname(nickname);
+    public Boolean checkNicknameDuplication(Long letterId, String nickname) {
+        Participant participant = participantRepository.findByNickname(letterId, nickname);
         return participant != null;
     }
 

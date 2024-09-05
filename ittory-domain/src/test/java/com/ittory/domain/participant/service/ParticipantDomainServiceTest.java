@@ -181,7 +181,7 @@ public class ParticipantDomainServiceTest {
         participantRepository.save(participant);
 
         //when
-        Boolean isDuplicate = participantDomainService.checkNicknameDuplication("participant");
+        Boolean isDuplicate = participantDomainService.checkNicknameDuplication(letter.getId(), "participant");
 
         //then
         assertThat(isDuplicate).isTrue();

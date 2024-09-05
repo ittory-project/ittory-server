@@ -8,5 +8,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ParticipantRepository extends JpaRepository<Participant, Long>, ParticipantRepositoryCustom {
     List<Participant> findByMemberId(Long memberId);
 
-    Participant findByNickname(String nickname);
 }
