@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ElementRequest {
 
-    private Long elementId;
+    private Integer sequence;
     private String content;
 
 }

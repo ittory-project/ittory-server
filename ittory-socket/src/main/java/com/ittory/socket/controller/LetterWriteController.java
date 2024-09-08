@@ -22,7 +22,7 @@ public class LetterWriteController {
     public void sendElement(@CurrentMemberId Long memberId, @DestinationVariable Long letterId,
                             ElementRequest request) {
         String destination = "/topic/letter/" + letterId;
-        ElementResponse response = letterWriteUseCase.execute(memberId, request);
+        ElementResponse response = letterWriteUseCase.execute(memberId, letterId, request);
         messagingTemplate.convertAndSend(destination, response);
     }
 

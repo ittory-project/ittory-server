@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ElementResponse {
 
     private Long elementId;
-    private Integer sort;
+    private Integer sequence;
     private String imageUrl;
     private String content;
     private String nickname;
@@ -24,7 +24,7 @@ public class ElementResponse {
     public static ElementResponse of(Participant participant, Element element) {
         return ElementResponse.builder()
                 .elementId(element.getId())
-                .sort(element.getSequence())
+                .sequence(element.getSequence())
                 .imageUrl(element.getElementImage().getUrl())
                 .content(element.getContent())
                 .nickname(participant.getNickname())

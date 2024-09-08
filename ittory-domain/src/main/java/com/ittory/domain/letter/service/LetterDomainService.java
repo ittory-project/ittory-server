@@ -63,7 +63,7 @@ public class LetterDomainService {
     @Transactional
     public void updateLetterElement(Long letterElementId, String content) {
         Element element = letterElementRepository.findById(letterElementId)
-                .orElseThrow(() -> new LetterException.ElementNotFoundException(letterElementId));
+                .orElseThrow(() -> new LetterException.LetterNotFoundException(letterElementId));
 
         element.changeContent(content);
         letterElementRepository.save(element);
@@ -81,7 +81,7 @@ public class LetterDomainService {
     @Transactional(readOnly = true)
     public Letter findLetterById(Long letterId) {
         return letterRepository.findById(letterId)
-                .orElseThrow(() -> new LetterException.ElementNotFoundException(letterId));
+                .orElseThrow(() -> new LetterException.LetterNotFoundException(letterId));
     }
 
     @Transactional(readOnly = true)

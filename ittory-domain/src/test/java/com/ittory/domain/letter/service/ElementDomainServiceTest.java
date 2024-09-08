@@ -8,6 +8,7 @@ import com.ittory.domain.letter.domain.ElementImage;
 import com.ittory.domain.letter.domain.Font;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.dto.CoverTypeImages;
+import com.ittory.domain.letter.dto.ElementEditData;
 import com.ittory.domain.letter.repository.CoverTypeRepository;
 import com.ittory.domain.letter.repository.ElementImageRepository;
 import com.ittory.domain.letter.repository.ElementRepository;
@@ -75,7 +76,7 @@ public class ElementDomainServiceTest {
 
         Letter letter = Letter.create(coverType, font, "receiver", LocalDateTime.now(), "title", "image", null);
         Participant participant = Participant.create(member, letter, "participant");
-        Element element = Element.create(letter, participant, elementImage, 0, null);
+        Element element = Element.create(letter, participant, elementImage, 1, null);
 
         memberRepository.save(member);
         coverTypeRepository.save(coverType);
@@ -85,8 +86,10 @@ public class ElementDomainServiceTest {
         participantRepository.save(participant);
         Element savedElement = elementRepository.save(element);
 
+        ElementEditData editData = ElementEditData.of(1, "New Letter Element");
+
         //when
-        elementDomainService.changeContent(participant, savedElement.getId(), "New Letter Element");
+        elementDomainService.changeContent(letter.getId(), participant, editData);
 
         //then
         Element findElement = elementRepository.findById(savedElement.getId()).orElse(null);
