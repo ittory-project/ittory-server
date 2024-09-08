@@ -5,6 +5,7 @@ import com.ittory.domain.letter.repository.LetterRepository;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.enums.MemberStatus;
 import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
+import com.ittory.domain.member.repository.LetterBoxRepository;
 import com.ittory.domain.member.repository.MemberRepository;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.repository.ParticipantRepository;
@@ -20,6 +21,7 @@ public class MemberDomainService {
     private final MemberRepository memberDomainRepository;
     private final ParticipantRepository participantRepository;
     private final LetterRepository letterRepository;
+    private final LetterBoxRepository letterBoxRepository;
 
 
     @Transactional
@@ -62,4 +64,9 @@ public class MemberDomainService {
         memberDomainRepository.save(member);
     }
 
+    @Transactional(readOnly = true)
+    public Boolean checkVisitedMember(Long memberId) {
+        Integer participationLetterCount = letterBoxRepository.countParticipationLetterByMemberId(memberId);
+        return participationLetterCount > 0;
+    }
 }
