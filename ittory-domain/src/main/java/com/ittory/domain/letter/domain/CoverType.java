@@ -1,6 +1,7 @@
 package com.ittory.domain.letter.domain;
 
 import com.ittory.domain.common.BaseEntity;
+import com.ittory.domain.letter.dto.CoverTypeImages;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,12 +27,21 @@ public class CoverType extends BaseEntity {
 
     private String name;
 
-    private String url;
+    @Column(name = "image_url")
+    private String imageUrl;
 
-    public static CoverType create(String name, String url) {
+    @Column(name = "simple_url")
+    private String simpleUrl;
+
+    @Column(name = "background_url")
+    private String backgroundUrl;
+
+    public static CoverType create(String name, CoverTypeImages request) {
         return CoverType.builder()
                 .name(name)
-                .url(url)
+                .imageUrl(request.getImageUrl())
+                .simpleUrl(request.getSimpleUrl())
+                .backgroundUrl(request.getBackgroundUrl())
                 .build();
     }
 }

@@ -7,6 +7,7 @@ import com.ittory.domain.letter.domain.Element;
 import com.ittory.domain.letter.domain.ElementImage;
 import com.ittory.domain.letter.domain.Font;
 import com.ittory.domain.letter.domain.Letter;
+import com.ittory.domain.letter.dto.CoverTypeImages;
 import com.ittory.domain.letter.repository.CoverTypeRepository;
 import com.ittory.domain.letter.repository.ElementImageRepository;
 import com.ittory.domain.letter.repository.ElementRepository;
@@ -67,7 +68,8 @@ public class ElementDomainServiceTest {
     void changeContentTest() {
         //given
         Member member = Member.create(1L, "member", "image");
-        CoverType coverType = CoverType.create("type", "image");
+        CoverTypeImages images = CoverTypeImages.of("image", "simple", "back");
+        CoverType coverType = CoverType.create("type", images);
         Font font = Font.create("font");
         ElementImage elementImage = ElementImage.create("image");
 

@@ -11,5 +11,13 @@ public class CoverTypeCreateRequest {
     private String name;
 
     @Schema(description = "표지사진의 URL", example = "http://ittory..com/cover")
-    private String url;
+    private String imageUrl;
+
+    @Schema(description = "표지 간단사진의 URL", example = "http://ittory..com/cover")
+    private String simpleUrl;
+
+    @Schema(description = "표지 배경 이미지 URL", example = "http://ittory..com/cover")
+    private String backgroundUrl;
+
+
 }

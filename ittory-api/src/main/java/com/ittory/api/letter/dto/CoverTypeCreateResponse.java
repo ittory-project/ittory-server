@@ -22,7 +22,7 @@ public class CoverTypeCreateResponse {
         return CoverTypeCreateResponse.builder()
                 .id(coverType.getId())
                 .name(coverType.getName())
-                .url(coverType.getUrl())
+                .url(coverType.getImageUrl())
                 .createdAt(coverType.getCreatedAt())
                 .updatedAt(coverType.getUpdatedAt())
                 .build();

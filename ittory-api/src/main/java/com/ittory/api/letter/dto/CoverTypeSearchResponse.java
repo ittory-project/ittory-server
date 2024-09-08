@@ -12,15 +12,20 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 public class CoverTypeSearchResponse {
+
     private Long id;
     private String name;
-    private String url;
+    private String imageUrl;
+    private String simpleUrl;
+    private String backgroundUrl;
 
     public static CoverTypeSearchResponse from(CoverType coverType) {
         return CoverTypeSearchResponse.builder()
                 .id(coverType.getId())
                 .name(coverType.getName())
-                .url(coverType.getUrl())
+                .imageUrl(coverType.getImageUrl())
+                .simpleUrl(coverType.getSimpleUrl())
+                .backgroundUrl(coverType.getBackgroundUrl())
                 .build();
     }
 }
