@@ -41,7 +41,7 @@ public class LetterBoxRepositoryTest {
         String name = "test member";
         String profileImage = "profile url";
         Member member = memberRepository.save(Member.create(socialId, name, profileImage));
-        Letter newLetter = Letter.create(null, null, "receiver", null, "title", null);
+        Letter newLetter = Letter.create(null, null, "receiver", null, "title", null, null);
         Letter letter = letterRepository.save(newLetter);
         letterBoxRepository.save(LetterBox.create(member, letter, LetterBoxType.RECEIVE));
 

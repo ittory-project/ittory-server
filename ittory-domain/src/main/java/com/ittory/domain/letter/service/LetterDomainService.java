@@ -41,7 +41,8 @@ public class LetterDomainService {
                 receiverName,
                 deliveryDate,
                 title,
-                coverPhotoUrl
+                coverPhotoUrl,
+                null
         );
 
         return letterRepository.save(letter);

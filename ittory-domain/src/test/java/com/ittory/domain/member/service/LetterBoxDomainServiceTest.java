@@ -52,7 +52,7 @@ public class LetterBoxDomainServiceTest {
         String name = "test member";
         String profileImage = "profile url";
         Member member = memberRepository.save(Member.create(socialId, name, profileImage));
-        Letter newLetter = Letter.create(null, null, "receiver", null, "title", null);
+        Letter newLetter = Letter.create(null, null, "receiver", null, "title", null, null);
         Letter letter = letterRepository.save(newLetter);
         letterBoxRepository.save(LetterBox.create(member, letter, LetterBoxType.RECEIVE));
 
@@ -70,7 +70,7 @@ public class LetterBoxDomainServiceTest {
         Member member1 = memberRepository.save(Member.create(1L, "member1", null));
         Member member2 = memberRepository.save(Member.create(2L, "member2", null));
 
-        Letter newLetter = Letter.create(null, null, "receiver", null, "title", null);
+        Letter newLetter = Letter.create(null, null, "receiver", null, "title", null, null);
         Letter letter = letterRepository.save(newLetter);
 
         List<Member> members = List.of(member1, member2);
@@ -105,7 +105,7 @@ public class LetterBoxDomainServiceTest {
         Member member1 = memberRepository.save(Member.create(1L, "member1", null));
         Member member2 = memberRepository.save(Member.create(2L, "member2", null));
 
-        Letter newLetter = Letter.create(null, null, "receiver", null, "title", null);
+        Letter newLetter = Letter.create(null, null, "receiver", null, "title", null, null);
         Letter letter = letterRepository.save(newLetter);
 
         List<Member> members = List.of(member1, member2);
