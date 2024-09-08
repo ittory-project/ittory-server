@@ -171,4 +171,20 @@ public class ParticipantDomainServiceTest {
         assertThat(currentParticipant.get(1).getSequence()).isEqualTo(2);
     }
 
+    @DisplayName("참여자의 닉네임이 중복인지 확인한다.")
+    @Test
+    void checkNicknameDuplicationTest() {
+        //given
+        Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
+        Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
+        Participant participant = Participant.create(member1, letter, "participant");
+        participantRepository.save(participant);
+
+        //when
+        Boolean isDuplicate = participantDomainService.checkNicknameDuplication(letter.getId(), "participant");
+
+        //then
+        assertThat(isDuplicate).isTrue();
+    }
+
 }
