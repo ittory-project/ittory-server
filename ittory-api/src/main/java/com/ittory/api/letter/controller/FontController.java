@@ -6,6 +6,7 @@ import com.ittory.api.letter.dto.FontSearchResponse;
 import com.ittory.api.letter.usecase.FontAllReadUseCase;
 import com.ittory.api.letter.usecase.FontCreateUseCase;
 import com.ittory.api.letter.usecase.FontReadUseCase;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ public class FontController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "폰트 모두 조회")
     @GetMapping("/all")
     public ResponseEntity<List<FontSearchResponse>> getAllFont() {
         List<FontSearchResponse> response = fontAllReadUseCase.execute();
