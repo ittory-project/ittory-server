@@ -9,4 +9,6 @@ public interface ElementRepositoryCustom {
     Page<Element> findAllByLetterId(Long letterId, Pageable pageable);
 
     Optional<Element> findByLetterIdAndSequence(Long letterId, Integer sequence);
+
+    Element findByLetterIdAndSequenceWithImage(Long elementId, Integer sequence);
 }

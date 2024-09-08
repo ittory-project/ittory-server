@@ -45,4 +45,11 @@ public class ElementRepositoryImpl implements ElementRepositoryCustom {
         return Optional.ofNullable(result);
     }
 
+    @Override
+    public Element findByLetterIdAndSequenceWithImage(Long letterId, Integer sequence) {
+        return jpaQueryFactory.selectFrom(element)
+                .leftJoin(element.elementImage, elementImage).fetchJoin()
+                .where(element.letter.id.eq(letterId).and(element.sequence.eq(sequence)))
+                .fetchOne();
+    }
 }

@@ -36,4 +36,9 @@ public class ElementDomainService {
         return elementRepository.findAllByLetterId(letterId, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Element findElementWithImage(Long letterId, Integer sequence) {
+        return elementRepository.findByLetterIdAndSequenceWithImage(letterId, sequence);
+    }
+
 }
