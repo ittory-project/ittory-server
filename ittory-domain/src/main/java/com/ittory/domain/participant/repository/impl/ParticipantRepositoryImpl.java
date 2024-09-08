@@ -32,7 +32,8 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     }
 
     @Override
-    public List<Participant> findCurrentParticipantsByLetterIdOrdered(Long letterId, Boolean isAscending) {
+    public List<Participant> findCurrentParticipantsByLetterIdOrdered(Long letterId,
+                                                                      Boolean isAscending) {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.member, member).fetchJoin()
                 .where(participant.participantStatus.eq(PROGRESS).and(participant.letter.id.in(letterId)))

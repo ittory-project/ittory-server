@@ -31,12 +31,14 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -96,10 +98,12 @@ public class LetterController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "현재 유저를 순서에 맞게 조회", description = "순서를 기준으로 오름차순 정렬")
+    @Operation(summary = "현재 유저를 순서에 맞게 조회",
+            description = "order가 sequence면 sequence순서대로 조회. 그 외 혹은 null이면 참여한 순서대로 조회.")
     @GetMapping("/participant/{letterId}")
-    public ResponseEntity<ParticipantSortResponse> getParticipantInLetter(@PathVariable Long letterId) {
-        List<ParticipantProfile> profiles = letterParticipantReadUseCase.execute(letterId);
+    public ResponseEntity<ParticipantSortResponse> getParticipantInLetter(@PathVariable Long letterId,
+                                                                          @Nullable @RequestParam("order") String order) {
+        List<ParticipantProfile> profiles = letterParticipantReadUseCase.execute(letterId, order);
         return ResponseEntity.ok().body(ParticipantSortResponse.from(profiles));
     }
 

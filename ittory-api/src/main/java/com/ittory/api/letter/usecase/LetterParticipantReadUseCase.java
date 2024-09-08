@@ -12,8 +12,12 @@ public class LetterParticipantReadUseCase {
 
     private final ParticipantDomainService participantDomainService;
 
-    public List<ParticipantProfile> execute(Long letterId) {
-        return participantDomainService.findAllCurrentParticipantsOrderedBySequence(letterId, true)
+    public List<ParticipantProfile> execute(Long letterId, String order) {
+        Boolean isAscending = null;
+        if (order != null && order.equals("sequence")) {
+            isAscending = true;
+        }
+        return participantDomainService.findAllCurrentParticipantsOrderedBySequence(letterId, isAscending)
                 .stream()
                 .map(ParticipantProfile::from)
                 .toList();
