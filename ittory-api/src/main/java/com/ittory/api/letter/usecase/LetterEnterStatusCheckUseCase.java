@@ -13,7 +13,7 @@ public class LetterEnterStatusCheckUseCase {
 
     public LetterEnterStatusResponse execute(Long letterId) {
         Boolean enterStatus = participantDomainService.getEnterStatus(letterId);
-        return LetterEnterStatusResponse.create(enterStatus);
+        return LetterEnterStatusResponse.of(enterStatus);
     }
 
 }

@@ -14,7 +14,7 @@ public class LetterEnterStatusResponse {
 
     private Boolean enterStatus;
 
-    public static LetterEnterStatusResponse create(Boolean enterStatus) {
+    public static LetterEnterStatusResponse of(Boolean enterStatus) {
         return LetterEnterStatusResponse.builder()
                 .enterStatus(enterStatus)
                 .build();

@@ -9,6 +9,7 @@ import com.ittory.api.letter.dto.LetterElementsResponse;
 import com.ittory.api.letter.dto.LetterEnterStatusResponse;
 import com.ittory.api.letter.dto.LetterInfoResponse;
 import com.ittory.api.letter.dto.LetterRepeatCountRequest;
+import com.ittory.api.letter.dto.LetterStartInfoResponse;
 import com.ittory.api.letter.dto.LetterStorageStatusResponse;
 import com.ittory.api.letter.usecase.LetterCreateUseCase;
 import com.ittory.api.letter.usecase.LetterDeleteUseCase;
@@ -19,6 +20,7 @@ import com.ittory.api.letter.usecase.LetterEnterStatusCheckUseCase;
 import com.ittory.api.letter.usecase.LetterInfoReadUseCase;
 import com.ittory.api.letter.usecase.LetterParticipantReadUseCase;
 import com.ittory.api.letter.usecase.LetterRepeatCountUseCase;
+import com.ittory.api.letter.usecase.LetterStartInfoReadUseCase;
 import com.ittory.api.letter.usecase.LetterStorageStatusCheckUseCase;
 import com.ittory.api.letter.usecase.LetterStoreInLetterBoxUseCase;
 import com.ittory.api.participant.dto.ParticipantProfile;
@@ -53,6 +55,7 @@ public class LetterController {
     private final LetterStoreInLetterBoxUseCase letterStoreInLetterBoxUseCase;
     private final LetterElementsReadUseCase letterElementsReadUseCase;
     private final LetterEnterStatusCheckUseCase letterEnterStatusCheckUseCase;
+    private final LetterStartInfoReadUseCase letterStartInfoReadUseCase;
 
     @PostMapping
     public ResponseEntity<LetterCreateResponse> createLetter(@RequestBody LetterCreateRequest request) {
@@ -125,6 +128,13 @@ public class LetterController {
     @GetMapping("/{letterId}/enter-status")
     public ResponseEntity<LetterEnterStatusResponse> checkLetterEnterStatus(@PathVariable Long letterId) {
         LetterEnterStatusResponse response = letterEnterStatusCheckUseCase.execute(letterId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "편지 시작 시 정보 조회", description = "참여인원, 반복횟수, 생성된 요소의 수")
+    @GetMapping("/{letterId}/startInfo")
+    public ResponseEntity<LetterStartInfoResponse> getLetterStartInfo(@PathVariable Long letterId) {
+        LetterStartInfoResponse response = letterStartInfoReadUseCase.execute(letterId);
         return ResponseEntity.ok().body(response);
     }
 
