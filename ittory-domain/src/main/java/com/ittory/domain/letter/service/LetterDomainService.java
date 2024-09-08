@@ -94,4 +94,10 @@ public class LetterDomainService {
         return letterRepository.findById(letterId).orElseThrow(() -> new MemberNotFoundException(letterId));
     }
 
+    @Transactional
+    public void changeRepeatCount(Letter letter, int repeatCount) {
+        letter.changeRepeatCount(repeatCount);
+        letterRepository.save(letter);
+    }
+
 }
