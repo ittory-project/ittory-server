@@ -75,4 +75,10 @@ public class ParticipantDomainService {
         return participant != null;
     }
 
+    @Transactional(readOnly = true)
+    public Boolean getEnterStatus(Long letterId) {
+        Integer participantCount = participantRepository.countByLetterId(letterId);
+        return participantCount < 5;
+    }
+
 }

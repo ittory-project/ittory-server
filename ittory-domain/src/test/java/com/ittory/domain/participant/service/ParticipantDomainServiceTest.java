@@ -11,6 +11,7 @@ import com.ittory.domain.member.repository.MemberRepository;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.exception.ParticipantException.ParticipantNotFoundException;
 import com.ittory.domain.participant.repository.ParticipantRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -185,6 +186,33 @@ public class ParticipantDomainServiceTest {
 
         //then
         assertThat(isDuplicate).isTrue();
+    }
+
+    @DisplayName("편지의 참여자가 5명 미만인지 체크한다.")
+    @Test
+    void getEnterStatusTest() {
+        //given
+        int MAX_PARTICIPANT_SIZE = 5;
+        List<Member> newMembers = new ArrayList<>();
+        for (int i = 0; i < MAX_PARTICIPANT_SIZE; i++) {
+            Member member = Member.create((long) i, "tester" + i, null);
+            newMembers.add(member);
+        }
+        List<Member> members = memberRepository.saveAll(newMembers);
+        Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
+
+        List<Participant> newParticipants = new ArrayList<>();
+        for (int i = 0; i < MAX_PARTICIPANT_SIZE; i++) {
+            Participant participant = Participant.create(members.get(i), letter, "participant" + i);
+            newParticipants.add(participant);
+        }
+        participantRepository.saveAll(newParticipants);
+
+        //when
+        Boolean enterStatus = participantDomainService.getEnterStatus(letter.getId());
+
+        //then
+        assertThat(enterStatus).isFalse();
     }
 
 }

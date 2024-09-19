@@ -1,14 +1,24 @@
 package com.ittory.api.letter.controller;
 
-import com.ittory.api.letter.dto.*;
-import com.ittory.api.letter.usecase.*;
 import com.ittory.api.letter.dto.LetterCreateRequest;
 import com.ittory.api.letter.dto.LetterCreateResponse;
+import com.ittory.api.letter.dto.LetterDetailResponse;
+import com.ittory.api.letter.dto.LetterElementRequest;
+import com.ittory.api.letter.dto.LetterElementResponse;
 import com.ittory.api.letter.dto.LetterElementsResponse;
+import com.ittory.api.letter.dto.LetterEnterStatusResponse;
+import com.ittory.api.letter.dto.LetterInfoResponse;
+import com.ittory.api.letter.dto.LetterRepeatCountRequest;
 import com.ittory.api.letter.dto.LetterStorageStatusResponse;
 import com.ittory.api.letter.usecase.LetterCreateUseCase;
+import com.ittory.api.letter.usecase.LetterDeleteUseCase;
+import com.ittory.api.letter.usecase.LetterDetailReadUseCase;
+import com.ittory.api.letter.usecase.LetterElementUseCase;
 import com.ittory.api.letter.usecase.LetterElementsReadUseCase;
+import com.ittory.api.letter.usecase.LetterEnterStatusCheckUseCase;
+import com.ittory.api.letter.usecase.LetterInfoReadUseCase;
 import com.ittory.api.letter.usecase.LetterParticipantReadUseCase;
+import com.ittory.api.letter.usecase.LetterRepeatCountUseCase;
 import com.ittory.api.letter.usecase.LetterStorageStatusCheckUseCase;
 import com.ittory.api.letter.usecase.LetterStoreInLetterBoxUseCase;
 import com.ittory.api.participant.dto.ParticipantProfile;
@@ -19,7 +29,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/letter")
@@ -36,6 +52,7 @@ public class LetterController {
     private final LetterStorageStatusCheckUseCase letterStorageStatusCheckUseCase;
     private final LetterStoreInLetterBoxUseCase letterStoreInLetterBoxUseCase;
     private final LetterElementsReadUseCase letterElementsReadUseCase;
+    private final LetterEnterStatusCheckUseCase letterEnterStatusCheckUseCase;
 
     @PostMapping
     public ResponseEntity<LetterCreateResponse> createLetter(@RequestBody LetterCreateRequest request) {
@@ -50,7 +67,8 @@ public class LetterController {
     }
 
     @PostMapping("/element/{letterElementId}")
-    public ResponseEntity<LetterElementResponse> registerLetterElementContent(@PathVariable Long letterElementId, @RequestBody LetterElementRequest request) {
+    public ResponseEntity<LetterElementResponse> registerLetterElementContent(@PathVariable Long letterElementId,
+                                                                              @RequestBody LetterElementRequest request) {
         LetterElementResponse response = letterElementUseCase.execute(letterElementId, request);
         return ResponseEntity.ok().body(response);
     }
@@ -100,6 +118,13 @@ public class LetterController {
     @GetMapping("/{letterId}/elements")
     public ResponseEntity<LetterElementsResponse> getLetterDetails(@PathVariable Long letterId, Pageable pageable) {
         LetterElementsResponse response = letterElementsReadUseCase.execute(letterId, pageable);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "편지 참여가능 여부 조회", description = "현재 참여중인 참여자가 5명인지 아닌지 획인")
+    @GetMapping("/{letterId}/enter-status")
+    public ResponseEntity<LetterEnterStatusResponse> checkLetterEnterStatus(@PathVariable Long letterId) {
+        LetterEnterStatusResponse response = letterEnterStatusCheckUseCase.execute(letterId);
         return ResponseEntity.ok().body(response);
     }
 
