@@ -1,8 +1,9 @@
 package com.ittory.domain.letter.service;
 
 import com.ittory.domain.letter.domain.Element;
+import com.ittory.domain.letter.dto.ElementEditData;
+import com.ittory.domain.letter.exception.LetterException.ElementNotFoundException;
 import com.ittory.domain.letter.repository.ElementRepository;
-import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
 import com.ittory.domain.participant.domain.Participant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,11 +18,11 @@ public class ElementDomainService {
     private final ElementRepository elementRepository;
 
     @Transactional
-    public Element changeContent(Participant participant, Long elementId, String content) {
-        Element element = elementRepository.findById(elementId)
-                .orElseThrow(() -> new MemberNotFoundException(elementId));
+    public Element changeContent(Long letterId, Participant participant, ElementEditData editData) {
+        Element element = elementRepository.findByLetterIdAndSequence(letterId, editData.getSequence())
+                .orElseThrow(ElementNotFoundException::new);
         element.changeParticipant(participant);
-        element.changeContent(content);
+        element.changeContent(editData.getContent());
         return element;
     }
 
@@ -33,6 +34,11 @@ public class ElementDomainService {
     @Transactional(readOnly = true)
     public Page<Element> findAllByLetterId(Long letterId, Pageable pageable) {
         return elementRepository.findAllByLetterId(letterId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Element findElementWithImage(Long letterId, Integer sequence) {
+        return elementRepository.findByLetterIdAndSequenceWithImage(letterId, sequence);
     }
 
 }

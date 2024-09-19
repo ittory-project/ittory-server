@@ -37,10 +37,10 @@ public class LetterException extends GlobalException {
     }
 
     public static class ElementNotFoundException extends LetterException {
-        public ElementNotFoundException(Long letterElementId) {
+        public ElementNotFoundException() {
             super(LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getStatus(),
                     new ErrorInfo<>(LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getCode(),
-                            LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getMessage(), letterElementId));
+                            LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getMessage()));
         }
     }
 }
