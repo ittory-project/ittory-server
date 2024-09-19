@@ -3,6 +3,7 @@ package com.ittory.domain.letter.service;
 import com.ittory.domain.letter.domain.Font;
 import com.ittory.domain.letter.exception.LetterException.FontNotFoundException;
 import com.ittory.domain.letter.repository.FontRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,11 @@ public class FontDomainService {
     @Transactional(readOnly = true)
     public Font getFontById(Long fontId) {
         return fontRepository.findById(fontId).orElseThrow(() -> new FontNotFoundException(fontId));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Font> getAllFont() {
+        return fontRepository.findAll();
     }
 
 }

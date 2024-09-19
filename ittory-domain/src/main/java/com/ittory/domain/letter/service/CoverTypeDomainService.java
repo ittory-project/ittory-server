@@ -1,8 +1,10 @@
 package com.ittory.domain.letter.service;
 
 import com.ittory.domain.letter.domain.CoverType;
+import com.ittory.domain.letter.dto.CoverTypeImages;
 import com.ittory.domain.letter.exception.LetterException.CoverTypeNotFoundException;
 import com.ittory.domain.letter.repository.CoverTypeRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +16,8 @@ public class CoverTypeDomainService {
     private final CoverTypeRepository coverTypeRepository;
 
     @Transactional
-    public CoverType createCoverType(String name, String url) {
-        CoverType coverType = CoverType.create(name, url);
+    public CoverType createCoverType(String name, CoverTypeImages images) {
+        CoverType coverType = CoverType.create(name, images);
         return coverTypeRepository.save(coverType);
     }
 
@@ -25,4 +27,8 @@ public class CoverTypeDomainService {
                 .orElseThrow(() -> new CoverTypeNotFoundException(coverTypeId));
     }
 
+    @Transactional(readOnly = true)
+    public List<CoverType> findAllCoverType() {
+        return coverTypeRepository.findAll();
+    }
 }
