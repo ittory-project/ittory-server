@@ -73,7 +73,7 @@ public class ElementDomainServiceTest {
         Font font = Font.create("font");
         ElementImage elementImage = ElementImage.create("image");
 
-        Letter letter = Letter.create(coverType, font, "receiver", LocalDateTime.now(), "title", "image");
+        Letter letter = Letter.create(coverType, font, "receiver", LocalDateTime.now(), "title", "image", null);
         Participant participant = Participant.create(member, letter, "participant");
         Element element = Element.create(letter, participant, elementImage, 0, null);
 

@@ -41,7 +41,8 @@ public class LetterDomainService {
                 receiverName,
                 deliveryDate,
                 title,
-                coverPhotoUrl
+                coverPhotoUrl,
+                null
         );
 
         return letterRepository.save(letter);
@@ -91,6 +92,12 @@ public class LetterDomainService {
     @Transactional(readOnly = true)
     public Letter findLetter(Long letterId) {
         return letterRepository.findById(letterId).orElseThrow(() -> new MemberNotFoundException(letterId));
+    }
+
+    @Transactional
+    public void changeRepeatCount(Letter letter, int repeatCount) {
+        letter.changeRepeatCount(repeatCount);
+        letterRepository.save(letter);
     }
 
 }
