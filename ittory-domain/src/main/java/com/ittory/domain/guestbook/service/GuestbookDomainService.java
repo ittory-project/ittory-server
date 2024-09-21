@@ -4,6 +4,8 @@ import com.ittory.domain.guestbook.domain.Guestbook;
 import com.ittory.domain.guestbook.domain.GuestbookColor;
 import com.ittory.domain.guestbook.repository.GuestbookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,4 +23,8 @@ public class GuestbookDomainService {
         return guestbook;
     }
 
+    @Transactional(readOnly = true)
+    public Page<Guestbook> findAllGuestbook(Pageable pageable) {
+        return guestbookRepository.findGuestbookPage(pageable);
+    }
 }
