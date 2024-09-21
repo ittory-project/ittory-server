@@ -23,12 +23,15 @@ public class Guestbook extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private GuestbookColor color;
 
-    public static Guestbook create(String nickname, String content, GuestbookColor color) {
+    public static Guestbook create(String nickname, String content) {
         return Guestbook.builder()
                 .nickname(nickname)
                 .content(content)
-                .color(color)
                 .build();
+    }
+
+    public void changeColor(GuestbookColor color) {
+        this.color = color;
     }
 
 }

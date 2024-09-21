@@ -1,7 +1,5 @@
 package com.ittory.api.config.security;
 
-import static com.ittory.common.constant.DBConstant.H2_PATH;
-
 import com.ittory.api.config.security.filter.CustomAuthenticationEntryPoint;
 import com.ittory.api.config.security.filter.ExceptionHandlerFilter;
 import com.ittory.api.config.security.filter.JwtAuthenticationFilter;
@@ -16,6 +14,8 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.ittory.common.constant.DBConstant.H2_PATH;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(H2_PATH).permitAll()
                         .requestMatchers("/api/auth/login/**", "/api/auth/refresh").permitAll()
+                        .requestMatchers("/api/guestbook/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling((config) -> config.authenticationEntryPoint(customAuthenticationEntryPoint))
