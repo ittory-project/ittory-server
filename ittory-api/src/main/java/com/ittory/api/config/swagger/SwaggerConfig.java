@@ -6,26 +6,24 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "Ittory", description = "Ittory API 명세서", version = "v1"))
+@OpenAPIDefinition(info = @Info(title = "Ittory", description = "Ittory API 명세서", version = "v1"),
+        servers = {@Server(url = "https://dev-server.ittory.co.kr", description = "Dev 도메인"),
+                @Server(url = "/", description = "기본")})
 @SecurityScheme(
         name = "bearerAuth",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
         scheme = "bearer"
 )
-@Server(url = "/")
 public class SwaggerConfig {
 
     @Bean
