@@ -10,7 +10,6 @@ import com.ittory.api.auth.usecase.TokenRefreshUseCase;
 import com.ittory.common.annotation.CurrentMemberId;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -32,7 +33,7 @@ public class AuthController {
     @Operation(summary = "카카오 소셜 로그인")
     @PostMapping("/login/kakao")
     public ResponseEntity<AuthTokenResponse> loginByKaKao(@Valid @RequestBody KaKaoLoginRequest request) {
-        AuthTokenResponse response = kaKaoLoginUseCase.execute(request.getCode());
+        AuthTokenResponse response = kaKaoLoginUseCase.execute(request.getAccessToken());
         log.info("Login with {} in {}", response.getAccessToken(), LocalDateTime.now());
         return ResponseEntity.ok().body(response);
     }
