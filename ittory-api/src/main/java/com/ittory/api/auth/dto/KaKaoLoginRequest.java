@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class KaKaoLoginRequest {
 
-    @Schema(description = "카카오 인가 코드")
+    @Schema(description = "카카오 엑세스 토큰")
     @NotNull
-    private String code;
+    private String accessToken;
 
 }
