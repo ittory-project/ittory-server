@@ -9,14 +9,14 @@ import com.ittory.domain.letter.repository.CoverTypeRepository;
 import com.ittory.domain.letter.repository.FontRepository;
 import com.ittory.domain.letter.repository.LetterElementRepository;
 import com.ittory.domain.letter.repository.LetterRepository;
-import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -91,7 +91,7 @@ public class LetterDomainService {
 
     @Transactional(readOnly = true)
     public Letter findLetter(Long letterId) {
-        return letterRepository.findById(letterId).orElseThrow(() -> new MemberNotFoundException(letterId));
+        return letterRepository.findById(letterId).orElseThrow(() -> new LetterException.LetterNotFoundException(letterId));
     }
 
     @Transactional
