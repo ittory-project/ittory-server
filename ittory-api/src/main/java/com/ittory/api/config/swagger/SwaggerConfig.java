@@ -1,6 +1,7 @@
 package com.ittory.api.config.swagger;
 
 
+import com.ittory.common.annotation.CurrentMemberId;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -9,9 +10,12 @@ import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.Schema;
+import org.springdoc.core.customizers.GlobalOperationCustomizer;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Arrays;
 
 
 @Configuration
@@ -53,6 +57,16 @@ public class SwaggerConfig {
         wrapperSchema.addProperty("data", originalSchema);
 
         return wrapperSchema;
+    }
+
+    @Bean
+    public GlobalOperationCustomizer customize() {
+        return (operation, handlerMethod) -> {
+            Arrays.stream(handlerMethod.getMethodParameters())
+                    .filter(param -> param.hasParameterAnnotation(CurrentMemberId.class))
+                    .forEach(param -> operation.getParameters().remove(param.getParameterIndex()));
+            return operation;
+        };
     }
 
 }
