@@ -26,7 +26,7 @@ public class GuestbookController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "방명록 리스트 조회", description = "Pagination 적용, 생성일 기준으로 내림차순 조회")
+    @Operation(summary = "방명록 리스트 조회", description = "(Pagination) 생성일 기준으로 내림차순 조회")
     @GetMapping("/all")
     public ResponseEntity<GuestbookPageResponse> getAllGuestbook(Pageable pageable) {
         GuestbookPageResponse response = guestbookAllReadUseCase.execute(pageable);

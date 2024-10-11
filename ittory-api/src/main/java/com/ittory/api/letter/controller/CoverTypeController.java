@@ -7,15 +7,11 @@ import com.ittory.api.letter.usecase.CoverTypeAllReadUseCase;
 import com.ittory.api.letter.usecase.CoverTypeCreateUseCase;
 import com.ittory.api.letter.usecase.CoverTypeReadUseCase;
 import io.swagger.v3.oas.annotations.Operation;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/cover-type")
@@ -38,7 +34,7 @@ public class CoverTypeController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "커버타입 모두 조회")
+    @Operation(summary = "커버타입 모두 조회", description = "생성 순서대로 오름차순 정렬.")
     @GetMapping("/all")
     public ResponseEntity<List<CoverTypeSearchResponse>> getAllCoverType() {
         List<CoverTypeSearchResponse> response = coverTypeAllReadUseCase.execute();
