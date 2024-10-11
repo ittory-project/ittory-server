@@ -26,6 +26,15 @@ public class SecurityConfig {
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
+    private static final String[] PERMIT_ALL_URIS = {
+            "/swagger-ui/**", "/v3/api-docs/**", // Swagger
+            "/api/auth/login/**", "/api/auth/refresh", // Login
+            "/api/cover-type/all", "/api/cover-type/{coverTypeId}", // Cover-Type
+            "/api/cover-type/all", "/api/cover-type/{coverTypeId}", // Font
+            "/api/guestbook/**", // GuestBook
+            "/image/letter-cover" // PreSigned URL
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -36,10 +45,8 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(H2_PATH).permitAll()
-                        .requestMatchers("/api/auth/login/**", "/api/auth/refresh").permitAll()
-                        .requestMatchers("/api/guestbook/**").permitAll()
+                        .requestMatchers(PERMIT_ALL_URIS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling((config) -> config.authenticationEntryPoint(customAuthenticationEntryPoint))
