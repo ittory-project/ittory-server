@@ -17,7 +17,7 @@ public class ElementController {
 
     private final ElementImageReadUseCase elementImageReadUseCase;
 
-    @Operation(summary = "요소의 이미지 조회")
+    @Operation(summary = "요소의 이미지 조회", description = "(Authenticated) 편지 Id와 요소 순번으로 요소의 이미지 조회.")
     @GetMapping("/image")
     public ResponseEntity<ElementImageResponse> getElementImage(@RequestParam Long letterId,
                                                                 @RequestParam Integer sequence) {

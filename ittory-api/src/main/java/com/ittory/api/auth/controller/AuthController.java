@@ -30,7 +30,7 @@ public class AuthController {
     private final TokenRefreshUseCase tokenRefreshUseCase;
     private final LogoutUseCase logoutUseCase;
 
-    @Operation(summary = "카카오 소셜 로그인")
+    @Operation(summary = "카카오 소셜 로그인", description = "카카오 AccessToken 필요.")
     @PostMapping("/login/kakao")
     public ResponseEntity<AuthTokenResponse> loginByKaKao(@Valid @RequestBody KaKaoLoginRequest request) {
         AuthTokenResponse response = kaKaoLoginUseCase.execute(request.getAccessToken());
@@ -38,7 +38,7 @@ public class AuthController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "Access Token 갱신")
+    @Operation(summary = "Access Token 갱신", description = "잇토리 AccessToken, 잇토리 RefreshToken 필요.")
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshMemberToken(@Valid @RequestBody TokenRefreshRequest request) {
         TokenRefreshResponse response = tokenRefreshUseCase.execute(request.getAccessToken(),
@@ -46,7 +46,7 @@ public class AuthController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "로그아웃", description = "Authenticated")
+    @Operation(summary = "로그아웃", description = "(Authenticated) RefreshToken 삭제.")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@CurrentMemberId Long memberId) {
         logoutUseCase.execute(memberId);
