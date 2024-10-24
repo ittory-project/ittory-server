@@ -1,11 +1,11 @@
 package com.ittory.domain.letter.exception;
 
-import static com.ittory.domain.letter.exception.LetterErrorCode.COVER_TYPE_NOT_FOUND_ERROR;
-import static com.ittory.domain.letter.exception.LetterErrorCode.FONT_NOT_FOUND_ERROR;
-
 import com.ittory.common.exception.ErrorInfo;
 import com.ittory.common.exception.ErrorStatus;
 import com.ittory.common.exception.GlobalException;
+
+import static com.ittory.domain.letter.exception.LetterErrorCode.COVER_TYPE_NOT_FOUND_ERROR;
+import static com.ittory.domain.letter.exception.LetterErrorCode.FONT_NOT_FOUND_ERROR;
 
 public class LetterException extends GlobalException {
 
@@ -41,6 +41,14 @@ public class LetterException extends GlobalException {
             super(LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getStatus(),
                     new ErrorInfo<>(LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getCode(),
                             LetterErrorCode.ELEMENT_NOT_FOUND_ERROR.getMessage()));
+        }
+    }
+
+    public static class RepeatCountTooManyException extends LetterException {
+        public RepeatCountTooManyException() {
+            super(LetterErrorCode.REPEAT_COUNT_TOO_MANY_ERROR.getStatus(),
+                    new ErrorInfo<>(LetterErrorCode.REPEAT_COUNT_TOO_MANY_ERROR.getCode(),
+                            LetterErrorCode.REPEAT_COUNT_TOO_MANY_ERROR.getMessage()));
         }
     }
 }

@@ -1,19 +1,14 @@
 package com.ittory.domain.letter.service;
 
-import com.ittory.domain.letter.domain.CoverType;
-import com.ittory.domain.letter.domain.Element;
-import com.ittory.domain.letter.domain.Font;
-import com.ittory.domain.letter.domain.Letter;
+import com.ittory.domain.letter.domain.*;
 import com.ittory.domain.letter.exception.LetterException;
-import com.ittory.domain.letter.repository.CoverTypeRepository;
-import com.ittory.domain.letter.repository.FontRepository;
-import com.ittory.domain.letter.repository.LetterElementRepository;
-import com.ittory.domain.letter.repository.LetterRepository;
+import com.ittory.domain.letter.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -26,6 +21,7 @@ public class LetterDomainService {
     private final CoverTypeRepository coverTypeRepository;
     private final FontRepository fontRepository;
     private final LetterElementRepository letterElementRepository;
+    private final ElementImageRepository elementImageRepository;
 
     @Transactional
     public Letter saveLetter(Long coverTypeId, Long fontId, Long receiverId, String receiverName,
@@ -53,8 +49,16 @@ public class LetterDomainService {
         Letter letter = letterRepository.findById(letterId)
                 .orElseThrow(() -> new LetterException.LetterNotFoundException(letterId));
 
+        List<ElementImage> elementImages = elementImageRepository.findAll();
+
+        // 요청된 반복횟수가 전체 요소 이미지의 개수보다 적을 때만 정상작동
+        if (elementImages.size() < repeatCount) {
+            throw new LetterException.RepeatCountTooManyException();
+        }
+
+        Collections.shuffle(elementImages);
         List<Element> elements = IntStream.range(0, repeatCount)
-                .mapToObj(i -> Element.create(letter, null, null, i, null))
+                .mapToObj(i -> Element.create(letter, null, elementImages.get(i), i, null))
                 .collect(Collectors.toList());
 
         letterElementRepository.saveAll(elements);
