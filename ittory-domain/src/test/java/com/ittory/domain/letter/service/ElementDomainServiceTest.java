@@ -1,29 +1,22 @@
 package com.ittory.domain.letter.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.ittory.domain.letter.domain.CoverType;
-import com.ittory.domain.letter.domain.Element;
-import com.ittory.domain.letter.domain.ElementImage;
-import com.ittory.domain.letter.domain.Font;
-import com.ittory.domain.letter.domain.Letter;
+import com.ittory.domain.letter.domain.*;
 import com.ittory.domain.letter.dto.CoverTypeImages;
 import com.ittory.domain.letter.dto.ElementEditData;
-import com.ittory.domain.letter.repository.CoverTypeRepository;
-import com.ittory.domain.letter.repository.ElementImageRepository;
-import com.ittory.domain.letter.repository.ElementRepository;
-import com.ittory.domain.letter.repository.FontRepository;
-import com.ittory.domain.letter.repository.LetterRepository;
+import com.ittory.domain.letter.repository.*;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.repository.MemberRepository;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.repository.ParticipantRepository;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class ElementDomainServiceTest {
@@ -69,7 +62,8 @@ public class ElementDomainServiceTest {
     void changeContentTest() {
         //given
         Member member = Member.create(1L, "member", "image");
-        CoverTypeImages images = CoverTypeImages.of("image", "simple", "back");
+        CoverTypeImages images = CoverTypeImages.of("list", "select", "edit",
+                "confirm", "output", "loading");
         CoverType coverType = CoverType.create("type", images);
         Font font = Font.create("font");
         ElementImage elementImage = ElementImage.create("image");

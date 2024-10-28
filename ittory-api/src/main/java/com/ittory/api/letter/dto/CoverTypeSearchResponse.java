@@ -15,17 +15,23 @@ public class CoverTypeSearchResponse {
 
     private Long id;
     private String name;
-    private String imageUrl;
-    private String simpleUrl;
-    private String backgroundUrl;
+    private String listImageUrl;
+    private String selectImageUrl;
+    private String editImageUrl;
+    private String confirmImageUrl;
+    private String outputBackgroundImageUrl;
+    private String loadingBackgroundImageUrl;
 
     public static CoverTypeSearchResponse from(CoverType coverType) {
         return CoverTypeSearchResponse.builder()
                 .id(coverType.getId())
                 .name(coverType.getName())
-                .imageUrl(coverType.getImageUrl())
-                .simpleUrl(coverType.getSimpleUrl())
-                .backgroundUrl(coverType.getBackgroundUrl())
+                .listImageUrl(coverType.getListImageUrl())
+                .selectImageUrl(coverType.getSelectImageUrl())
+                .editImageUrl(coverType.getEditImageUrl())
+                .confirmImageUrl(coverType.getConfirmImageUrl())
+                .outputBackgroundImageUrl(coverType.getOutputBackgroundImageUrl())
+                .loadingBackgroundImageUrl(coverType.getLoadingBackgroundImageUrl())
                 .build();
     }
 }
