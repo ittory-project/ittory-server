@@ -34,7 +34,7 @@ public class SecurityConfig {
             "/api/cover-type/all", "/api/cover-type/{coverTypeId}", // Cover-Type
             "/api/cover-type/all", "/api/cover-type/{coverTypeId}", // Font
             "/api/guestbook/**", // GuestBook
-            "/image/letter-cover" // PreSigned URL
+            "/api/image/letter-cover" // PreSigned URL
     };
 
     @Bean
