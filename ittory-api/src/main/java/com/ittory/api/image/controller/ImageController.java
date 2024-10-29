@@ -12,13 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/api/image")
 @RequiredArgsConstructor
 public class ImageController {
 
     private final GetImageUploadUrlUseCase getImageUploadUrlUseCase;
 
-    @Operation(summary = "이미지 S3 PreSigned URL 발급", description = "JPG, JPEG, PNG만 가능")
+    @Operation(summary = "이미지 S3 PreSigned URL 발급", description = "JPG, JPEG, PNG만 가능." +
+            " 발급된 PreSigned URL로 PUT과 Binary Body로 이미지를 보내면 발급." +
+            " 이미지 URL : {AWS S3 주소} + key. AWS S3 주소는 Confluence의 프로젝트 정보를 참고.")
     @PostMapping("/letter-cover")
     public ResponseEntity<ImageUrlResponse> getLetterCoverImageUlr(@RequestBody ImageUrlRequest imageUrlRequest) {
         ImageUrlResponse response = getImageUploadUrlUseCase.forLetterCover(imageUrlRequest.getImgExtension());
