@@ -1,17 +1,18 @@
 package com.ittory.domain.participant.repository.impl;
 
 
+import com.ittory.domain.participant.domain.Participant;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.Optional;
+
 import static com.ittory.domain.letter.domain.QLetter.letter;
 import static com.ittory.domain.member.domain.QMember.member;
 import static com.ittory.domain.participant.domain.QParticipant.participant;
 import static com.ittory.domain.participant.enums.ParticipantStatus.PROGRESS;
-
-import com.ittory.domain.participant.domain.Participant;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
@@ -72,5 +73,14 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                         .and(participant.nickname.eq(nickname))
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public Integer countProgressByLetterId(Long letterId) {
+        return jpaQueryFactory.selectFrom(participant)
+                .where(participant.letter.id.eq(letterId)
+                        .and(participant.participantStatus.eq(PROGRESS))
+                )
+                .fetch().size();
     }
 }
