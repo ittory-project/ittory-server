@@ -3,6 +3,7 @@ package com.ittory.domain.letter.service;
 import com.ittory.domain.letter.domain.*;
 import com.ittory.domain.letter.exception.LetterException;
 import com.ittory.domain.letter.repository.*;
+import com.ittory.domain.participant.repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class LetterDomainService {
     private final FontRepository fontRepository;
     private final LetterElementRepository letterElementRepository;
     private final ElementImageRepository elementImageRepository;
+    private final ParticipantRepository participantRepository;
 
     @Transactional
     public Letter saveLetter(Long coverTypeId, Long fontId, Long receiverId, String receiverName,
@@ -45,19 +47,19 @@ public class LetterDomainService {
     }
 
     @Transactional
-    public void createLetterElements(Long letterId, int repeatCount) {
-        Letter letter = letterRepository.findById(letterId)
-                .orElseThrow(() -> new LetterException.LetterNotFoundException(letterId));
+    public void createLetterElements(Letter letter, int repeatCount) {
+        Integer participantCount = participantRepository.countProgressByLetterId(letter.getId());
+        int totalCount = participantCount * repeatCount;
 
         List<ElementImage> elementImages = elementImageRepository.findAll();
 
         // 요청된 반복횟수가 전체 요소 이미지의 개수보다 적을 때만 정상작동
-        if (elementImages.size() < repeatCount) {
+        if (elementImages.size() < totalCount) {
             throw new LetterException.RepeatCountTooManyException();
         }
 
         Collections.shuffle(elementImages);
-        List<Element> elements = IntStream.range(0, repeatCount)
+        List<Element> elements = IntStream.range(0, totalCount)
                 .mapToObj(i -> Element.create(letter, null, elementImages.get(i), i, null))
                 .collect(Collectors.toList());
 

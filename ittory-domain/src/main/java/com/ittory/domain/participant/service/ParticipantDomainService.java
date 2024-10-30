@@ -1,14 +1,15 @@
 package com.ittory.domain.participant.service;
 
-import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
-
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.exception.ParticipantException.ParticipantNotFoundException;
 import com.ittory.domain.participant.repository.ParticipantRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
 
 @Service
 @RequiredArgsConstructor
@@ -81,4 +82,8 @@ public class ParticipantDomainService {
         return participantCount < 5;
     }
 
+    @Transactional(readOnly = true)
+    public Integer countProgressByLetterId(Long letterId) {
+        return participantRepository.countProgressByLetterId(letterId);
+    }
 }
