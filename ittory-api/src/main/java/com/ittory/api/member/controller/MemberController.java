@@ -28,16 +28,16 @@ public class MemberController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "참여한 편지 조회", description = "참여한 모든 편지를 조회합니다.")
-    @GetMapping("/participations/{memberId}")
-    public ResponseEntity<ParticipationResponse> getParticipations(@PathVariable @Positive Long memberId) {
+    @Operation(summary = "참여한 편지 조회", description = "(Authenticated) 참여한 모든 편지를 조회합니다.")
+    @GetMapping("/participations")
+    public ResponseEntity<ParticipationResponse> getParticipations(@CurrentMemberId Long memberId) {
         ParticipationResponse response = memberParticipationReadUseCase.execute(memberId);
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "받은 편지함 조회", description = "받은 모든 편지를 조회합니다.")
-    @GetMapping("/received/{memberId}")
-    public ResponseEntity<ReceivedLetterResponse> getReceivedLetters(@PathVariable @Positive Long memberId) {
+    @Operation(summary = "받은 편지함 조회", description = "(Authenticated) 받은 모든 편지를 조회합니다.")
+    @GetMapping("/received")
+    public ResponseEntity<ReceivedLetterResponse> getReceivedLetters(@CurrentMemberId Long memberId) {
         ReceivedLetterResponse response = receivedLetterUseCase.execute(memberId);
         return ResponseEntity.ok().body(response);
     }

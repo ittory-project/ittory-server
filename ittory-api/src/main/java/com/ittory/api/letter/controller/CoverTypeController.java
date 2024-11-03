@@ -22,12 +22,14 @@ public class CoverTypeController {
     private final CoverTypeReadUseCase coverTypeReadUseCase;
     private final CoverTypeAllReadUseCase coverTypeAllReadUseCase;
 
+    @Operation(summary = "커버타입 생성", description = "사용자가 커버타입을 생성합니다.")
     @PostMapping
     public ResponseEntity<CoverTypeCreateResponse> createCoverType(@RequestBody CoverTypeCreateRequest request) {
         CoverTypeCreateResponse response = coverTypeCreateUseCase.execute(request);
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "특정 커버타입 조회", description = "커버타입 ID로 커버타입을 조회합니다.")
     @GetMapping("/{coverTypeId}")
     public ResponseEntity<CoverTypeSearchResponse> getCoverTypeById(@PathVariable("coverTypeId") Long coverTypeId) {
         CoverTypeSearchResponse response = coverTypeReadUseCase.execute(coverTypeId);

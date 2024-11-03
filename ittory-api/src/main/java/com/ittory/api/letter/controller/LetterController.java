@@ -32,12 +32,14 @@ public class LetterController {
     private final LetterEnterStatusCheckUseCase letterEnterStatusCheckUseCase;
     private final LetterStartInfoReadUseCase letterStartInfoReadUseCase;
 
+    @Operation(summary = "편지 작성", description = "새로운 편지를 작성합니다.")
     @PostMapping
     public ResponseEntity<LetterCreateResponse> createLetter(@RequestBody LetterCreateRequest request) {
         LetterCreateResponse response = letterCreateUseCase.execute(request);
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "편지 반복 횟수 등록", description = "편지의 반복 횟수를 등록합니다.")
     @PostMapping("/repeat-count")
     public ResponseEntity<Void> registerRepeatCount(@RequestBody LetterRepeatCountRequest request) {
         letterRepeatCountUseCase.execute(request);
@@ -52,6 +54,7 @@ public class LetterController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "편지 삭제", description = "(Authenticated) 편지를 삭제합니다.")
     @DeleteMapping("/{letterId}")
     public ResponseEntity<Void> deleteLetter(@PathVariable Long letterId) {
         letterDeleteUseCase.execute(letterId);
@@ -59,6 +62,7 @@ public class LetterController {
     }
 
     // 편지 기본 정보 조회 (대기실)
+    @Operation(summary = "편지 기본 정보 조회", description = "(Authenticated) 대기실에 있는 편지의 기본 정보를 조회합니다.")
     @GetMapping("/info/{letterId}")
     public ResponseEntity<LetterInfoResponse> getLetterInfo(@PathVariable("letterId") Long letterId) {
         LetterInfoResponse response = letterInfoReadUseCase.execute(letterId);
@@ -66,6 +70,7 @@ public class LetterController {
     }
 
     // 편지 상세 조회 (편지 내용)
+    @Operation(summary = "편지 상세 정보 조회", description = "(Authenticated) 편지의 세부 내용을 조회합니다.")
     @GetMapping("/detail/{letterId}")
     public ResponseEntity<LetterDetailResponse> getLetterDetail(@PathVariable("letterId") Long letterId) {
         LetterDetailResponse response = letterDetailReadUseCase.execute(letterId);

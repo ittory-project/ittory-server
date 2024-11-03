@@ -13,7 +13,7 @@ public class LetterCreateResponse {
     private Long letterId;
     private Long coverTypeId;
     private Long fontId;
-    private Long receiverId;
+//    private Long receiverId;
     private String receiverName;
     private LocalDateTime deliveryDate;
     private String title;
@@ -26,7 +26,7 @@ public class LetterCreateResponse {
                 .letterId(letter.getId())
                 .coverTypeId(letter.getCoverType().getId())
                 .fontId(letter.getFont().getId())
-                .receiverId(letter.getReceiver().getId())
+//                .receiverId(letter.getReceiver().getId())
                 .receiverName(letter.getReceiverName())
                 .deliveryDate(letter.getDeliveryDate())
                 .title(letter.getTitle())
