@@ -3,20 +3,8 @@ package com.ittory.domain.member.domain;
 import com.ittory.domain.common.BaseEntity;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.member.enums.LetterBoxType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity(name = "letter_box")
 @Getter
@@ -27,6 +15,7 @@ public class LetterBox extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "letter_box_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -47,7 +36,6 @@ public class LetterBox extends BaseEntity {
                 .letterBoxType(type)
                 .build();
     }
-
 
 
 }
