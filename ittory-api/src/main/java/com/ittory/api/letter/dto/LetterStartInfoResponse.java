@@ -1,10 +1,6 @@
 package com.ittory.api.letter.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Builder
@@ -12,12 +8,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LetterStartInfoResponse {
 
+    private String title;
     private Integer participantCount;
     private Integer repeatCount;
     private Integer elementCount;
 
-    public static LetterStartInfoResponse of(Integer participantCount, Integer repeatCount, Integer elementCount) {
+    public static LetterStartInfoResponse of(String title, Integer participantCount,
+                                             Integer repeatCount, Integer elementCount) {
         return LetterStartInfoResponse.builder()
+                .title(title)
                 .participantCount(participantCount)
                 .repeatCount(repeatCount)
                 .elementCount(elementCount)

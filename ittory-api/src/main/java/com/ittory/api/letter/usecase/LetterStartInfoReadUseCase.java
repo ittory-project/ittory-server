@@ -21,7 +21,7 @@ public class LetterStartInfoReadUseCase {
         Letter letter = letterDomainService.findLetter(letterId);
         List<Element> elements = letterDomainService.findElementsByLetterId(letterId);
         Integer participantCount = participantDomainService.countProgressByLetterId(letterId);
-        return LetterStartInfoResponse.of(participantCount, letter.getRepeatCount(), elements.size());
+        return LetterStartInfoResponse.of(letter.getTitle(), participantCount, letter.getRepeatCount(), elements.size());
     }
 
 }
