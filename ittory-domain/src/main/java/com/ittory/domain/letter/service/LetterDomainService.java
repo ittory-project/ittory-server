@@ -26,7 +26,7 @@ public class LetterDomainService {
     private final ParticipantRepository participantRepository;
 
     @Transactional
-    public Letter saveLetter(Long coverTypeId, Long fontId, Long receiverId, String receiverName,
+    public Letter saveLetter(Long coverTypeId, Long fontId, String receiverName,
                              LocalDateTime deliveryDate, String title, String coverPhotoUrl) {
         CoverType coverType = coverTypeRepository.findById(coverTypeId)
                 .orElseThrow(() -> new LetterException.CoverTypeNotFoundException(coverTypeId));

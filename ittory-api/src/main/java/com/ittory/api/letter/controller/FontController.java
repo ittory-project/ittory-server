@@ -22,12 +22,14 @@ public class FontController {
     private final FontReadUseCase fontReadUseCase;
     private final FontAllReadUseCase fontAllReadUseCase;
 
+    @Operation(summary = "폰트 생성", description = "사용자가 폰트를 생성합니다.")
     @PostMapping
     public ResponseEntity<FontCreateResponse> createFont(@RequestBody FontCreateRequest request) {
         FontCreateResponse response = fontCreateUseCase.execute(request);
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "특정 폰트 조회", description = "폰트 ID로 폰트를 조회합니다.")
     @GetMapping("/{fontId}")
     public ResponseEntity<FontSearchResponse> getFontById(@PathVariable("fontId") Long fontId) {
         FontSearchResponse response = fontReadUseCase.execute(fontId);

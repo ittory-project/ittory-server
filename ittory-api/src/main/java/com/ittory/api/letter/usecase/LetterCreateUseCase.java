@@ -17,7 +17,7 @@ public class LetterCreateUseCase {
         Letter letter = letterDomainService.saveLetter(
                 request.getCoverTypeId(),
                 request.getFontId(),
-                request.getReceiverId(),
+//                request.getReceiverId(),
                 request.getReceiverName(),
                 request.getDeliveryDate(),
                 request.getTitle(),
