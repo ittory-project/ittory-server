@@ -9,10 +9,11 @@ import com.ittory.domain.member.repository.LetterBoxRepository;
 import com.ittory.domain.member.repository.MemberRepository;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.repository.ParticipantRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +55,7 @@ public class MemberDomainService {
 
     @Transactional(readOnly = true)
     public List<Letter> getReceivedLetters(Long memberId) {
-        return letterRepository.findByReceiverId(memberId);
+        return letterRepository.findByReceiverIdOrderByDeliveryDateDesc(memberId);
     }
 
     @Transactional

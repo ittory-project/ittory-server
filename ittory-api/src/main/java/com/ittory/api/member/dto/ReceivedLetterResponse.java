@@ -4,6 +4,7 @@ import com.ittory.domain.letter.domain.Letter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,13 +25,15 @@ public class ReceivedLetterResponse {
     public static class LetterDto {
         private Long letterId;
         private String title;
-        private String receiverName;
+        private String coverTypeImage;
+        private LocalDateTime deliveryDate;
 
-        public static LetterDto from(Letter letter) {
-            return new LetterDto(
+        public static ReceivedLetterResponse.LetterDto from(Letter letter) {
+            return new ReceivedLetterResponse.LetterDto(
                     letter.getId(),
                     letter.getTitle(),
-                    letter.getReceiverName()
+                    letter.getCoverType().getListImageUrl(),
+                    letter.getDeliveryDate()
             );
         }
     }
