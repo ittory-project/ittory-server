@@ -24,14 +24,14 @@ public class ParticipationResponse {
     @AllArgsConstructor
     public static class LetterDto {
         private Long letterId;
-        private String title;
+        private String receiverName;
         private String coverTypeImage;
         private LocalDateTime deliveryDate;
 
         public static LetterDto from(Letter letter) {
             return new LetterDto(
                     letter.getId(),
-                    letter.getTitle(),
+                    letter.getReceiverName(),
                     letter.getCoverType().getListImageUrl(),
                     letter.getDeliveryDate()
             );
