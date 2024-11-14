@@ -5,4 +5,5 @@ import com.ittory.domain.member.repository.impl.LetterBoxRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LetterBoxRepository extends JpaRepository<LetterBox, Long>, LetterBoxRepositoryCustom {
+    void deleteByMemberIdAndLetterId(Long memberId, Long letterId);
 }

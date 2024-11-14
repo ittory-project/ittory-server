@@ -4,7 +4,6 @@ import com.ittory.api.member.dto.*;
 import com.ittory.api.member.usecase.*;
 import com.ittory.common.annotation.CurrentMemberId;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +19,7 @@ public class MemberController {
     private final MemberWithdrawUseCase memberWithdrawUseCase;
     private final MemberLetterCountReadUseCase memberLetterCountReadUseCase;
     private final MemberAlreadyVisitCheckUseCase memberAlreadyVisitCheckUseCase;
+    private final MemberLetterDeleteUseCase memberLetterDeleteUseCase;
 
     @Operation(summary = "마이페이지 정보 조회", description = "(Authenticated) 사용자의 마이페이지 정보를 조회합니다.")
     @GetMapping("/mypage")
@@ -63,6 +63,13 @@ public class MemberController {
     public ResponseEntity<MemberAlreadyVisitResponse> checkMemberAlreadyVisit(@CurrentMemberId Long memberId) {
         MemberAlreadyVisitResponse response = memberAlreadyVisitCheckUseCase.execute(memberId);
         return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "편지함에서 편지 삭제", description = "(Authenticated) 사용자의 편지함에서 편지를 삭제.")
+    @DeleteMapping("/{letterId}")
+    public ResponseEntity<Void> deleteLetterInLetterBox(@CurrentMemberId Long memberId, @PathVariable Long letterId) {
+        memberLetterDeleteUseCase.execute(memberId, letterId);
+        return ResponseEntity.ok().build();
     }
 
 }
