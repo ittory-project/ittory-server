@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Entity(name = "member")
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member extends BaseEntity {
 
     @Id
@@ -26,7 +27,7 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    private String email;
+    private Long socialId;
 
     private String name;
 
@@ -35,10 +36,12 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus;
 
+    private String refreshToken;
 
-    public static Member toEntity(String email, String name, String profileImage) {
+
+    public static Member create(Long socialId, String name, String profileImage) {
         return Member.builder()
-                .email(email)
+                .socialId(socialId)
                 .name(name)
                 .profileImage(profileImage)
                 .memberStatus(MemberStatus.ACTIVE)
@@ -47,6 +50,14 @@ public class Member extends BaseEntity {
 
     public void changeStatus(MemberStatus memberStatus) {
         this.memberStatus = memberStatus;
+    }
+
+    public void changeRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void changeSocialId(Long socialId) {
+        this.socialId = socialId;
     }
 
 }

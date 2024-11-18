@@ -13,13 +13,13 @@ public class MemberUserCase {
 
     private final MemberDomainService memberDomainService;
 
-    public MemberCreateResponse registerMember(String email, String name) {
-        Member newMember = memberDomainService.saveMember(email, name);
-        return MemberCreateResponse.of(newMember);
+    public MemberCreateResponse registerMember(Long socialId, String name, String profileImage) {
+        Member newMember = memberDomainService.saveMember(socialId, name, profileImage);
+        return MemberCreateResponse.from(newMember);
     }
 
     public MemberSearchResponse searchMemberById(Long memberId) {
         Member member = memberDomainService.findMemberById(memberId);
-        return MemberSearchResponse.of(member);
+        return MemberSearchResponse.from(member);
     }
 }

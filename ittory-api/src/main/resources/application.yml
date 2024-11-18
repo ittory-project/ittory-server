@@ -6,17 +6,18 @@ spring:
   config:
     import:
       - domain.yml
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
+      - infra.yml
+      - common.yml
 
   security:
     user:
       name: user
       password: 1234
+---
+spring:
+  config:
+    activate:
+      on-profile: local
 
 ---
 spring:
@@ -29,3 +30,4 @@ spring:
   config:
     activate:
       on-profile: prod
+

@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,13 +20,14 @@ import lombok.NoArgsConstructor;
 @Entity(name = "letter")
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Letter extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "letter_id")
-    private Long Id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
@@ -47,8 +49,10 @@ public class Letter extends BaseEntity {
 
     private String coverPhotoUrl;
 
-    public static Letter toEntity(CoverType coverType, Font font, String receiverName, LocalDateTime deliveryDate,
-                                  String title, String coverPhotoUrl) {
+    private Integer repeatCount;
+
+    public static Letter create(CoverType coverType, Font font, String receiverName, LocalDateTime deliveryDate,
+                                String title, String coverPhotoUrl, Integer repeatCount) {
         return Letter.builder()
                 .coverType(coverType)
                 .font(font)
@@ -56,11 +60,12 @@ public class Letter extends BaseEntity {
                 .deliveryDate(deliveryDate)
                 .title(title)
                 .coverPhotoUrl(coverPhotoUrl)
+                .repeatCount(repeatCount)
                 .build();
     }
 
-    public void changeReceiver(Member receiver) {
-        this.receiver = receiver;
+    public void changeRepeatCount(int repeatCount) {
+        this.repeatCount = repeatCount;
     }
 
 

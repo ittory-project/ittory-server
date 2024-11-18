@@ -6,6 +6,7 @@ spring:
   config:
     import:
       - domain.yml
+      - common.yml
 
 ---
 spring:

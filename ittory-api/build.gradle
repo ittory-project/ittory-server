@@ -1,3 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group 'com.ittory'
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
 bootJar.enabled = true
 
 jar.enabled = false
@@ -5,8 +16,17 @@ jar.enabled = false
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     implementation project(':ittory-domain')
+    implementation project(':ittory-common')
+    implementation project(':ittory-infra')
 
     testImplementation 'org.springframework.security:spring-security-test'
+
+}
+
+tasks.named('test') {
+    dependsOn ':ittory-domain:test', ':ittory-common:test', ':ittory-infra:test'
 }
