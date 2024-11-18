@@ -55,3 +55,8 @@ spring:
   config:
     activate:
       on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${PROD_DB_ADDRESS}:${PROD_DB_PORT}/${PROD_DB_SCHEMA}
+    username: ${PROD_DB_USERNAME}
+    password: ${PROD_DB_PASSWORD}
