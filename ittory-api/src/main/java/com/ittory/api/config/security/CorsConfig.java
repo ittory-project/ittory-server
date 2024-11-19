@@ -15,8 +15,9 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
-                Arrays.asList("https://dev-server.ittory.co.kr", "http://localhost:3000",
-                        "http://localhost:5173", "http://localhost:8080"));
+                Arrays.asList("https://prod-server.ittory.co.kr", "https://dev-server.ittory.co.kr", "http://localhost:8080",
+                        "https://ittory.co.kr", "http://localhost:3000", "http://localhost:5173"));
+
         configuration.addAllowedHeader("Authorization");
         configuration.addAllowedHeader("Content-Type");
         configuration.addAllowedMethod("*");
