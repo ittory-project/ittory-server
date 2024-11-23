@@ -9,7 +9,8 @@ import lombok.Getter;
 public enum MemberErrorCode {
 
     MEMBER_NOT_FOUND_ERROR(ErrorStatus.BAD_REQUEST, "1000", "존재하지 않는 사용자입니다."),
-    LETTER_BOX_ALREADY_STORED(ErrorStatus.BAD_REQUEST, "1001", "이미 저장된 편지입니다.");
+    LETTER_BOX_ALREADY_STORED(ErrorStatus.BAD_REQUEST, "1001", "이미 저장된 편지입니다."),
+    MEMBER_NOT_PARTICIPATION_ERROR(ErrorStatus.BAD_REQUEST, "1002", "편지에 참여하지 않은 사용자입니다.");
 
     private final ErrorStatus status;
     private final String code;
