@@ -86,4 +86,10 @@ public class ParticipantDomainService {
     public Integer countProgressByLetterId(Long letterId) {
         return participantRepository.countProgressByLetterId(letterId);
     }
+
+    @Transactional(readOnly = true)
+    public Participant findParticipantOrNull(Long letterId, Long memberId) {
+        return participantRepository.findByLetterIdAndMemberId(letterId, memberId).orElse(null);
+    }
+
 }
