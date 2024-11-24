@@ -42,6 +42,7 @@ public class MemberController {
         return ResponseEntity.ok().body(response);
     }
 
+
     @Operation(summary = "회원 탈퇴", description = "(Authenticated) " +
             "탈퇴사유 = [ERROR, ANOTHER_ACCOUNT, BETTER_FUN, NOT_USE, ETC")
     @PostMapping("/withdraw")

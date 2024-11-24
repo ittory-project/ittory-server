@@ -29,6 +29,11 @@ public class LetterBox extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LetterBoxType letterBoxType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    private Member receiver;
+
+
     public static LetterBox create(Member member, Letter letter, LetterBoxType type) {
         return LetterBox.builder()
                 .member(member)
