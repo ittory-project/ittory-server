@@ -1,5 +1,7 @@
 package com.ittory.domain.member.service;
 
+
+import com.ittory.domain.member.domain.LetterBox;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.repository.LetterRepository;
 import com.ittory.domain.member.domain.Member;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +58,10 @@ public class MemberDomainService {
 
     @Transactional(readOnly = true)
     public List<Letter> getReceivedLetters(Long memberId) {
-        return letterRepository.findByReceiverIdOrderByDeliveryDateDesc(memberId);
+        return letterBoxRepository.findAllByReceiverId(memberId) // LetterBox 조회
+                .stream()
+                .map(LetterBox::getLetter) // LetterBox에서 Letter 객체 추출
+                .collect(Collectors.toList());
     }
 
     @Transactional
