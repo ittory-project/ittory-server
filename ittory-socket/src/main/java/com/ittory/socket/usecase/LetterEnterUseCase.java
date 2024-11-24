@@ -23,6 +23,12 @@ public class LetterEnterUseCase {
 
 
     public EnterResponse execute(Long memberId, Long letterId, EnterRequest request) {
+        Participant participant = participantDomainService.findParticipantOrNull(letterId, memberId);
+
+        if (participant != null) {
+            throw new IllegalArgumentException("이미 참여중인 사용자");
+        }
+
         Participant newParticipant = createNewParticipant(memberId, letterId, request);
         Participant savedParticipant = participantDomainService.saveParticipant(newParticipant);
         return EnterResponse.from(savedParticipant);

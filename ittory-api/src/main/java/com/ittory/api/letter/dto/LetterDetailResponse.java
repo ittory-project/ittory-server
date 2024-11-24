@@ -2,7 +2,10 @@ package com.ittory.api.letter.dto;
 
 import com.ittory.domain.letter.domain.Element;
 import com.ittory.domain.letter.domain.Letter;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +17,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class LetterDetailResponse {
     private Long letterId;
+    private Long coverTypeId;
+    private Long fontId;
     private String receiverName;
     private LocalDateTime deliveryDate;
     private String title;
@@ -23,6 +28,8 @@ public class LetterDetailResponse {
     public static LetterDetailResponse from(Letter letter, List<Element> elements) {
         return LetterDetailResponse.builder()
                 .letterId(letter.getId())
+                .coverTypeId(letter.getCoverType().getId())
+                .fontId(letter.getFont().getId())
                 .receiverName(letter.getReceiverName())
                 .deliveryDate(letter.getDeliveryDate())
                 .title(letter.getTitle())
