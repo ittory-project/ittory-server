@@ -45,4 +45,9 @@ public class ElementDomainService {
     public void deleteAllByLetterId(Long letterId) {
         elementRepository.deleteAllByLetterId(letterId);
     }
+
+    @Transactional(readOnly = true)
+    public Element findById(Long letterElementId) {
+        return elementRepository.findById(letterElementId).orElseThrow(ElementNotFoundException::new);
+    }
 }
