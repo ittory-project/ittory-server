@@ -92,4 +92,8 @@ public class ParticipantDomainService {
         return participantRepository.findByLetterIdAndMemberId(letterId, memberId).orElse(null);
     }
 
+    @Transactional(readOnly = true)
+    public Participant findManagerByLetterId(Long letterId) {
+        return participantRepository.findManagerByLetterId(letterId);
+    }
 }
