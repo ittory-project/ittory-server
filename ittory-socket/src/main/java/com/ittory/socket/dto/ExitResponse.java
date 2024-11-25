@@ -1,14 +1,10 @@
 package com.ittory.socket.dto;
 
-import static com.ittory.socket.enums.ConnectAction.EXIT;
-
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.socket.enums.ConnectAction;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import static com.ittory.socket.enums.ConnectAction.EXIT;
 
 @Getter
 @Builder
@@ -19,12 +15,14 @@ public class ExitResponse {
     private Long participantId;
     private String nickname;
     private ConnectAction action;
+    private Boolean isManager;
 
-    public static ExitResponse from(Participant participant) {
+    public static ExitResponse from(Participant participant, Boolean isManager) {
         return ExitResponse.builder()
                 .participantId(participant.getId())
                 .nickname(participant.getNickname())
                 .action(EXIT)
+                .isManager(isManager)
                 .build();
     }
 

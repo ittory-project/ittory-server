@@ -8,6 +8,8 @@ import com.ittory.socket.dto.ExitResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class LetterExitUseCase {
@@ -17,10 +19,11 @@ public class LetterExitUseCase {
     private final ElementDomainService elementDomainService;
 
     public ExitResponse execute(Long memberId, Long letterId) {
-        Participant participant = participantDomainService.findParticipant(letterId, memberId);
-        changeParticipantOrder(letterId, participant);
-        exitParticipant(participant);
-        return ExitResponse.from(participant);
+        Participant manager = participantDomainService.findManagerByLetterId(letterId);
+        Participant nowParticipant = participantDomainService.findParticipant(letterId, memberId);
+        changeParticipantOrder(letterId, nowParticipant);
+        exitParticipant(nowParticipant);
+        return ExitResponse.from(nowParticipant, Objects.equals(manager.getId(), nowParticipant.getId()));
     }
 
     private void exitParticipant(Participant participant) {

@@ -83,4 +83,15 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 )
                 .fetch().size();
     }
+
+    @Override
+    public Participant findManagerByLetterId(Long letterId) {
+        return jpaQueryFactory.selectFrom(participant)
+                .leftJoin(participant.letter, letter).fetchJoin()
+                .where(letter.id.eq(letterId))
+                .orderBy(participant.createdAt.asc())
+                .limit(1)
+                .fetchOne();
+    }
+
 }
