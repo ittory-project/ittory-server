@@ -25,4 +25,12 @@ public class LetterProcessController {
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
     }
+
+    @MessageMapping("/letter/end/{letterId}")
+    public void endMember(@DestinationVariable Long letterId) {
+        EndResponse response = letterEndUseCase.execute(letterId);
+        String destination = "/topic/letter/" + letterId;
+        messagingTemplate.convertAndSend(destination, response);
+    }
+
 }
