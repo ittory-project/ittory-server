@@ -5,6 +5,7 @@ import com.ittory.domain.member.domain.LetterBox;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.repository.LetterRepository;
 import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.enums.LetterBoxType;
 import com.ittory.domain.member.enums.MemberStatus;
 import com.ittory.domain.member.exception.MemberException.MemberNotFoundException;
 import com.ittory.domain.member.repository.LetterBoxRepository;
@@ -58,11 +59,12 @@ public class MemberDomainService {
 
     @Transactional(readOnly = true)
     public List<Letter> getReceivedLetters(Long memberId) {
-        return letterBoxRepository.findAllByReceiverId(memberId) // LetterBox 조회
+        return letterBoxRepository.findAllByMemberIdAndLetterBoxType(memberId, LetterBoxType.RECEIVE)
                 .stream()
-                .map(LetterBox::getLetter) // LetterBox에서 Letter 객체 추출
+                .map(LetterBox::getLetter)
                 .collect(Collectors.toList());
     }
+
 
     @Transactional
     public void withdrawMember(Member member) {
