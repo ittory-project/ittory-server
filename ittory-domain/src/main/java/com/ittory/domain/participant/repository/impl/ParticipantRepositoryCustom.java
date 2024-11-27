@@ -19,4 +19,6 @@ public interface ParticipantRepositoryCustom {
     Integer countProgressByLetterId(Long letterId);
 
     Participant findManagerByLetterId(Long letterId);
+
+    void deleteParticipantByMemberIdWhenDisconnect(Long memberId);
 }

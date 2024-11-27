@@ -31,6 +31,7 @@ public class LetterController {
     private final LetterElementsReadUseCase letterElementsReadUseCase;
     private final LetterEnterStatusCheckUseCase letterEnterStatusCheckUseCase;
     private final LetterStartInfoReadUseCase letterStartInfoReadUseCase;
+    private final LetterEnterUseCase letterEnterUseCase;
 
     @Operation(summary = "편지 작성", description = "새로운 편지를 작성합니다.")
     @PostMapping
@@ -107,6 +108,7 @@ public class LetterController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Deprecated
     @Operation(summary = "편지 참여가능 여부 조회", description = "(Authenticated) 현재 참여중인 참여자가 5명인지 아닌지 획인.")
     @GetMapping("/{letterId}/enter-status")
     public ResponseEntity<LetterEnterStatusResponse> checkLetterEnterStatus(@PathVariable Long letterId) {
@@ -118,6 +120,13 @@ public class LetterController {
     @GetMapping("/{letterId}/startInfo")
     public ResponseEntity<LetterStartInfoResponse> getLetterStartInfo(@PathVariable Long letterId) {
         LetterStartInfoResponse response = letterStartInfoReadUseCase.execute(letterId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "편지 참여 요청", description = "(Authenticated) 편지에 참여 성공 시 true, 실패 시 false 반환")
+    @PostMapping("/enter/{letterId}")
+    public ResponseEntity<LetterEnterStatusResponse> checkLetterEnterStatus(@CurrentMemberId Long memberId, @PathVariable Long letterId) {
+        LetterEnterStatusResponse response = letterEnterUseCase.execute(memberId, letterId);
         return ResponseEntity.ok().body(response);
     }
 

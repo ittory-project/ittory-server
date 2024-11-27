@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.ittory.common.constant.GlobalConstant.PARTICIPANTS_SIZE;
 import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
 
 @Service
@@ -79,7 +80,7 @@ public class ParticipantDomainService {
     @Transactional(readOnly = true)
     public Boolean getEnterStatus(Long letterId) {
         Integer participantCount = participantRepository.countByLetterId(letterId);
-        return participantCount < 5;
+        return participantCount < PARTICIPANTS_SIZE;
     }
 
     @Transactional(readOnly = true)
@@ -95,5 +96,10 @@ public class ParticipantDomainService {
     @Transactional(readOnly = true)
     public Participant findManagerByLetterId(Long letterId) {
         return participantRepository.findManagerByLetterId(letterId);
+    }
+
+    @Transactional
+    public void deleteParticipantByMemberIdWhenDisconnect(Long memberId) {
+        participantRepository.deleteParticipantByMemberIdWhenDisconnect(memberId);
     }
 }
