@@ -2,7 +2,6 @@ package com.ittory.socket.usecase;
 
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.service.ParticipantDomainService;
-import com.ittory.socket.dto.EnterRequest;
 import com.ittory.socket.dto.EnterResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,8 @@ public class LetterEnterUseCase {
 
 
     @Transactional
-    public EnterResponse execute(Long memberId, Long letterId, EnterRequest request) {
+    public EnterResponse execute(Long memberId, Long letterId) {
         Participant participant = participantDomainService.findParticipant(letterId, memberId);
-        participant.changeNickname(request.getNickname());
         return EnterResponse.from(participant);
     }
 
