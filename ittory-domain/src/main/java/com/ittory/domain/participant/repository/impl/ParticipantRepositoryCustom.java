@@ -17,4 +17,6 @@ public interface ParticipantRepositoryCustom {
     Participant findByNickname(Long letterId, String nickname);
 
     Integer countProgressByLetterId(Long letterId);
+
+    Participant findManagerByLetterId(Long letterId);
 }
