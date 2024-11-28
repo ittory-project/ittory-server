@@ -69,7 +69,7 @@ public class ElementDomainServiceTest {
         ElementImage elementImage = ElementImage.create("image");
 
         Letter letter = Letter.create(coverType, font, "receiver", LocalDateTime.now(), "title", "image", null);
-        Participant participant = Participant.create(member, letter, "participant");
+        Participant participant = Participant.create(member, letter);
         Element element = Element.create(letter, participant, elementImage, 1, null);
 
         memberRepository.save(member);

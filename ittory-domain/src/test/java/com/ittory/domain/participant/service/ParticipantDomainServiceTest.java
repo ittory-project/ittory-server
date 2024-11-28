@@ -115,6 +115,8 @@ public class ParticipantDomainServiceTest {
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
         Participant participant1 = Participant.create(member1, letter);
         Participant participant2 = Participant.create(member2, letter);
+        participant1.changeNickname("participant1");
+        participant2.changeNickname("participant2");
 
         participant1.changeSequence(2);
         participant2.changeSequence(1);
@@ -180,6 +182,7 @@ public class ParticipantDomainServiceTest {
         Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
         Participant participant = Participant.create(member1, letter);
+        participant.changeNickname("participant");
         participantRepository.save(participant);
 
         //when
