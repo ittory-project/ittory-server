@@ -13,12 +13,12 @@ public class ParticipantNicknameUpdateUseCase {
 
     private final ParticipantDomainService participantDomainService;
 
-    public synchronized ParticipantNicknameResponse execute(Long memberId, ParticipantNicknameRequest request) {
-        Boolean isDuplicate = participantDomainService.checkNicknameDuplication(request.getLetterId(), request.getNickname());
+    public synchronized ParticipantNicknameResponse execute(Long memberId, Long letterId, ParticipantNicknameRequest request) {
+        Boolean isDuplicate = participantDomainService.checkNicknameDuplication(letterId, request.getNickname());
 
         String nickname = null;
         if (!isDuplicate) {
-            Participant participant = participantDomainService.findParticipant(request.getLetterId(), memberId);
+            Participant participant = participantDomainService.findParticipant(letterId, memberId);
             participant.changeNickname(request.getNickname());
             participantDomainService.saveParticipant(participant);
             nickname = request.getNickname();

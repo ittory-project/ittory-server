@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ParticipantNicknameRequest {
 
-    private Long letterId;
     private String nickname;
 
 }
