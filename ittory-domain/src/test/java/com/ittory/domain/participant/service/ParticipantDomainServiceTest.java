@@ -1,9 +1,5 @@
 package com.ittory.domain.participant.service;
 
-import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.repository.LetterRepository;
 import com.ittory.domain.member.domain.Member;
@@ -11,13 +7,18 @@ import com.ittory.domain.member.repository.MemberRepository;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.exception.ParticipantException.ParticipantNotFoundException;
 import com.ittory.domain.participant.repository.ParticipantRepository;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 @SpringBootTest
@@ -48,7 +49,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        participantRepository.save(Participant.create(member, letter, "participant"));
+        participantRepository.save(Participant.create(member, letter));
 
         //when
         Participant participant = participantDomainService.findParticipant(letter.getId(), member.getId());
@@ -64,7 +65,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        participantRepository.save(Participant.create(member, letter, "participant"));
+        participantRepository.save(Participant.create(member, letter));
 
         //when & then
         assertThatThrownBy(() -> participantDomainService.findParticipant(-1L, member.getId()))
@@ -78,7 +79,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        participantRepository.save(Participant.create(member, letter, "participant"));
+        participantRepository.save(Participant.create(member, letter));
 
         //when & then
         assertThatThrownBy(() -> participantDomainService.findParticipant(letter.getId(), -1L))
@@ -92,8 +93,8 @@ public class ParticipantDomainServiceTest {
         Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
         Member member2 = memberRepository.save(Member.create(2L, "tester2", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        Participant participant1 = Participant.create(member1, letter, "participant1");
-        Participant participant2 = Participant.create(member2, letter, "participant2");
+        Participant participant1 = Participant.create(member1, letter);
+        Participant participant2 = Participant.create(member2, letter);
         participant2.changeParticipantStatus(EXITED);
         participantRepository.saveAll(List.of(participant1, participant2));
 
@@ -112,8 +113,10 @@ public class ParticipantDomainServiceTest {
         Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
         Member member2 = memberRepository.save(Member.create(2L, "tester2", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        Participant participant1 = Participant.create(member1, letter, "participant1");
-        Participant participant2 = Participant.create(member2, letter, "participant2");
+        Participant participant1 = Participant.create(member1, letter);
+        Participant participant2 = Participant.create(member2, letter);
+        participant1.changeNickname("participant1");
+        participant2.changeNickname("participant2");
 
         participant1.changeSequence(2);
         participant2.changeSequence(1);
@@ -133,7 +136,7 @@ public class ParticipantDomainServiceTest {
         //given
         Member member = memberRepository.save(Member.create(1L, "tester1", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        Participant newParticipant = Participant.create(member, letter, "participant");
+        Participant newParticipant = Participant.create(member, letter);
         Participant savedParticipant = participantRepository.save(newParticipant);
 
         //when
@@ -153,9 +156,9 @@ public class ParticipantDomainServiceTest {
         Member member2 = memberRepository.save(Member.create(2L, "tester2", null));
         Member member3 = memberRepository.save(Member.create(2L, "tester2", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        Participant participant1 = Participant.create(member1, letter, "participant1");
-        Participant participant2 = Participant.create(member2, letter, "participant2");
-        Participant participant3 = Participant.create(member3, letter, "participant3");
+        Participant participant1 = Participant.create(member1, letter);
+        Participant participant2 = Participant.create(member2, letter);
+        Participant participant3 = Participant.create(member3, letter);
         participant1.changeSequence(1);
         participant2.changeSequence(2);
         participant3.changeSequence(3);
@@ -178,7 +181,8 @@ public class ParticipantDomainServiceTest {
         //given
         Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        Participant participant = Participant.create(member1, letter, "participant");
+        Participant participant = Participant.create(member1, letter);
+        participant.changeNickname("participant");
         participantRepository.save(participant);
 
         //when
@@ -203,7 +207,7 @@ public class ParticipantDomainServiceTest {
 
         List<Participant> newParticipants = new ArrayList<>();
         for (int i = 0; i < MAX_PARTICIPANT_SIZE; i++) {
-            Participant participant = Participant.create(members.get(i), letter, "participant" + i);
+            Participant participant = Participant.create(members.get(i), letter);
             newParticipants.add(participant);
         }
         participantRepository.saveAll(newParticipants);

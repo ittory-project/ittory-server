@@ -1,7 +1,6 @@
 package com.ittory.socket.controller;
 
 import com.ittory.common.annotation.CurrentMemberId;
-import com.ittory.socket.dto.EnterRequest;
 import com.ittory.socket.dto.EnterResponse;
 import com.ittory.socket.dto.ExitResponse;
 import com.ittory.socket.usecase.LetterEnterUseCase;
@@ -22,8 +21,8 @@ public class LetterConnectController {
     private final LetterExitUseCase letterExitUseCase;
 
     @MessageMapping("/letter/enter/{letterId}")
-    public void enterMember(@CurrentMemberId Long memberId, @DestinationVariable Long letterId, EnterRequest request) {
-        EnterResponse response = letterEnterUseCase.execute(memberId, letterId, request);
+    public void enterMember(@CurrentMemberId Long memberId, @DestinationVariable Long letterId) {
+        EnterResponse response = letterEnterUseCase.execute(memberId, letterId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
     }

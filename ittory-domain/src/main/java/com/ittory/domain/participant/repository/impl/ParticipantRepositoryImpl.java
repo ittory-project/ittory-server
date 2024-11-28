@@ -12,6 +12,7 @@ import java.util.Optional;
 import static com.ittory.domain.letter.domain.QLetter.letter;
 import static com.ittory.domain.member.domain.QMember.member;
 import static com.ittory.domain.participant.domain.QParticipant.participant;
+import static com.ittory.domain.participant.enums.ParticipantStatus.COMPLETED;
 import static com.ittory.domain.participant.enums.ParticipantStatus.PROGRESS;
 
 @RequiredArgsConstructor
@@ -94,4 +95,10 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 .fetchOne();
     }
 
+    @Override
+    public void deleteParticipantByMemberIdWhenDisconnect(Long memberId) {
+        jpaQueryFactory.delete(participant)
+                .where(participant.member.id.eq(memberId).and(participant.participantStatus.ne(COMPLETED)))
+                .execute();
+    }
 }
