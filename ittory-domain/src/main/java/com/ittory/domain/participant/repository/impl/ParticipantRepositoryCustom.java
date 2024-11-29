@@ -20,5 +20,7 @@ public interface ParticipantRepositoryCustom {
 
     Participant findManagerByLetterId(Long letterId);
 
-    void deleteParticipantByMemberIdWhenDisconnect(Long memberId);
+    void updateAllStatusToStart(Long letterId);
+
+    void updateAllStatusToEnd(Long letterId);
 }
