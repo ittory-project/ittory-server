@@ -12,8 +12,7 @@ import java.util.Optional;
 import static com.ittory.domain.letter.domain.QLetter.letter;
 import static com.ittory.domain.member.domain.QMember.member;
 import static com.ittory.domain.participant.domain.QParticipant.participant;
-import static com.ittory.domain.participant.enums.ParticipantStatus.COMPLETED;
-import static com.ittory.domain.participant.enums.ParticipantStatus.PROGRESS;
+import static com.ittory.domain.participant.enums.ParticipantStatus.*;
 
 @RequiredArgsConstructor
 public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
@@ -38,7 +37,9 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                                                                       Boolean isAscending) {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.member, member).fetchJoin()
-                .where(participant.participantStatus.eq(PROGRESS).and(participant.letter.id.in(letterId)))
+                .where(participant.letter.id.in(letterId)
+                        .and(participant.participantStatus.eq(ENTER).or(participant.participantStatus.eq(PROGRESS)))
+                )
                 .orderBy(getOrderParticipant(isAscending))
                 .fetch();
     }
@@ -96,9 +97,18 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     }
 
     @Override
-    public void deleteParticipantByMemberIdWhenDisconnect(Long memberId) {
-        jpaQueryFactory.delete(participant)
-                .where(participant.member.id.eq(memberId).and(participant.participantStatus.ne(COMPLETED)))
+    public void updateAllStatusToStart(Long letterId) {
+        jpaQueryFactory.update(participant)
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(ENTER)))
+                .set(participant.participantStatus, PROGRESS)
+                .execute();
+    }
+
+    @Override
+    public void updateAllStatusToEnd(Long letterId) {
+        jpaQueryFactory.update(participant)
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(PROGRESS)))
+                .set(participant.participantStatus, COMPLETED)
                 .execute();
     }
 }

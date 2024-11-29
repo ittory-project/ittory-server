@@ -7,7 +7,7 @@ import com.ittory.domain.participant.enums.ParticipantStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static com.ittory.domain.participant.enums.ParticipantStatus.PROGRESS;
+import static com.ittory.domain.participant.enums.ParticipantStatus.GHOST;
 
 @Entity(name = "participant")
 @Getter
@@ -40,7 +40,7 @@ public class Participant extends BaseEntity {
         return Participant.builder()
                 .member(member)
                 .letter(letter)
-                .participantStatus(PROGRESS)
+                .participantStatus(GHOST)
                 .build();
     }
 

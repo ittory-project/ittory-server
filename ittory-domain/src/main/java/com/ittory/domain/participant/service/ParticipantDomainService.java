@@ -99,7 +99,12 @@ public class ParticipantDomainService {
     }
 
     @Transactional
-    public void deleteParticipantByMemberIdWhenDisconnect(Long memberId) {
-        participantRepository.deleteParticipantByMemberIdWhenDisconnect(memberId);
+    public void updateAllStatusToStart(Long letterId) {
+        participantRepository.updateAllStatusToStart(letterId);
+    }
+
+    @Transactional
+    public void updateAllStatusToEnd(Long letterId) {
+        participantRepository.updateAllStatusToEnd(letterId);
     }
 }

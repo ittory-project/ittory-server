@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
+import static com.ittory.domain.participant.enums.ParticipantStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -92,9 +92,13 @@ public class ParticipantDomainServiceTest {
         //given
         Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
         Member member2 = memberRepository.save(Member.create(2L, "tester2", null));
+        Member member3 = memberRepository.save(Member.create(3L, "tester3", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
         Participant participant1 = Participant.create(member1, letter);
         Participant participant2 = Participant.create(member2, letter);
+        Participant participant3 = Participant.create(member3, letter);
+        participant1.changeParticipantStatus(PROGRESS);
+        participant1.changeParticipantStatus(ENTER);
         participant2.changeParticipantStatus(EXITED);
         participantRepository.saveAll(List.of(participant1, participant2));
 
@@ -117,6 +121,8 @@ public class ParticipantDomainServiceTest {
         Participant participant2 = Participant.create(member2, letter);
         participant1.changeNickname("participant1");
         participant2.changeNickname("participant2");
+        participant1.changeParticipantStatus(PROGRESS);
+        participant2.changeParticipantStatus(PROGRESS);
 
         participant1.changeSequence(2);
         participant2.changeSequence(1);
@@ -163,6 +169,8 @@ public class ParticipantDomainServiceTest {
         participant2.changeSequence(2);
         participant3.changeSequence(3);
         participant1.changeParticipantStatus(EXITED);
+        participant2.changeParticipantStatus(PROGRESS);
+        participant3.changeParticipantStatus(PROGRESS);
         participantRepository.saveAll(List.of(participant1, participant2, participant3));
 
         //when

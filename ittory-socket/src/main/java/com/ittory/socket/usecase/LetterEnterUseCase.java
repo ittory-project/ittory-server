@@ -1,6 +1,7 @@
 package com.ittory.socket.usecase;
 
 import com.ittory.domain.participant.domain.Participant;
+import com.ittory.domain.participant.enums.ParticipantStatus;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.dto.EnterResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class LetterEnterUseCase {
     @Transactional
     public EnterResponse execute(Long memberId, Long letterId) {
         Participant participant = participantDomainService.findParticipant(letterId, memberId);
+        participant.changeParticipantStatus(ParticipantStatus.ENTER);
         return EnterResponse.from(participant);
     }
 
