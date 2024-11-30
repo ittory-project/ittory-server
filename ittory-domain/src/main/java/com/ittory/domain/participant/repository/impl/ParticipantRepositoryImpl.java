@@ -111,4 +111,12 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 .set(participant.participantStatus, COMPLETED)
                 .execute();
     }
+
+    @Override
+    public void updateAllStatusToDelete(Long letterId) {
+        jpaQueryFactory.update(participant)
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(ENTER)))
+                .set(participant.participantStatus, GHOST)
+                .execute();
+    }
 }

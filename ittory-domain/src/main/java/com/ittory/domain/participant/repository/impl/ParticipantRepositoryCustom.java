@@ -23,4 +23,6 @@ public interface ParticipantRepositoryCustom {
     void updateAllStatusToStart(Long letterId);
 
     void updateAllStatusToEnd(Long letterId);
+
+    void updateAllStatusToDelete(Long letterId);
 }
