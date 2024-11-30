@@ -43,6 +43,7 @@ public class Letter extends BaseEntity {
     private Integer repeatCount;
 
     @Column(name = "letter_status")
+    @Enumerated(EnumType.STRING)
     private LetterStatus letterStatus;
 
     public static Letter create(CoverType coverType, Font font, String receiverName, LocalDateTime deliveryDate,
