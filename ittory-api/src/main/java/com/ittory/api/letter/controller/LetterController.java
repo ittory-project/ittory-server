@@ -103,7 +103,7 @@ public class LetterController {
 
     @Operation(summary = "편지에 소속되어 있는 요소 조회", description = "(Authenticated, Pagination) size와 page가 없으면, 편지에 소속한 모든 요소를 조회")
     @GetMapping("/{letterId}/elements")
-    public ResponseEntity<LetterElementsResponse> getLetterDetails(@PathVariable Long letterId, Pageable pageable) {
+    public ResponseEntity<LetterElementsResponse> getLetterElements(@PathVariable Long letterId, Pageable pageable) {
         LetterElementsResponse response = letterElementsReadUseCase.execute(letterId, pageable);
         return ResponseEntity.ok().body(response);
     }

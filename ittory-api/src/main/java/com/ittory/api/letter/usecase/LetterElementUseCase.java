@@ -18,6 +18,7 @@ public class LetterElementUseCase {
     public LetterElementResponse execute(Long letterElementId, LetterElementRequest request) {
         Element element = elementDomainService.findById(letterElementId);
         letterDomainService.updateLetterElement(letterElementId, request.getContent());
-        return new LetterElementResponse(letterElementId, element.getElementImage().getUrl(), request.getContent());
+        return new LetterElementResponse(letterElementId, element.getParticipant().getNickname(),
+                element.getElementImage().getUrl(), request.getContent(), element.getSequence());
     }
 }
