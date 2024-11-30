@@ -107,4 +107,9 @@ public class ParticipantDomainService {
     public void updateAllStatusToEnd(Long letterId) {
         participantRepository.updateAllStatusToEnd(letterId);
     }
+
+    @Transactional
+    public void updateAllStatusToDelete(Long letterId) {
+        participantRepository.updateAllStatusToDelete(letterId);
+    }
 }
