@@ -37,6 +37,12 @@ public class CoverType extends BaseEntity {
     @Column(name = "loading_background_image_url")
     private String loadingBackgroundImageUrl;
 
+    @Column(name = "output_board_image_url")
+    private String outputBoardImageUrl;
+
+    @Column(name = "list_color")
+    private String listColor;
+
 
     public static CoverType create(String name, CoverTypeImages request) {
         return CoverType.builder()

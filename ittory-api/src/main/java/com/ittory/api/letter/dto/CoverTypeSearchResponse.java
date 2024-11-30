@@ -21,6 +21,8 @@ public class CoverTypeSearchResponse {
     private String confirmImageUrl;
     private String outputBackgroundImageUrl;
     private String loadingBackgroundImageUrl;
+    private String outputBoardImageUrl;
+    private String listColor;
 
     public static CoverTypeSearchResponse from(CoverType coverType) {
         return CoverTypeSearchResponse.builder()
@@ -32,6 +34,8 @@ public class CoverTypeSearchResponse {
                 .confirmImageUrl(coverType.getConfirmImageUrl())
                 .outputBackgroundImageUrl(coverType.getOutputBackgroundImageUrl())
                 .loadingBackgroundImageUrl(coverType.getLoadingBackgroundImageUrl())
+                .outputBackgroundImageUrl(coverType.getOutputBackgroundImageUrl())
+                .listColor(coverType.getListColor())
                 .build();
     }
 }
