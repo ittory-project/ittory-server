@@ -26,6 +26,7 @@ public class ReceivedLetterResponse {
         private Long letterId;
         private String title;
         private String coverTypeImage;
+        private String coverTypeColor;
         private LocalDateTime deliveryDate;
 
         public static ReceivedLetterResponse.LetterDto from(Letter letter) {
@@ -33,6 +34,7 @@ public class ReceivedLetterResponse {
                     letter.getId(),
                     letter.getTitle(),
                     letter.getCoverType().getListImageUrl(),
+                    letter.getCoverType().getListColor(),
                     letter.getDeliveryDate()
             );
         }

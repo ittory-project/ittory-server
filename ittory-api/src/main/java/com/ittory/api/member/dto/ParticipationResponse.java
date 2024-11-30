@@ -26,6 +26,7 @@ public class ParticipationResponse {
         private Long letterId;
         private String receiverName;
         private String coverTypeImage;
+        private String coverTypeColor;
         private LocalDateTime deliveryDate;
 
         public static LetterDto from(Letter letter) {
@@ -33,6 +34,7 @@ public class ParticipationResponse {
                     letter.getId(),
                     letter.getReceiverName(),
                     letter.getCoverType().getListImageUrl(),
+                    letter.getCoverType().getListColor(),
                     letter.getDeliveryDate()
             );
         }
