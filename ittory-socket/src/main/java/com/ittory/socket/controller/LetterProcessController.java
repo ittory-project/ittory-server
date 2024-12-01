@@ -8,12 +8,14 @@ import com.ittory.socket.usecase.LetterDeleteUseCase;
 import com.ittory.socket.usecase.LetterEndUseCase;
 import com.ittory.socket.usecase.LetterStartUseCase;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 
-@RestController
+@Controller
+@Slf4j
 @RequiredArgsConstructor
 public class LetterProcessController {
 
@@ -25,6 +27,7 @@ public class LetterProcessController {
 
     @MessageMapping("/letter/start/{letterId}")
     public void startMember(@DestinationVariable Long letterId) {
+        log.info("Start letter {}", letterId);
         StartResponse response = letterStartUseCase.execute(letterId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
@@ -32,6 +35,7 @@ public class LetterProcessController {
 
     @MessageMapping("/letter/end/{letterId}")
     public void endMember(@DestinationVariable Long letterId) {
+        log.info("End letter {}", letterId);
         EndResponse response = letterEndUseCase.execute(letterId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
@@ -39,6 +43,7 @@ public class LetterProcessController {
 
     @MessageMapping("/letter/delete/{letterId}")
     public void deleteLetter(@CurrentMemberId Long memberId, @DestinationVariable Long letterId) {
+        log.info("Delete letter {}", letterId);
         DeleteResponse response = letterDeleteUseCase.execute(memberId, letterId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
