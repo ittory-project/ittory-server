@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberDetailReadUseCase memberDetailReadUseCase;
-    private final MemberParticipationReadUseCase memberParticipationReadUseCase;
-    private final ReceivedLetterUseCase receivedLetterUseCase;
+    private final ParticipationLetterReadUseCase participationLetterReadUseCase;
+    private final ReceivedLetterReadUseCase receivedLetterReadUseCase;
     private final MemberWithdrawUseCase memberWithdrawUseCase;
     private final MemberLetterCountReadUseCase memberLetterCountReadUseCase;
     private final MemberAlreadyVisitCheckUseCase memberAlreadyVisitCheckUseCase;
@@ -31,14 +31,14 @@ public class MemberController {
     @Operation(summary = "참여한 편지 조회", description = "(Authenticated) 참여한 모든 편지를 조회합니다.")
     @GetMapping("/participations")
     public ResponseEntity<ParticipationResponse> getParticipations(@CurrentMemberId Long memberId) {
-        ParticipationResponse response = memberParticipationReadUseCase.execute(memberId);
+        ParticipationResponse response = participationLetterReadUseCase.execute(memberId);
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "받은 편지함 조회", description = "(Authenticated) 받은 모든 편지를 조회합니다.")
     @GetMapping("/received")
     public ResponseEntity<ReceivedLetterResponse> getReceivedLetters(@CurrentMemberId Long memberId) {
-        ReceivedLetterResponse response = receivedLetterUseCase.execute(memberId);
+        ReceivedLetterResponse response = receivedLetterReadUseCase.execute(memberId);
         return ResponseEntity.ok().body(response);
     }
 

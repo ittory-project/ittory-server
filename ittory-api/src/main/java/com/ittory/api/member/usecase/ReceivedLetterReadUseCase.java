@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ReceivedLetterUseCase {
+public class ReceivedLetterReadUseCase {
 
     private final MemberDomainService memberDomainService;
 
