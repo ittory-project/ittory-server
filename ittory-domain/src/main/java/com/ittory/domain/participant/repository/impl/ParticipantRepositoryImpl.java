@@ -127,4 +127,17 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 .fetch().size();
     }
 
+    @Override
+    public Optional<Participant> findEnterParticipantByLetterIdAndMemberId(Long letterId, Long memberId) {
+        Participant fetch = jpaQueryFactory.selectFrom(participant)
+                .leftJoin(participant.letter, letter).fetchJoin()
+                .leftJoin(participant.member, member).fetchJoin()
+                .where(participant.letter.id.eq(letterId)
+                        .and(participant.member.id.eq(memberId))
+                        .and(participant.participantStatus.eq(ENTER))
+                )
+                .fetchOne();
+
+        return Optional.ofNullable(fetch);
+    }
 }

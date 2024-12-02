@@ -26,7 +26,7 @@ public class LetterEnterUseCase {
         Long participantId = null;
         if (enterStatus) {
             // 중복 참여 검증
-            Participant participant = participantDomainService.findParticipantOrNull(letterId, memberId);
+            Participant participant = participantDomainService.findEnterParticipantOrNull(letterId, memberId);
             if (participant != null) {
                 throw new ParticipantException.DuplicateParticipantException.DuplicateParticipantException(letterId, memberId);
             }

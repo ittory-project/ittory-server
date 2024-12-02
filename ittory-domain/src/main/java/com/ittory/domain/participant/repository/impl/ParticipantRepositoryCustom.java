@@ -27,4 +27,6 @@ public interface ParticipantRepositoryCustom {
     void updateAllStatusToDelete(Long letterId);
 
     Integer countEnterParticipantByLetterId(Long letterId);
+
+    Optional<Participant> findEnterParticipantByLetterIdAndMemberId(Long letterId, Long memberId);
 }

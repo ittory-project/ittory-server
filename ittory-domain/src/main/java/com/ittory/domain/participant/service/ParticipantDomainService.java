@@ -89,8 +89,8 @@ public class ParticipantDomainService {
     }
 
     @Transactional(readOnly = true)
-    public Participant findParticipantOrNull(Long letterId, Long memberId) {
-        return participantRepository.findByLetterIdAndMemberId(letterId, memberId).orElse(null);
+    public Participant findEnterParticipantOrNull(Long letterId, Long memberId) {
+        return participantRepository.findEnterParticipantByLetterIdAndMemberId(letterId, memberId).orElse(null);
     }
 
     @Transactional(readOnly = true)
