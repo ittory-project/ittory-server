@@ -119,4 +119,12 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 .set(participant.participantStatus, GHOST)
                 .execute();
     }
+
+    @Override
+    public Integer countEnterParticipantByLetterId(Long letterId) {
+        return jpaQueryFactory.selectFrom(participant)
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(ENTER)))
+                .fetch().size();
+    }
+
 }

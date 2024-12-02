@@ -216,6 +216,7 @@ public class ParticipantDomainServiceTest {
         List<Participant> newParticipants = new ArrayList<>();
         for (int i = 0; i < MAX_PARTICIPANT_SIZE; i++) {
             Participant participant = Participant.create(members.get(i), letter);
+            participant.changeParticipantStatus(ENTER);
             newParticipants.add(participant);
         }
         participantRepository.saveAll(newParticipants);

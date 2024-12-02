@@ -79,7 +79,7 @@ public class ParticipantDomainService {
 
     @Transactional(readOnly = true)
     public Boolean getEnterStatus(Long letterId) {
-        Integer participantCount = participantRepository.countByLetterId(letterId);
+        Integer participantCount = participantRepository.countEnterParticipantByLetterId(letterId);
         return participantCount < PARTICIPANTS_SIZE;
     }
 
