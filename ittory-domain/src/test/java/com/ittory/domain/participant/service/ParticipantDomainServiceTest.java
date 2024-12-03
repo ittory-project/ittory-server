@@ -188,16 +188,27 @@ public class ParticipantDomainServiceTest {
     void checkNicknameDuplicationTest() {
         //given
         Member member1 = memberRepository.save(Member.create(1L, "tester1", null));
+        Member member2 = memberRepository.save(Member.create(2L, "tester2", null));
         Letter letter = letterRepository.save(Letter.builder().title("test_letter").build());
-        Participant participant = Participant.create(member1, letter);
-        participant.changeNickname("participant");
-        participantRepository.save(participant);
+
+        Participant enterParticipant = Participant.create(member1, letter);
+        enterParticipant.changeNickname("participant");
+        enterParticipant.changeParticipantStatus(ENTER);
+        participantRepository.save(enterParticipant);
+
+        Participant ghostParticipant = Participant.create(member2, letter);
+        ghostParticipant.changeNickname("ghost");
+        ghostParticipant.changeParticipantStatus(GHOST);
+        participantRepository.save(ghostParticipant);
+
 
         //when
-        Boolean isDuplicate = participantDomainService.checkNicknameDuplication(letter.getId(), "participant");
+        Boolean isEnterDuplicate = participantDomainService.checkNicknameDuplication(letter.getId(), "participant");
+        Boolean isGhostDuplicate = participantDomainService.checkNicknameDuplication(letter.getId(), "ghost");
 
         //then
-        assertThat(isDuplicate).isTrue();
+        assertThat(isEnterDuplicate).isTrue();
+        assertThat(isGhostDuplicate).isFalse();
     }
 
     @DisplayName("편지의 참여자가 5명 미만인지 체크한다.")

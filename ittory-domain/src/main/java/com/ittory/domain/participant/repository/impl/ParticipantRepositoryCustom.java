@@ -14,7 +14,7 @@ public interface ParticipantRepositoryCustom {
 
     List<Participant> findAllParticipantsWithMember(Long letterId);
 
-    Participant findByNickname(Long letterId, String nickname);
+    Participant findEnterByNickname(Long letterId, String nickname);
 
     Integer countProgressByLetterId(Long letterId);
 

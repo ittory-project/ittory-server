@@ -69,10 +69,11 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     }
 
     @Override
-    public Participant findByNickname(Long letterId, String nickname) {
+    public Participant findEnterByNickname(Long letterId, String nickname) {
         return jpaQueryFactory.selectFrom(participant)
                 .where(participant.letter.id.eq(letterId)
                         .and(participant.nickname.eq(nickname))
+                        .and(participant.participantStatus.eq(ENTER))
                 )
                 .fetchOne();
     }
