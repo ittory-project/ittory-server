@@ -4,6 +4,5 @@ public enum EnterAction {
     SUCCESS,
     EXCEEDED,
     STARTED,
-    ENDED,
     DELETED
 }

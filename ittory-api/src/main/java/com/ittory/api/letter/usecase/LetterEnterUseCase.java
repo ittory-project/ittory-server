@@ -2,6 +2,7 @@ package com.ittory.api.letter.usecase;
 
 import com.ittory.api.letter.dto.LetterEnterStatusResponse;
 import com.ittory.domain.letter.domain.Letter;
+import com.ittory.domain.letter.enums.LetterStatus;
 import com.ittory.domain.letter.service.LetterDomainService;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.service.MemberDomainService;
@@ -52,12 +53,11 @@ public class LetterEnterUseCase {
     }
 
     private static EnterAction getEnterAction(Letter letter) {
+        LetterStatus letterStatus = letter.getLetterStatus();
         EnterAction enterAction;
-        if (letter.getLetterStatus().equals(PROGRESS)) {
+        if (letterStatus.equals(PROGRESS) || letterStatus.equals(COMPLETED)) {
             enterAction = EnterAction.STARTED;
-        } else if (letter.getLetterStatus().equals(COMPLETED)) {
-            enterAction = EnterAction.ENDED;
-        } else if (letter.getLetterStatus().equals(DELETED)) {
+        } else if (letterStatus.equals(DELETED)) {
             enterAction = EnterAction.DELETED;
         } else {
             enterAction = EnterAction.SUCCESS;
