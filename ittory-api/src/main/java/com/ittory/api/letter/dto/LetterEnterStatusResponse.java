@@ -1,5 +1,6 @@
 package com.ittory.api.letter.dto;
 
+import com.ittory.domain.participant.enums.EnterAction;
 import lombok.*;
 
 @Getter
@@ -9,6 +10,7 @@ import lombok.*;
 public class LetterEnterStatusResponse {
 
     private Boolean enterStatus;
+    private EnterAction enterAction;
     private Long participantId;
 
 
@@ -19,9 +21,10 @@ public class LetterEnterStatusResponse {
                 .build();
     }
 
-    public static LetterEnterStatusResponse of(Boolean enterStatus, Long participantId) {
+    public static LetterEnterStatusResponse of(Boolean enterStatus, EnterAction enterAction, Long participantId) {
         return LetterEnterStatusResponse.builder()
                 .enterStatus(enterStatus)
+                .enterAction(enterAction)
                 .participantId(participantId)
                 .build();
     }

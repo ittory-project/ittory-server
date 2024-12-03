@@ -6,10 +6,13 @@ import com.ittory.domain.letter.service.LetterDomainService;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.service.MemberDomainService;
 import com.ittory.domain.participant.domain.Participant;
+import com.ittory.domain.participant.enums.EnterAction;
 import com.ittory.domain.participant.exception.ParticipantException;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import static com.ittory.domain.letter.enums.LetterStatus.*;
 
 @Component
 @RequiredArgsConstructor
@@ -22,9 +25,11 @@ public class LetterEnterUseCase {
     // 스케일 아웃 시 분산락 적용 필요
     public synchronized LetterEnterStatusResponse execute(Long memberId, Long letterId) {
         Boolean enterStatus = participantDomainService.getEnterStatus(letterId);
+        EnterAction enterAction = EnterAction.EXCEEDED;
 
         Long participantId = null;
         if (enterStatus) {
+            enterStatus = false;
             // 중복 참여 검증
             Participant participant = participantDomainService.findEnterParticipantOrNull(letterId, memberId);
             if (participant != null) {
@@ -34,11 +39,30 @@ public class LetterEnterUseCase {
             // 입장
             Member member = memberDomainService.findMemberById(memberId);
             Letter letter = letterDomainService.findLetter(letterId);
-            Participant newParticipant = participantDomainService.saveParticipant(Participant.create(member, letter));
-            participantId = newParticipant.getId();
+            enterAction = getEnterAction(letter);
+
+            if (enterAction.equals(EnterAction.SUCCESS)) {
+                Participant newParticipant = participantDomainService.saveParticipant(Participant.create(member, letter));
+                participantId = newParticipant.getId();
+                enterStatus = true;
+            }
         }
 
-        return LetterEnterStatusResponse.of(enterStatus, participantId);
+        return LetterEnterStatusResponse.of(enterStatus, enterAction, participantId);
+    }
+
+    private static EnterAction getEnterAction(Letter letter) {
+        EnterAction enterAction;
+        if (letter.getLetterStatus().equals(PROGRESS)) {
+            enterAction = EnterAction.STARTED;
+        } else if (letter.getLetterStatus().equals(COMPLETED)) {
+            enterAction = EnterAction.ENDED;
+        } else if (letter.getLetterStatus().equals(DELETED)) {
+            enterAction = EnterAction.DELETED;
+        } else {
+            enterAction = EnterAction.SUCCESS;
+        }
+        return enterAction;
     }
 
 }
