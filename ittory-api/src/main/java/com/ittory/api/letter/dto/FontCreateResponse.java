@@ -1,11 +1,12 @@
 package com.ittory.api.letter.dto;
 
 import com.ittory.domain.letter.domain.Font;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class FontCreateResponse {
     private Long id;
     private String name;
+    private String value;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -21,6 +23,7 @@ public class FontCreateResponse {
         return FontCreateResponse.builder()
                 .id(font.getId())
                 .name(font.getName())
+                .value(font.getValue())
                 .createdAt(font.getCreatedAt())
                 .updatedAt(font.getUpdatedAt())
                 .build();

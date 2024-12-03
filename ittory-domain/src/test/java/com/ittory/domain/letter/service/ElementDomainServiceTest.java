@@ -65,7 +65,7 @@ public class ElementDomainServiceTest {
         CoverTypeImages images = CoverTypeImages.of("list", "select", "edit",
                 "confirm", "output", "loading");
         CoverType coverType = CoverType.create("type", images);
-        Font font = Font.create("font");
+        Font font = Font.create("font", "value");
         ElementImage elementImage = ElementImage.create("image");
 
         Letter letter = Letter.create(coverType, font, "receiver", LocalDateTime.now(), "title", "image", null);
