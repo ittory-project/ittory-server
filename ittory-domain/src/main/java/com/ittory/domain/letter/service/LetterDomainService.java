@@ -61,7 +61,7 @@ public class LetterDomainService {
 
         Collections.shuffle(elementImages);
         List<Element> elements = IntStream.range(0, totalCount)
-                .mapToObj(sequence -> Element.create(letter, null, elementImages.get(sequence), sequence, null))
+                .mapToObj(sequence -> Element.create(letter, null, elementImages.get(sequence), sequence + 1, null))
                 .collect(Collectors.toList());
 
         letterElementRepository.saveAll(elements);
