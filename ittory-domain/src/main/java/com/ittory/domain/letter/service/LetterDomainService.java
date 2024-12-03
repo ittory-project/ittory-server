@@ -60,7 +60,7 @@ public class LetterDomainService {
         }
 
         Collections.shuffle(elementImages);
-        List<Element> elements = IntStream.range(1, totalCount + 1)
+        List<Element> elements = IntStream.range(0, totalCount)
                 .mapToObj(sequence -> Element.create(letter, null, elementImages.get(sequence), sequence, null))
                 .collect(Collectors.toList());
 
