@@ -82,7 +82,7 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     public Integer countProgressByLetterId(Long letterId) {
         return jpaQueryFactory.selectFrom(participant)
                 .where(participant.letter.id.eq(letterId)
-                        .and(participant.participantStatus.eq(PROGRESS))
+                        .and(participant.participantStatus.eq(ENTER))
                 )
                 .fetch().size();
     }
