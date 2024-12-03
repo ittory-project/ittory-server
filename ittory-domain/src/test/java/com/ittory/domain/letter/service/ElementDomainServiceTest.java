@@ -62,8 +62,8 @@ public class ElementDomainServiceTest {
     void changeContentTest() {
         //given
         Member member = Member.create(1L, "member", "image");
-        CoverTypeImages images = CoverTypeImages.of("list", "select", "edit",
-                "confirm", "output", "loading");
+        CoverTypeImages images = CoverTypeImages.of("list", "select", "notSelect",
+                "edit", "confirm", "output", "loading");
         CoverType coverType = CoverType.create("type", images);
         Font font = Font.create("font", "value");
         ElementImage elementImage = ElementImage.create("image");

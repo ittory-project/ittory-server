@@ -17,6 +17,7 @@ public class CoverTypeSearchResponse {
     private String name;
     private String listImageUrl;
     private String selectImageUrl;
+    private String notSelectImageUrl;
     private String editImageUrl;
     private String confirmImageUrl;
     private String outputBackgroundImageUrl;
@@ -30,6 +31,7 @@ public class CoverTypeSearchResponse {
                 .name(coverType.getName())
                 .listImageUrl(coverType.getListImageUrl())
                 .selectImageUrl(coverType.getSelectImageUrl())
+                .notSelectImageUrl(coverType.getNotSelectImageUrl())
                 .editImageUrl(coverType.getEditImageUrl())
                 .confirmImageUrl(coverType.getConfirmImageUrl())
                 .outputBackgroundImageUrl(coverType.getOutputBackgroundImageUrl())

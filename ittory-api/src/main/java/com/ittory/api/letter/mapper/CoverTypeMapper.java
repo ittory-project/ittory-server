@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 public class CoverTypeMapper {
 
     public CoverTypeImages toCoverTypeImages(CoverTypeCreateRequest request) {
-        return CoverTypeImages.of(request.getListImageUrl(), request.getSelectImageUrl(), request.getEditImageUrl(),
-                request.getConfirmImageUrl(), request.getOutputBackgroundImageUrl(), request.getLoadingBackgroundImageUrl());
+        return CoverTypeImages.of(request.getListImageUrl(), request.getSelectImageUrl(), request.getNotSelectImageUrl(),
+                request.getEditImageUrl(), request.getConfirmImageUrl(), request.getOutputBackgroundImageUrl(),
+                request.getLoadingBackgroundImageUrl());
     }
 
 }

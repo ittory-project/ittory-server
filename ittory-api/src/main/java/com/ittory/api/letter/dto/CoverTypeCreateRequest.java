@@ -16,6 +16,9 @@ public class CoverTypeCreateRequest {
     @Schema(description = "표지 선택 시 간단사진의 URL", example = "http://ittory..com/cover")
     private String selectImageUrl;
 
+    @Schema(description = "선택되지 않은 표지의 간단사진의 URL", example = "http://ittory..com/cover")
+    private String notSelectImageUrl;
+
     @Schema(description = "표지 꾸미기 시 배경 이미지 URL", example = "http://ittory..com/cover")
     private String editImageUrl;
 

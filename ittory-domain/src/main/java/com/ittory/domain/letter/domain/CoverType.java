@@ -25,6 +25,9 @@ public class CoverType extends BaseEntity {
     @Column(name = "select_image_url")
     private String selectImageUrl;
 
+    @Column(name = "not_select_image_url")
+    private String notSelectImageUrl;
+
     @Column(name = "edit_image_url")
     private String editImageUrl;
 
@@ -49,6 +52,7 @@ public class CoverType extends BaseEntity {
                 .name(name)
                 .listImageUrl(request.getListImageUrl())
                 .selectImageUrl(request.getSelectImageUrl())
+                .notSelectImageUrl(request.getNotSelectImageUrl())
                 .editImageUrl(request.getEditImageUrl())
                 .confirmImageUrl(request.getConfirmImageUrl())
                 .outputBackgroundImageUrl(request.getOutputBackgroundImageUrl())
