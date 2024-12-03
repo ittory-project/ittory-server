@@ -16,9 +16,10 @@ public class LetterElementResponse {
     private Integer sequence;
 
     public static LetterElementResponse from(Element letterElement) {
+        String nickname = letterElement.getParticipant() != null ? letterElement.getParticipant().getNickname() : null;
         return new LetterElementResponse(
                 letterElement.getId(),
-                letterElement.getParticipant().getNickname(),
+                nickname,
                 letterElement.getElementImage().getUrl(),
                 letterElement.getContent(),
                 letterElement.getSequence()
