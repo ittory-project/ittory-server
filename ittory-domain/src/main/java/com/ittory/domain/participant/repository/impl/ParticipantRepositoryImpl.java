@@ -46,7 +46,7 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
 
     private static OrderSpecifier<?> getOrderParticipant(Boolean isAscending) {
         if (isAscending == null) {
-            return participant.createdAt.asc();
+            return participant.updatedAt.asc();
         }
         return isAscending ? participant.sequence.asc() : participant.sequence.desc();
     }
