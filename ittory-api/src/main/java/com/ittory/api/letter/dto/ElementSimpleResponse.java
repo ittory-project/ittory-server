@@ -1,11 +1,7 @@
 package com.ittory.api.letter.dto;
 
 import com.ittory.domain.letter.domain.Element;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Builder
@@ -20,9 +16,10 @@ public class ElementSimpleResponse {
     private Integer sequence;
 
     public static ElementSimpleResponse from(Element element) {
+        String nickname = element.getParticipant() != null ? element.getParticipant().getNickname() : null;
         return ElementSimpleResponse.builder()
                 .elementId(element.getId())
-                .nickname(element.getParticipant().getNickname())
+                .nickname(nickname)
                 .imageUrl(element.getElementImage().getUrl())
                 .content(element.getContent())
                 .sequence(element.getSequence())
