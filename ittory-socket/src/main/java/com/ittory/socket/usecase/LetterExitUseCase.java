@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
-import static com.ittory.domain.participant.enums.ParticipantStatus.GHOST;
+import static com.ittory.domain.participant.enums.ParticipantStatus.GUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +33,10 @@ public class LetterExitUseCase {
 
     private void exitParticipant(Participant participant) {
         if (!checkNoElement(participant)) {
-            participant.changeParticipantStatus(EXITED);
+            participant.changeParticipantStatus(GUEST);
             participantDomainService.exitParticipant(participant);
         } else {
-            participant.changeParticipantStatus(GHOST);
+            participant.changeParticipantStatus(EXITED);
 //            participantDomainService.deleteParticipant(participant);
         }
     }

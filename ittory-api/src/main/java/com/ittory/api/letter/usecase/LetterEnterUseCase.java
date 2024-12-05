@@ -8,6 +8,7 @@ import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.service.MemberDomainService;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.enums.EnterAction;
+import com.ittory.domain.participant.enums.ParticipantStatus;
 import com.ittory.domain.participant.exception.ParticipantException;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +44,27 @@ public class LetterEnterUseCase {
             enterAction = getEnterAction(letter);
 
             if (enterAction.equals(EnterAction.SUCCESS)) {
-                Participant newParticipant = participantDomainService.saveParticipant(Participant.create(member, letter));
+                Participant newParticipant = getNewParticipant(member, letter);
                 participantId = newParticipant.getId();
                 enterStatus = true;
             }
         }
 
         return LetterEnterStatusResponse.of(enterStatus, enterAction, participantId);
+    }
+
+    private Participant getNewParticipant(Member member, Letter letter) {
+        Participant oldParticipant = participantDomainService.findParticipantOrNull(letter.getId(), member.getId());
+        if (oldParticipant != null) {
+            updateToGhostParticipant(oldParticipant);
+            return oldParticipant;
+        }
+        return participantDomainService.saveParticipant(Participant.create(member, letter));
+    }
+
+    private void updateToGhostParticipant(Participant oldParticipant) {
+        oldParticipant.changeParticipantStatus(ParticipantStatus.GHOST);
+        participantDomainService.saveParticipant(oldParticipant);
     }
 
     private static EnterAction getEnterAction(Letter letter) {

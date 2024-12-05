@@ -99,7 +99,7 @@ public class ParticipantDomainServiceTest {
         Participant participant3 = Participant.create(member3, letter);
         participant1.changeParticipantStatus(PROGRESS);
         participant1.changeParticipantStatus(ENTER);
-        participant2.changeParticipantStatus(EXITED);
+        participant2.changeParticipantStatus(GUEST);
         participantRepository.saveAll(List.of(participant1, participant2));
 
         //when
@@ -151,7 +151,7 @@ public class ParticipantDomainServiceTest {
 
         //then
         assertThat(participant).isNotNull();
-        assertThat(participant.getParticipantStatus()).isEqualTo(EXITED);
+        assertThat(participant.getParticipantStatus()).isEqualTo(GUEST);
     }
 
     @DisplayName("참여자의 순서를 변경한다.")
@@ -168,7 +168,7 @@ public class ParticipantDomainServiceTest {
         participant1.changeSequence(1);
         participant2.changeSequence(2);
         participant3.changeSequence(3);
-        participant1.changeParticipantStatus(EXITED);
+        participant1.changeParticipantStatus(GUEST);
         participant2.changeParticipantStatus(PROGRESS);
         participant3.changeParticipantStatus(PROGRESS);
         participantRepository.saveAll(List.of(participant1, participant2, participant3));

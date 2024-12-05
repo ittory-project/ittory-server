@@ -117,14 +117,16 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     public void updateAllStatusToDelete(Long letterId) {
         jpaQueryFactory.update(participant)
                 .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(ENTER)))
-                .set(participant.participantStatus, GHOST)
+                .set(participant.participantStatus, EXITED)
                 .execute();
     }
 
     @Override
     public Integer countEnterParticipantByLetterId(Long letterId) {
         return jpaQueryFactory.selectFrom(participant)
-                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(ENTER)))
+                .where(participant.letter.id.eq(letterId)
+                        .and(participant.participantStatus.eq(ENTER).or(participant.participantStatus.eq(GHOST)))
+                )
                 .fetch().size();
     }
 
@@ -135,7 +137,8 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                 .leftJoin(participant.member, member).fetchJoin()
                 .where(participant.letter.id.eq(letterId)
                         .and(participant.member.id.eq(memberId))
-                        .and(participant.participantStatus.eq(ENTER))
+                        .and(participant.participantStatus.eq(ENTER).or(participant.participantStatus.eq(GHOST))
+                        )
                 )
                 .fetchOne();
 

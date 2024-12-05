@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.ittory.common.constant.GlobalConstant.PARTICIPANTS_SIZE;
-import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
+import static com.ittory.domain.participant.enums.ParticipantStatus.GUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class ParticipantDomainService {
 
     @Transactional
     public void exitParticipant(Participant participant) {
-        participant.changeParticipantStatus(EXITED);
+        participant.changeParticipantStatus(GUEST);
         participantRepository.save(participant);
     }
 
@@ -111,5 +111,10 @@ public class ParticipantDomainService {
     @Transactional
     public void updateAllStatusToDelete(Long letterId) {
         participantRepository.updateAllStatusToDelete(letterId);
+    }
+
+    @Transactional(readOnly = true)
+    public Participant findParticipantOrNull(Long letterId, Long memberId) {
+        return participantRepository.findByLetterIdAndMemberId(letterId, memberId).orElse(null);
     }
 }
