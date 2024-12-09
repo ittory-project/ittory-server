@@ -26,31 +26,32 @@ public class LetterEnterUseCase {
 
     // 스케일 아웃 시 분산락 적용 필요
     public synchronized LetterEnterStatusResponse execute(Long memberId, Long letterId) {
-        Boolean enterStatus = participantDomainService.getEnterStatus(letterId);
-        EnterAction enterAction = EnterAction.EXCEEDED;
 
-        Long participantId = null;
-        if (enterStatus) {
-            enterStatus = false;
-            // 중복 참여 검증
-            Participant participant = participantDomainService.findEnterParticipantOrNull(letterId, memberId);
-            if (participant != null) {
-                throw new ParticipantException.DuplicateParticipantException.DuplicateParticipantException(letterId, memberId);
-            }
-
-            // 입장
-            Member member = memberDomainService.findMemberById(memberId);
-            Letter letter = letterDomainService.findLetter(letterId);
-            enterAction = getEnterAction(letter);
-
-            if (enterAction.equals(EnterAction.SUCCESS)) {
-                Participant newParticipant = getNewParticipant(member, letter);
-                participantId = newParticipant.getId();
-                enterStatus = true;
-            }
+        // 1. 편지 상태 확인
+        Letter letter = letterDomainService.findLetter(letterId);
+        EnterAction enterAction = getEnterAction(letter);
+        if (!enterAction.equals(EnterAction.SUCCESS)) {
+            return LetterEnterStatusResponse.of(false, enterAction, null);
         }
 
-        return LetterEnterStatusResponse.of(enterStatus, enterAction, participantId);
+        // 2. 참여자 수 확인
+        Boolean enterStatus = participantDomainService.getEnterStatus(letterId);
+        if (!enterStatus) {
+            enterAction = EnterAction.EXCEEDED;
+            return LetterEnterStatusResponse.of(false, enterAction, null);
+        }
+
+        // 3. 중복 입장 확인
+        Participant participant = participantDomainService.findEnterParticipantOrNull(letterId, memberId);
+        if (participant != null) {
+            throw new ParticipantException.DuplicateParticipantException.DuplicateParticipantException(letterId, memberId);
+        }
+
+        // 4. 입장
+        Member member = memberDomainService.findMemberById(memberId);
+        Participant newParticipant = getNewParticipant(member, letter);
+
+        return LetterEnterStatusResponse.of(true, enterAction, newParticipant.getId());
     }
 
     private Participant getNewParticipant(Member member, Letter letter) {
