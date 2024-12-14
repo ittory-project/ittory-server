@@ -2,6 +2,7 @@ package com.ittory.api.member.usecase;
 
 import com.ittory.api.member.dto.LetterBoxParticipationRequest;
 import com.ittory.domain.letter.domain.Letter;
+import com.ittory.domain.letter.enums.LetterStatus;
 import com.ittory.domain.letter.service.LetterDomainService;
 import com.ittory.domain.member.service.LetterBoxDomainService;
 import com.ittory.domain.participant.domain.Participant;
@@ -29,6 +30,7 @@ public class LetterBoxParticipationSaveUseCase {
         letterBoxDomainService.saveAllInParticipationLetterBox(participants, letter);
         participantDomainService.updateAllStatusToEnd(letter.getId());
         changeParticipantStatus(participants);
+        letterDomainService.updateLetterStatus(letter.getId(), LetterStatus.COMPLETED);
     }
 
     private void changeParticipantStatus(List<Participant> participants) {

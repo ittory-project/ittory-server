@@ -4,9 +4,12 @@ import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.enums.ParticipantStatus;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.dto.EnterResponse;
+import com.ittory.socket.dto.ParticipantProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +22,11 @@ public class LetterEnterUseCase {
     public EnterResponse execute(Long memberId, Long letterId) {
         Participant participant = participantDomainService.findParticipant(letterId, memberId);
         participant.changeParticipantStatus(ParticipantStatus.ENTER);
-        return EnterResponse.from(participant);
+        List<ParticipantProfile> participants = participantDomainService.findAllCurrentParticipantsOrderedBySequence(letterId, null)
+                .stream()
+                .map(ParticipantProfile::from)
+                .toList();
+        return EnterResponse.from(participant, participants);
     }
 
 }
