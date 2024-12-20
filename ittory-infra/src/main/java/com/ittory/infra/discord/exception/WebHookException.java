@@ -4,7 +4,7 @@ import com.ittory.common.exception.ErrorInfo;
 import com.ittory.common.exception.ErrorStatus;
 import com.ittory.common.exception.GlobalException;
 
-import static com.ittory.infra.oauth.exception.OAuthErrorCode.WEBHOOK_MESSAGE_SEN_FAIL_ERROR;
+import static com.ittory.infra.discord.exception.WebHookErrorCode.WEBHOOK_MESSAGE_SEN_FAIL_ERROR;
 
 public class WebHookException extends GlobalException {
 

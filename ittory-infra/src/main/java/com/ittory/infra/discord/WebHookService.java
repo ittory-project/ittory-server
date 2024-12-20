@@ -8,4 +8,6 @@ public interface WebHookService {
 
     void sendWithdrawMessage(Member member, WithdrawReason reason, String content);
 
+    void sendDailyReportMessage();
+
 }

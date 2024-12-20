@@ -1,14 +1,17 @@
 package com.ittory.domain.member.repository.impl;
 
+import com.ittory.domain.member.domain.LetterBox;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 import static com.ittory.domain.member.domain.QLetterBox.letterBox;
 import static com.ittory.domain.member.enums.LetterBoxType.PARTICIPATION;
 import static com.ittory.domain.member.enums.LetterBoxType.RECEIVE;
-
-import com.ittory.domain.member.domain.LetterBox;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class LetterBoxRepositoryImpl implements LetterBoxRepositoryCustom {
@@ -47,6 +50,15 @@ public class LetterBoxRepositoryImpl implements LetterBoxRepositoryCustom {
         return jpaQueryFactory.selectFrom(letterBox)
                 .where(letterBox.member.id.eq(memberId).and(letterBox.letterBoxType.eq(RECEIVE)))
                 .fetch().size();
+    }
+
+    @Override
+    public long countReceivedLetterByCreatedAt(LocalDate date) {
+        return jpaQueryFactory.selectFrom(letterBox)
+                .where(Expressions.dateTemplate(LocalDate.class, "DATE({0})", letterBox.createdAt)
+                        .eq(date).and(letterBox.letterBoxType.eq(RECEIVE)))
+                .fetch()
+                .size();
     }
 
 }

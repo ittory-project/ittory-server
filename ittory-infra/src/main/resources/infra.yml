@@ -39,3 +39,4 @@ discord:
   webhook:
     signup: ${SIGNUP_DISCORD_WEBHOOK_URL}
     withdraw: ${WITHDRAW_DISCORD_WEBHOOK_URL}
+    daily-report: ${DAILY_REPORT_DISCORD_WEBHOOK_URL}
