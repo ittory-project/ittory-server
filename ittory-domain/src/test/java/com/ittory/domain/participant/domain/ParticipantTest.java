@@ -1,12 +1,12 @@
 package com.ittory.domain.participant.domain;
 
-import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
-import static com.ittory.domain.participant.enums.ParticipantStatus.PROGRESS;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import static com.ittory.domain.participant.enums.ParticipantStatus.GUEST;
+import static com.ittory.domain.participant.enums.ParticipantStatus.PROGRESS;
 
 @DataJpaTest
 public class ParticipantTest {
@@ -31,10 +31,10 @@ public class ParticipantTest {
         Participant participant = Participant.builder().participantStatus(PROGRESS).build();
 
         // when
-        participant.changeParticipantStatus(EXITED);
+        participant.changeParticipantStatus(GUEST);
 
         // then
-        Assertions.assertThat(participant.getParticipantStatus()).isEqualTo(EXITED);
+        Assertions.assertThat(participant.getParticipantStatus()).isEqualTo(GUEST);
     }
 
 }

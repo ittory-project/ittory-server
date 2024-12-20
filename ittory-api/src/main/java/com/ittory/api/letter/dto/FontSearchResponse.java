@@ -13,11 +13,13 @@ import lombok.NoArgsConstructor;
 public class FontSearchResponse {
     private Long id;
     private String name;
+    private String value;
 
     public static FontSearchResponse from(Font font) {
         return FontSearchResponse.builder()
                 .id(font.getId())
                 .name(font.getName())
+                .value(font.getValue())
                 .build();
     }
 }

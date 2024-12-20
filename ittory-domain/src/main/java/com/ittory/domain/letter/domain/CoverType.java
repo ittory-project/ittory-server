@@ -25,6 +25,9 @@ public class CoverType extends BaseEntity {
     @Column(name = "select_image_url")
     private String selectImageUrl;
 
+    @Column(name = "not_select_image_url")
+    private String notSelectImageUrl;
+
     @Column(name = "edit_image_url")
     private String editImageUrl;
 
@@ -37,12 +40,19 @@ public class CoverType extends BaseEntity {
     @Column(name = "loading_background_image_url")
     private String loadingBackgroundImageUrl;
 
+    @Column(name = "output_board_image_url")
+    private String outputBoardImageUrl;
+
+    @Column(name = "list_color")
+    private String listColor;
+
 
     public static CoverType create(String name, CoverTypeImages request) {
         return CoverType.builder()
                 .name(name)
                 .listImageUrl(request.getListImageUrl())
                 .selectImageUrl(request.getSelectImageUrl())
+                .notSelectImageUrl(request.getNotSelectImageUrl())
                 .editImageUrl(request.getEditImageUrl())
                 .confirmImageUrl(request.getConfirmImageUrl())
                 .outputBackgroundImageUrl(request.getOutputBackgroundImageUrl())

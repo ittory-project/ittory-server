@@ -1,21 +1,12 @@
 package com.ittory.domain.letter.domain;
 
 import com.ittory.domain.common.BaseEntity;
+import com.ittory.domain.letter.enums.LetterStatus;
 import com.ittory.domain.member.domain.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity(name = "letter")
 @Getter
@@ -51,6 +42,10 @@ public class Letter extends BaseEntity {
 
     private Integer repeatCount;
 
+    @Column(name = "letter_status")
+    @Enumerated(EnumType.STRING)
+    private LetterStatus letterStatus;
+
     public static Letter create(CoverType coverType, Font font, String receiverName, LocalDateTime deliveryDate,
                                 String title, String coverPhotoUrl, Integer repeatCount) {
         return Letter.builder()
@@ -61,6 +56,7 @@ public class Letter extends BaseEntity {
                 .title(title)
                 .coverPhotoUrl(coverPhotoUrl)
                 .repeatCount(repeatCount)
+                .letterStatus(LetterStatus.WAIT)
                 .build();
     }
 
@@ -68,5 +64,8 @@ public class Letter extends BaseEntity {
         this.repeatCount = repeatCount;
     }
 
+    public void changeStatus(LetterStatus letterStatus) {
+        this.letterStatus = letterStatus;
+    }
 
 }

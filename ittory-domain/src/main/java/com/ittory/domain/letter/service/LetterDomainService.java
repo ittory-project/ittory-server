@@ -1,6 +1,7 @@
 package com.ittory.domain.letter.service;
 
 import com.ittory.domain.letter.domain.*;
+import com.ittory.domain.letter.enums.LetterStatus;
 import com.ittory.domain.letter.exception.LetterException;
 import com.ittory.domain.letter.repository.*;
 import com.ittory.domain.participant.repository.ParticipantRepository;
@@ -59,8 +60,8 @@ public class LetterDomainService {
         }
 
         Collections.shuffle(elementImages);
-        List<Element> elements = IntStream.range(1, totalCount + 1)
-                .mapToObj(sequence -> Element.create(letter, null, elementImages.get(sequence), sequence, null))
+        List<Element> elements = IntStream.range(0, totalCount)
+                .mapToObj(sequence -> Element.create(letter, null, elementImages.get(sequence), sequence + 1, null))
                 .collect(Collectors.toList());
 
         letterElementRepository.saveAll(elements);
@@ -77,11 +78,9 @@ public class LetterDomainService {
 
     @Transactional
     public void deleteLetter(Long letterId) {
-        // 편지 있는지  확인 후 삭제
-        if (!letterRepository.existsById(letterId)) {
-            throw new LetterException.LetterNotFoundException(letterId);
-        }
-        letterRepository.deleteById(letterId);
+        Letter letter = letterRepository.findById(letterId)
+                .orElseThrow(() -> new LetterException.LetterNotFoundException(letterId));
+        letter.changeStatus(LetterStatus.DELETED);
     }
 
     @Transactional(readOnly = true)
@@ -106,4 +105,11 @@ public class LetterDomainService {
         letterRepository.save(letter);
     }
 
+    @Transactional
+    public void updateLetterStatus(Long letterId, LetterStatus letterStatus) {
+        Letter letter = letterRepository.findById(letterId)
+                .orElseThrow(() -> new LetterException.LetterNotFoundException(letterId));
+
+        letter.changeStatus(letterStatus);
+    }
 }

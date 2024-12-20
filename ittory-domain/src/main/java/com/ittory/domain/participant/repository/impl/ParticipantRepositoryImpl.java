@@ -12,7 +12,7 @@ import java.util.Optional;
 import static com.ittory.domain.letter.domain.QLetter.letter;
 import static com.ittory.domain.member.domain.QMember.member;
 import static com.ittory.domain.participant.domain.QParticipant.participant;
-import static com.ittory.domain.participant.enums.ParticipantStatus.PROGRESS;
+import static com.ittory.domain.participant.enums.ParticipantStatus.*;
 
 @RequiredArgsConstructor
 public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
@@ -37,14 +37,16 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
                                                                       Boolean isAscending) {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.member, member).fetchJoin()
-                .where(participant.participantStatus.eq(PROGRESS).and(participant.letter.id.in(letterId)))
+                .where(participant.letter.id.in(letterId)
+                        .and(participant.participantStatus.eq(ENTER).or(participant.participantStatus.eq(PROGRESS)))
+                )
                 .orderBy(getOrderParticipant(isAscending))
                 .fetch();
     }
 
     private static OrderSpecifier<?> getOrderParticipant(Boolean isAscending) {
         if (isAscending == null) {
-            return participant.createdAt.asc();
+            return participant.updatedAt.asc();
         }
         return isAscending ? participant.sequence.asc() : participant.sequence.desc();
     }
@@ -67,10 +69,11 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     }
 
     @Override
-    public Participant findByNickname(Long letterId, String nickname) {
+    public Participant findEnterByNickname(Long letterId, String nickname) {
         return jpaQueryFactory.selectFrom(participant)
                 .where(participant.letter.id.eq(letterId)
                         .and(participant.nickname.eq(nickname))
+                        .and(participant.participantStatus.eq(ENTER))
                 )
                 .fetchOne();
     }
@@ -79,8 +82,66 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     public Integer countProgressByLetterId(Long letterId) {
         return jpaQueryFactory.selectFrom(participant)
                 .where(participant.letter.id.eq(letterId)
-                        .and(participant.participantStatus.eq(PROGRESS))
+                        .and(participant.participantStatus.eq(ENTER))
                 )
                 .fetch().size();
+    }
+
+    @Override
+    public Participant findManagerByLetterId(Long letterId) {
+        return jpaQueryFactory.selectFrom(participant)
+                .leftJoin(participant.letter, letter).fetchJoin()
+                .where(letter.id.eq(letterId))
+                .orderBy(participant.createdAt.asc())
+                .limit(1)
+                .fetchOne();
+    }
+
+    @Override
+    public void updateAllStatusToStart(Long letterId) {
+        jpaQueryFactory.update(participant)
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(ENTER)))
+                .set(participant.participantStatus, PROGRESS)
+                .execute();
+    }
+
+    @Override
+    public void updateAllStatusToEnd(Long letterId) {
+        jpaQueryFactory.update(participant)
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(PROGRESS)))
+                .set(participant.participantStatus, COMPLETED)
+                .execute();
+    }
+
+    @Override
+    public void updateAllStatusToDelete(Long letterId) {
+        jpaQueryFactory.update(participant)
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(ENTER)))
+                .set(participant.participantStatus, EXITED)
+                .execute();
+    }
+
+    @Override
+    public Integer countEnterParticipantByLetterId(Long letterId) {
+        return jpaQueryFactory.selectFrom(participant)
+                .where(participant.letter.id.eq(letterId)
+                        .and(participant.participantStatus.eq(ENTER).or(participant.participantStatus.eq(GHOST)))
+                )
+                .fetch().size();
+    }
+
+    @Override
+    public Optional<Participant> findEnterParticipantByLetterIdAndMemberId(Long letterId, Long memberId) {
+        Participant fetch = jpaQueryFactory.selectFrom(participant)
+                .leftJoin(participant.letter, letter).fetchJoin()
+                .leftJoin(participant.member, member).fetchJoin()
+                .where(participant.letter.id.eq(letterId)
+                        .and(participant.member.id.eq(memberId))
+                        .and(participant.participantStatus.eq(ENTER).or(participant.participantStatus.eq(GHOST))
+                        )
+                )
+                .fetchOne();
+
+        return Optional.ofNullable(fetch);
     }
 }

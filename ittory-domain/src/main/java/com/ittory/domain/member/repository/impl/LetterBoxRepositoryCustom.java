@@ -1,6 +1,8 @@
 package com.ittory.domain.member.repository.impl;
 
 import com.ittory.domain.member.domain.LetterBox;
+
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface LetterBoxRepositoryCustom {
@@ -12,4 +14,6 @@ public interface LetterBoxRepositoryCustom {
     Integer countParticipationLetterByMemberId(Long memberId);
 
     Integer countReceiveLetterByMemberId(Long memberId);
+
+    long countReceivedLetterByCreatedAt(LocalDate date);
 }

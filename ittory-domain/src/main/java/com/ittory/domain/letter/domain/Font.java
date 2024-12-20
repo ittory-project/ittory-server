@@ -1,16 +1,8 @@
 package com.ittory.domain.letter.domain;
 
 import com.ittory.domain.common.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity(name = "font")
 @Getter
@@ -26,9 +18,13 @@ public class Font extends BaseEntity {
 
     private String name;
 
-    public static Font create(String name) {
+    @Column(name = "font_value")
+    private String value;
+
+    public static Font create(String name, String value) {
         return Font.builder()
                 .name(name)
+                .value(value)
                 .build();
     }
 

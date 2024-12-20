@@ -14,7 +14,19 @@ public interface ParticipantRepositoryCustom {
 
     List<Participant> findAllParticipantsWithMember(Long letterId);
 
-    Participant findByNickname(Long letterId, String nickname);
+    Participant findEnterByNickname(Long letterId, String nickname);
 
     Integer countProgressByLetterId(Long letterId);
+
+    Participant findManagerByLetterId(Long letterId);
+
+    void updateAllStatusToStart(Long letterId);
+
+    void updateAllStatusToEnd(Long letterId);
+
+    void updateAllStatusToDelete(Long letterId);
+
+    Integer countEnterParticipantByLetterId(Long letterId);
+
+    Optional<Participant> findEnterParticipantByLetterIdAndMemberId(Long letterId, Long memberId);
 }

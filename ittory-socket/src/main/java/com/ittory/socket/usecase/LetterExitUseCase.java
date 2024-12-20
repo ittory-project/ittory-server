@@ -7,6 +7,12 @@ import com.ittory.socket.config.handler.WebSocketSessionHandler;
 import com.ittory.socket.dto.ExitResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+
+import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
+import static com.ittory.domain.participant.enums.ParticipantStatus.GUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -16,18 +22,22 @@ public class LetterExitUseCase {
     private final ParticipantDomainService participantDomainService;
     private final ElementDomainService elementDomainService;
 
+    @Transactional
     public ExitResponse execute(Long memberId, Long letterId) {
-        Participant participant = participantDomainService.findParticipant(letterId, memberId);
-        changeParticipantOrder(letterId, participant);
-        exitParticipant(participant);
-        return ExitResponse.from(participant);
+        Participant manager = participantDomainService.findManagerByLetterId(letterId);
+        Participant nowParticipant = participantDomainService.findParticipant(letterId, memberId);
+        changeParticipantOrder(letterId, nowParticipant);
+        exitParticipant(nowParticipant);
+        return ExitResponse.from(nowParticipant, Objects.equals(manager.getId(), nowParticipant.getId()));
     }
 
     private void exitParticipant(Participant participant) {
         if (!checkNoElement(participant)) {
+            participant.changeParticipantStatus(GUEST);
             participantDomainService.exitParticipant(participant);
         } else {
-            participantDomainService.deleteParticipant(participant);
+            participant.changeParticipantStatus(EXITED);
+//            participantDomainService.deleteParticipant(participant);
         }
     }
 

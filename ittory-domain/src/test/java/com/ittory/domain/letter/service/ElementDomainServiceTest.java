@@ -62,14 +62,14 @@ public class ElementDomainServiceTest {
     void changeContentTest() {
         //given
         Member member = Member.create(1L, "member", "image");
-        CoverTypeImages images = CoverTypeImages.of("list", "select", "edit",
-                "confirm", "output", "loading");
+        CoverTypeImages images = CoverTypeImages.of("list", "select", "notSelect",
+                "edit", "confirm", "output", "loading");
         CoverType coverType = CoverType.create("type", images);
-        Font font = Font.create("font");
+        Font font = Font.create("font", "value");
         ElementImage elementImage = ElementImage.create("image");
 
         Letter letter = Letter.create(coverType, font, "receiver", LocalDateTime.now(), "title", "image", null);
-        Participant participant = Participant.create(member, letter, "participant");
+        Participant participant = Participant.create(member, letter);
         Element element = Element.create(letter, participant, elementImage, 1, null);
 
         memberRepository.save(member);

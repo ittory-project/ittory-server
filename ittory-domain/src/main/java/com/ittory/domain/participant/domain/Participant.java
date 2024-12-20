@@ -1,26 +1,13 @@
 package com.ittory.domain.participant.domain;
 
-import static com.ittory.domain.participant.enums.ParticipantStatus.PROGRESS;
-
 import com.ittory.domain.common.BaseEntity;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.participant.enums.ParticipantStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+
+import static com.ittory.domain.participant.enums.ParticipantStatus.GHOST;
 
 @Entity(name = "participant")
 @Getter
@@ -49,12 +36,11 @@ public class Participant extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ParticipantStatus participantStatus;
 
-    public static Participant create(Member member, Letter letter, String nickname) {
+    public static Participant create(Member member, Letter letter) {
         return Participant.builder()
                 .member(member)
                 .letter(letter)
-                .nickname(nickname)
-                .participantStatus(PROGRESS)
+                .participantStatus(GHOST)
                 .build();
     }
 
@@ -64,6 +50,10 @@ public class Participant extends BaseEntity {
 
     public void changeParticipantStatus(ParticipantStatus status) {
         this.participantStatus = status;
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
     }
 
 }

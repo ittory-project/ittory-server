@@ -23,9 +23,10 @@ public class LetterDetailResponse {
     private LocalDateTime deliveryDate;
     private String title;
     private String coverPhotoUrl;
+    private List<String> participantNames;
     private List<LetterElementResponse> elements;
 
-    public static LetterDetailResponse from(Letter letter, List<Element> elements) {
+    public static LetterDetailResponse of(Letter letter, List<String> participantNames, List<Element> elements) {
         return LetterDetailResponse.builder()
                 .letterId(letter.getId())
                 .coverTypeId(letter.getCoverType().getId())
@@ -34,6 +35,7 @@ public class LetterDetailResponse {
                 .deliveryDate(letter.getDeliveryDate())
                 .title(letter.getTitle())
                 .coverPhotoUrl(letter.getCoverPhotoUrl())
+                .participantNames(participantNames)
                 .elements(elements.stream()
                         .map(LetterElementResponse::from)
                         .collect(Collectors.toList()))

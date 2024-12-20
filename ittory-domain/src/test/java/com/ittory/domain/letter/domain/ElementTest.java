@@ -1,12 +1,12 @@
 package com.ittory.domain.letter.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.participant.domain.Participant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 public class ElementTest {
@@ -31,7 +31,8 @@ public class ElementTest {
         // given
         Element element = com.ittory.domain.letter.domain.Element.create(null, null, null, 0, null);
         Member member = Member.create(1L, "member", "image");
-        Participant participant = Participant.create(member, null, "participant");
+        Participant participant = Participant.create(member, null);
+        participant.changeNickname("participant");
 
         // when
         element.changeParticipant(participant);

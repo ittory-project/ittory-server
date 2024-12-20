@@ -1,10 +1,7 @@
 package com.ittory.api.letter.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.ittory.domain.participant.enums.EnterAction;
+import lombok.*;
 
 @Getter
 @Builder
@@ -13,10 +10,22 @@ import lombok.NoArgsConstructor;
 public class LetterEnterStatusResponse {
 
     private Boolean enterStatus;
+    private EnterAction enterAction;
+    private Long participantId;
 
+
+    // Deprecated
     public static LetterEnterStatusResponse of(Boolean enterStatus) {
         return LetterEnterStatusResponse.builder()
                 .enterStatus(enterStatus)
+                .build();
+    }
+
+    public static LetterEnterStatusResponse of(Boolean enterStatus, EnterAction enterAction, Long participantId) {
+        return LetterEnterStatusResponse.builder()
+                .enterStatus(enterStatus)
+                .enterAction(enterAction)
+                .participantId(participantId)
                 .build();
     }
 

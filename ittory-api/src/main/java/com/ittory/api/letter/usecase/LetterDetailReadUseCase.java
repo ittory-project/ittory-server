@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,11 @@ public class LetterDetailReadUseCase {
     public LetterDetailResponse execute(Long letterId) {
         Letter letter = letterDomainService.findLetterById(letterId);
         List<Element> elements = letterDomainService.findElementsByLetterId(letterId);
-        return LetterDetailResponse.from(letter, elements);
+        Set<String> nicknames = elements.stream()
+                .filter(element -> element.getParticipant() != null)
+                .map(element -> element.getParticipant().getNickname())
+                .collect(Collectors.toSet());
+
+        return LetterDetailResponse.of(letter, nicknames.stream().toList(), elements);
     }
 }

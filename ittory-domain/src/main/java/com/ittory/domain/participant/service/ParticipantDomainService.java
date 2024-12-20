@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
+import static com.ittory.common.constant.GlobalConstant.PARTICIPANTS_SIZE;
+import static com.ittory.domain.participant.enums.ParticipantStatus.GUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class ParticipantDomainService {
 
     @Transactional
     public void exitParticipant(Participant participant) {
-        participant.changeParticipantStatus(EXITED);
+        participant.changeParticipantStatus(GUEST);
         participantRepository.save(participant);
     }
 
@@ -72,14 +73,14 @@ public class ParticipantDomainService {
 
     @Transactional(readOnly = true)
     public Boolean checkNicknameDuplication(Long letterId, String nickname) {
-        Participant participant = participantRepository.findByNickname(letterId, nickname);
+        Participant participant = participantRepository.findEnterByNickname(letterId, nickname);
         return participant != null;
     }
 
     @Transactional(readOnly = true)
     public Boolean getEnterStatus(Long letterId) {
-        Integer participantCount = participantRepository.countByLetterId(letterId);
-        return participantCount < 5;
+        Integer participantCount = participantRepository.countEnterParticipantByLetterId(letterId);
+        return participantCount < PARTICIPANTS_SIZE;
     }
 
     @Transactional(readOnly = true)
@@ -88,8 +89,32 @@ public class ParticipantDomainService {
     }
 
     @Transactional(readOnly = true)
+    public Participant findEnterParticipantOrNull(Long letterId, Long memberId) {
+        return participantRepository.findEnterParticipantByLetterIdAndMemberId(letterId, memberId).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public Participant findManagerByLetterId(Long letterId) {
+        return participantRepository.findManagerByLetterId(letterId);
+    }
+
+    @Transactional
+    public void updateAllStatusToStart(Long letterId) {
+        participantRepository.updateAllStatusToStart(letterId);
+    }
+
+    @Transactional
+    public void updateAllStatusToEnd(Long letterId) {
+        participantRepository.updateAllStatusToEnd(letterId);
+    }
+
+    @Transactional
+    public void updateAllStatusToDelete(Long letterId) {
+        participantRepository.updateAllStatusToDelete(letterId);
+    }
+
+    @Transactional(readOnly = true)
     public Participant findParticipantOrNull(Long letterId, Long memberId) {
         return participantRepository.findByLetterIdAndMemberId(letterId, memberId).orElse(null);
     }
-
 }

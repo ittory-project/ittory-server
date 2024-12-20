@@ -14,7 +14,7 @@ public class FontCreateUseCase {
     private final FontDomainService fontDomainService;
 
     public FontCreateResponse execute(FontCreateRequest request) {
-        Font font = fontDomainService.createFont(request.getName());
+        Font font = fontDomainService.createFont(request.getName(), request.getValue());
         return FontCreateResponse.from(font);
     }
 }
