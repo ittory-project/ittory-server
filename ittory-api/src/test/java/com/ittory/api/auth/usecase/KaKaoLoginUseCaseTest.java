@@ -1,13 +1,11 @@
 package com.ittory.api.auth.usecase;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
 import com.ittory.api.auth.dto.AuthTokenResponse;
 import com.ittory.common.jwt.JwtProvider;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.enums.MemberStatus;
 import com.ittory.domain.member.service.MemberDomainService;
+import com.ittory.infra.discord.DiscordWebHookService;
 import com.ittory.infra.oauth.kakao.KaKaoPlatformClient;
 import com.ittory.infra.oauth.kakao.dto.KaKaoTokenResponse;
 import com.ittory.infra.oauth.kakao.dto.MemberInfo;
@@ -16,6 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class KaKaoLoginUseCaseTest {
@@ -27,6 +29,9 @@ public class KaKaoLoginUseCaseTest {
     private MemberDomainService memberDomainService;
     @Mock
     private KaKaoPlatformClient kaKaoPlatformClient;
+
+    @Mock
+    private DiscordWebHookService discordWebHookService;
 
     @InjectMocks
     private KaKaoLoginUseCase kaKaoLoginUseCase;
@@ -52,6 +57,7 @@ public class KaKaoLoginUseCaseTest {
         when(memberDomainService.saveMember(1L, "test man", null)).thenReturn(member);
         when(jwtProvider.createAccessToken(any(Long.class), any(String.class))).thenReturn("access.token");
         when(jwtProvider.createRefreshToken(any(Long.class))).thenReturn("refresh.token");
+        doNothing().when(discordWebHookService).sendSingupMessage(any(Member.class));
 
         //when
         AuthTokenResponse execute = kaKaoLoginUseCase.execute(kakaoCode);

@@ -18,6 +18,12 @@ kakao:
   redirectUri: ${KAKAO_REDIRECT_URI}
   clientSecret: ${KAKAO_CLIENT_SECRET}
 
+discord:
+  webhook:
+    signup: null
+    withdraw: null
+    daily-report: null
+
 ---
 spring:
   config:
