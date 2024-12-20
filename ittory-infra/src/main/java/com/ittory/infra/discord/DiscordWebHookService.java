@@ -41,21 +41,23 @@ public class DiscordWebHookService implements WebHookService {
     @Async("asyncThreadPoolExecutor")
     @Transactional
     public void sendSingupMessage(Member member) {
-        long activeUser = memberRepository.countByMemberStatus(MemberStatus.ACTIVE);
-        LocalDateTime now = LocalDateTime.now();
-        LocalDate date = now.toLocalDate();
-        LocalTime localTime = now.toLocalTime().truncatedTo(ChronoUnit.SECONDS);
-        String message = new StringBuilder()
-                .append("# 유저가 가입하였습니다.\n")
-                .append("- 소셜 아이디: ").append(member.getSocialId()).append("\n")
-                .append("- 이름: ").append(member.getName()).append("\n")
-                .append("- 가입 시간: ").append(date).append(" ").append(localTime).append("\n")
-                .append("### 현재 __**").append(activeUser).append("명**__의 유저")
-                .toString();
+        if (DISCORD_WEBHOOK_SIGNUP_URL != null) {
+            long activeUser = memberRepository.countByMemberStatus(MemberStatus.ACTIVE);
+            LocalDateTime now = LocalDateTime.now();
+            LocalDate date = now.toLocalDate();
+            LocalTime localTime = now.toLocalTime().truncatedTo(ChronoUnit.SECONDS);
+            String message = new StringBuilder()
+                    .append("# 유저가 가입하였습니다.\n")
+                    .append("- 소셜 아이디: ").append(member.getSocialId()).append("\n")
+                    .append("- 이름: ").append(member.getName()).append("\n")
+                    .append("- 가입 시간: ").append(date).append(" ").append(localTime).append("\n")
+                    .append("### 현재 __**").append(activeUser).append("명**__의 유저")
+                    .toString();
 
-        WebHookMessage webHookMessage = new WebHookMessage(message);
+            WebHookMessage webHookMessage = new WebHookMessage(message);
 
-        discordWebHookConnector.sendMessageForDiscord(webHookMessage, DISCORD_WEBHOOK_SIGNUP_URL);
+            discordWebHookConnector.sendMessageForDiscord(webHookMessage, DISCORD_WEBHOOK_SIGNUP_URL);
+        }
 
     }
 
@@ -63,23 +65,25 @@ public class DiscordWebHookService implements WebHookService {
     @Async("asyncThreadPoolExecutor")
     @Transactional
     public void sendWithdrawMessage(Member member, WithdrawReason reason, String content) {
-        long activeUser = memberRepository.countByMemberStatus(MemberStatus.ACTIVE);
-        LocalDateTime now = LocalDateTime.now();
-        LocalDate date = now.toLocalDate();
-        LocalTime localTime = now.toLocalTime().truncatedTo(ChronoUnit.SECONDS);
-        String message = new StringBuilder()
-                .append("# 유저가 탈퇴하였습니다.\n")
-                .append("- 소셜 아이디: ").append(member.getSocialId()).append("\n")
-                .append("- 이름: ").append(member.getName()).append("\n")
-                .append("- 가입 시간: ").append(member.getCreatedAt()).append("\n")
-                .append("- 탈퇴 시간: ").append(date).append(" ").append(localTime).append("\n")
-                .append("- 탈퇴 사유: ").append(reason).append(" -> ").append(content).append("\n")
-                .append("### 현재 __**").append(activeUser).append("명**__의 유저").append("\n")
-                .toString();
+        if (DISCORD_WEBHOOK_WITHDRAW_URL != null) {
+            long activeUser = memberRepository.countByMemberStatus(MemberStatus.ACTIVE);
+            LocalDateTime now = LocalDateTime.now();
+            LocalDate date = now.toLocalDate();
+            LocalTime localTime = now.toLocalTime().truncatedTo(ChronoUnit.SECONDS);
+            String message = new StringBuilder()
+                    .append("# 유저가 탈퇴하였습니다.\n")
+                    .append("- 소셜 아이디: ").append(member.getSocialId()).append("\n")
+                    .append("- 이름: ").append(member.getName()).append("\n")
+                    .append("- 가입 시간: ").append(member.getCreatedAt()).append("\n")
+                    .append("- 탈퇴 시간: ").append(date).append(" ").append(localTime).append("\n")
+                    .append("- 탈퇴 사유: ").append(reason).append(" -> ").append(content).append("\n")
+                    .append("### 현재 __**").append(activeUser).append("명**__의 유저").append("\n")
+                    .toString();
 
-        WebHookMessage webHookMessage = new WebHookMessage(message);
+            WebHookMessage webHookMessage = new WebHookMessage(message);
 
-        discordWebHookConnector.sendMessageForDiscord(webHookMessage, DISCORD_WEBHOOK_WITHDRAW_URL);
+            discordWebHookConnector.sendMessageForDiscord(webHookMessage, DISCORD_WEBHOOK_WITHDRAW_URL);
+        }
 
     }
 
@@ -87,23 +91,25 @@ public class DiscordWebHookService implements WebHookService {
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void sendDailyReportMessage() {
-        LocalDate today = LocalDate.now();
-        LocalDate yesterday = today.minusDays(1);
-        long yesterdaySignUpCount = memberRepository.countSignUpByDate(yesterday);
-        long yesterdayWithdrawCount = memberWithdrawRepository.countWithdrawByDate(yesterday);
-        long yesterdayCreatedLetterCount = letterRepository.countByCreatedAt(yesterday);
-        long yesterdaySavedReceiveLetterCount = letterBoxRepository.countReceivedLetterByCreatedAt(yesterday);
-        String message = new StringBuilder()
-                .append("# " + today + "데일리 보고서!\n")
-                .append("- 어제 가입한 회원 수: ").append(yesterdaySignUpCount).append("\n")
-                .append("- 어제 탈퇴한 회원 수: ").append(yesterdayWithdrawCount).append("\n")
-                .append("- 어제 생성된 편지 수: ").append(yesterdayCreatedLetterCount).append("\n")
-                .append("- 어제 받은 편지함에 저장된 편지 수: ").append(yesterdaySavedReceiveLetterCount)
-                .toString();
+        if (DISCORD_WEBHOOK_DAILY_REPORT_URL != null) {
+            LocalDate today = LocalDate.now();
+            LocalDate yesterday = today.minusDays(1);
+            long yesterdaySignUpCount = memberRepository.countSignUpByDate(yesterday);
+            long yesterdayWithdrawCount = memberWithdrawRepository.countWithdrawByDate(yesterday);
+            long yesterdayCreatedLetterCount = letterRepository.countByCreatedAt(yesterday);
+            long yesterdaySavedReceiveLetterCount = letterBoxRepository.countReceivedLetterByCreatedAt(yesterday);
+            String message = new StringBuilder()
+                    .append("# " + today + "데일리 보고서!\n")
+                    .append("- 어제 가입한 회원 수: ").append(yesterdaySignUpCount).append("\n")
+                    .append("- 어제 탈퇴한 회원 수: ").append(yesterdayWithdrawCount).append("\n")
+                    .append("- 어제 생성된 편지 수: ").append(yesterdayCreatedLetterCount).append("\n")
+                    .append("- 어제 받은 편지함에 저장된 편지 수: ").append(yesterdaySavedReceiveLetterCount)
+                    .toString();
 
-        WebHookMessage webHookMessage = new WebHookMessage(message);
+            WebHookMessage webHookMessage = new WebHookMessage(message);
 
-        discordWebHookConnector.sendMessageForDiscord(webHookMessage, DISCORD_WEBHOOK_DAILY_REPORT_URL);
+            discordWebHookConnector.sendMessageForDiscord(webHookMessage, DISCORD_WEBHOOK_DAILY_REPORT_URL);
+        }
 
     }
 
