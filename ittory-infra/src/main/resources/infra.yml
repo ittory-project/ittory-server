@@ -35,3 +35,7 @@ spring:
   config:
     activate:
       on-profile: prod
+discord:
+  webhook:
+    signup: ${SIGNUP_DISCORD_WEBHOOK_URL}
+    withdraw: ${WITHDRAW_DISCORD_WEBHOOK_URL}

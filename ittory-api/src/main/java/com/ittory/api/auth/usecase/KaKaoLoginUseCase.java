@@ -4,6 +4,7 @@ import com.ittory.api.auth.dto.AuthTokenResponse;
 import com.ittory.common.jwt.JwtProvider;
 import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.service.MemberDomainService;
+import com.ittory.infra.discord.DiscordWebHookService;
 import com.ittory.infra.oauth.kakao.KaKaoPlatformClient;
 import com.ittory.infra.oauth.kakao.dto.MemberInfo;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class KaKaoLoginUseCase {
     private final JwtProvider jwtProvider;
 
     private final MemberDomainService memberDomainService;
+    private final DiscordWebHookService discordWebHookService;
 
     public AuthTokenResponse execute(String accessToken) {
         MemberInfo memberInfo = kaKaoPlatformClient.getMemberInfo(accessToken);
@@ -30,6 +32,7 @@ public class KaKaoLoginUseCase {
                     memberInfo.getName(),
                     memberInfo.getProfileUrl()
             );
+            discordWebHookService.sendSingupMessage(member);
         }
 
         return generateMemberToken(member);
