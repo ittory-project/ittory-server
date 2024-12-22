@@ -22,6 +22,8 @@ public class CoverTypeCreateResponse {
     private String confirmImageUrl;
     private String outputBackgroundImageUrl;
     private String loadingBackgroundImageUrl;
+    private String outputBoardImageUrl;
+    private String listColor;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -36,6 +38,8 @@ public class CoverTypeCreateResponse {
                 .confirmImageUrl(coverType.getConfirmImageUrl())
                 .outputBackgroundImageUrl(coverType.getOutputBackgroundImageUrl())
                 .loadingBackgroundImageUrl(coverType.getLoadingBackgroundImageUrl())
+                .outputBoardImageUrl(coverType.getOutputBoardImageUrl())
+                .listColor(coverType.getListColor())
                 .createdAt(coverType.getCreatedAt())
                 .updatedAt(coverType.getUpdatedAt())
                 .build();
