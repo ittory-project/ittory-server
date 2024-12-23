@@ -36,7 +36,7 @@ public class CoverTypeSearchResponse {
                 .confirmImageUrl(coverType.getConfirmImageUrl())
                 .outputBackgroundImageUrl(coverType.getOutputBackgroundImageUrl())
                 .loadingBackgroundImageUrl(coverType.getLoadingBackgroundImageUrl())
-                .outputBackgroundImageUrl(coverType.getOutputBackgroundImageUrl())
+                .outputBoardImageUrl(coverType.getOutputBoardImageUrl())
                 .listColor(coverType.getListColor())
                 .build();
     }

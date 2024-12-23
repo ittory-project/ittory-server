@@ -88,7 +88,7 @@ public class DiscordWebHookService implements WebHookService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 15 0 * * *")
     @Transactional
     public void sendDailyReportMessage() {
         if (DISCORD_WEBHOOK_DAILY_REPORT_URL != null) {
