@@ -48,7 +48,6 @@ public class DiscordWebHookService implements WebHookService {
             LocalTime localTime = now.toLocalTime().truncatedTo(ChronoUnit.SECONDS);
             String message = new StringBuilder()
                     .append("# 유저가 가입하였습니다.\n")
-                    .append("- 소셜 아이디: ").append(member.getSocialId()).append("\n")
                     .append("- 이름: ").append(member.getName()).append("\n")
                     .append("- 가입 시간: ").append(date).append(" ").append(localTime).append("\n")
                     .append("### 현재 __**").append(activeUser).append("명**__의 유저")
@@ -72,7 +71,6 @@ public class DiscordWebHookService implements WebHookService {
             LocalTime localTime = now.toLocalTime().truncatedTo(ChronoUnit.SECONDS);
             String message = new StringBuilder()
                     .append("# 유저가 탈퇴하였습니다.\n")
-                    .append("- 소셜 아이디: ").append(member.getSocialId()).append("\n")
                     .append("- 이름: ").append(member.getName()).append("\n")
                     .append("- 가입 시간: ").append(member.getCreatedAt()).append("\n")
                     .append("- 탈퇴 시간: ").append(date).append(" ").append(localTime).append("\n")
@@ -88,7 +86,7 @@ public class DiscordWebHookService implements WebHookService {
     }
 
     @Override
-    @Scheduled(cron = "0 30 0 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void sendDailyReportMessage() {
         if (DISCORD_WEBHOOK_DAILY_REPORT_URL != null) {
