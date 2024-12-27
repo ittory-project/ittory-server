@@ -32,7 +32,7 @@ public class SecurityConfig {
             "/swagger-ui/**", "/v3/api-docs/**", // Swagger
             "/api/auth/login/**", "/api/auth/refresh", // Login
             "/api/cover-type/all", "/api/cover-type/{coverTypeId}", // Cover-Type
-            "/api/cover-type/all", "/api/cover-type/{coverTypeId}", // Font,
+            "/api/font/all", "/api/font/{fontId}", // Font,
             "/api/letter/detail/{letterId}", // 편지 상세
             "/api/guestbook/**", // GuestBook
             "/api/image/letter-cover" // PreSigned URL
