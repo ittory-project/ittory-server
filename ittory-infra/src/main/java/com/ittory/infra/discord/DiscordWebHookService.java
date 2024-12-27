@@ -30,6 +30,8 @@ public class DiscordWebHookService implements WebHookService {
     private String DISCORD_WEBHOOK_WITHDRAW_URL;
     @Value("${discord.webhook.daily-report}")
     private String DISCORD_WEBHOOK_DAILY_REPORT_URL;
+    @Value("${discord.webhook.nplusone-occurrence}")
+    private String DISCORD_WEBHOOK_NPLUSONE_OCCURRENCE_URL;
 
     private final DiscordWebHookConnector discordWebHookConnector;
     private final MemberRepository memberRepository;
@@ -107,6 +109,17 @@ public class DiscordWebHookService implements WebHookService {
             WebHookMessage webHookMessage = new WebHookMessage(message);
 
             discordWebHookConnector.sendMessageForDiscord(webHookMessage, DISCORD_WEBHOOK_DAILY_REPORT_URL);
+        }
+
+    }
+
+    @Override
+    @Async("asyncThreadPoolExecutor")
+    @Transactional
+    public void sendNPlusOneOccurrence(String message) {
+        if (DISCORD_WEBHOOK_NPLUSONE_OCCURRENCE_URL != null) {
+            WebHookMessage webHookMessage = new WebHookMessage(message);
+            discordWebHookConnector.sendMessageForDiscord(webHookMessage, DISCORD_WEBHOOK_NPLUSONE_OCCURRENCE_URL);
         }
 
     }

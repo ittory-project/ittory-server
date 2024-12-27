@@ -10,4 +10,6 @@ public interface WebHookService {
 
     void sendDailyReportMessage();
 
+    void sendNPlusOneOccurrence(String message);
+
 }
