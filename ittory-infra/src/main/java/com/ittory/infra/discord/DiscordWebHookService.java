@@ -43,7 +43,7 @@ public class DiscordWebHookService implements WebHookService {
     @Async("asyncThreadPoolExecutor")
     @Transactional
     public void sendSingupMessage(Member member) {
-        if (DISCORD_WEBHOOK_SIGNUP_URL != null) {
+        if (DISCORD_WEBHOOK_SIGNUP_URL != null && !DISCORD_WEBHOOK_SIGNUP_URL.isEmpty()) {
             long activeUser = memberRepository.countByMemberStatus(MemberStatus.ACTIVE);
             LocalDateTime now = LocalDateTime.now();
             LocalDate date = now.toLocalDate();
@@ -66,7 +66,7 @@ public class DiscordWebHookService implements WebHookService {
     @Async("asyncThreadPoolExecutor")
     @Transactional
     public void sendWithdrawMessage(Member member, WithdrawReason reason, String content) {
-        if (DISCORD_WEBHOOK_WITHDRAW_URL != null) {
+        if (DISCORD_WEBHOOK_WITHDRAW_URL != null && !DISCORD_WEBHOOK_WITHDRAW_URL.isEmpty()) {
             long activeUser = memberRepository.countByMemberStatus(MemberStatus.ACTIVE);
             LocalDateTime now = LocalDateTime.now();
             LocalDate date = now.toLocalDate();
@@ -91,7 +91,7 @@ public class DiscordWebHookService implements WebHookService {
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void sendDailyReportMessage() {
-        if (DISCORD_WEBHOOK_DAILY_REPORT_URL != null) {
+        if (DISCORD_WEBHOOK_DAILY_REPORT_URL != null && !DISCORD_WEBHOOK_DAILY_REPORT_URL.isEmpty()) {
             LocalDate today = LocalDate.now();
             LocalDate yesterday = today.minusDays(1);
             long yesterdaySignUpCount = memberRepository.countSignUpByDate(yesterday);
@@ -117,7 +117,7 @@ public class DiscordWebHookService implements WebHookService {
     @Async("asyncThreadPoolExecutor")
     @Transactional
     public void sendNPlusOneOccurrence(String message) {
-        if (DISCORD_WEBHOOK_NPLUSONE_OCCURRENCE_URL != null) {
+        if (DISCORD_WEBHOOK_NPLUSONE_OCCURRENCE_URL != null && !DISCORD_WEBHOOK_NPLUSONE_OCCURRENCE_URL.isEmpty()) {
             WebHookMessage webHookMessage = new WebHookMessage(message);
             discordWebHookConnector.sendMessageForDiscord(webHookMessage, DISCORD_WEBHOOK_NPLUSONE_OCCURRENCE_URL);
         }

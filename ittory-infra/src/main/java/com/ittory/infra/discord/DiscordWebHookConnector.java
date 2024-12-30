@@ -1,6 +1,5 @@
 package com.ittory.infra.discord;
 
-import com.ittory.infra.discord.exception.WebHookException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -29,7 +28,9 @@ public class DiscordWebHookConnector {
                     String.class
             );
         } catch (Exception e) {
-            throw new WebHookException.WebHookMessageSendFailException();
+            System.out.println(e.getMessage());
+            System.out.println(e.getStackTrace());
+//            throw new WebHookException.WebHookMessageSendFailException();
         }
 
     }
