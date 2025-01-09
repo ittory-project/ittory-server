@@ -1,6 +1,7 @@
 package com.ittory.domain.member.repository.impl;
 
 import com.ittory.domain.member.domain.LetterBox;
+import com.ittory.domain.member.enums.LetterBoxType;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.ittory.domain.letter.domain.QCoverType.coverType;
+import static com.ittory.domain.letter.domain.QLetter.letter;
 import static com.ittory.domain.member.domain.QLetterBox.letterBox;
+import static com.ittory.domain.member.domain.QMember.member;
 import static com.ittory.domain.member.enums.LetterBoxType.PARTICIPATION;
 import static com.ittory.domain.member.enums.LetterBoxType.RECEIVE;
 
@@ -61,4 +65,14 @@ public class LetterBoxRepositoryImpl implements LetterBoxRepositoryCustom {
                 .size();
     }
 
+    @Override
+    public List<LetterBox> findAllByMemberIdAndLetterBoxTypeWithFetch(Long memberId, LetterBoxType letterBoxType) {
+        return jpaQueryFactory.selectFrom(letterBox)
+                .leftJoin(letterBox.letter, letter).fetchJoin()
+                .leftJoin(letter.coverType, coverType).fetchJoin()
+                .leftJoin(letterBox.member, member).fetchJoin()
+                .where(letterBox.member.id.eq(memberId).and(letterBox.letterBoxType.eq(letterBoxType)))
+                .orderBy(letterBox.id.desc())
+                .fetch();
+    }
 }
