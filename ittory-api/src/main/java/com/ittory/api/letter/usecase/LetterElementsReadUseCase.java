@@ -20,7 +20,7 @@ public class LetterElementsReadUseCase {
 
     @Transactional(readOnly = true)
     public LetterElementsResponse execute(Long letterId, Pageable pageable) {
-        Page<Element> elementPage = elementDomainService.findAllByLetterId(letterId, pageable);
+        Page<Element> elementPage = elementDomainService.findPageByLetterId(letterId, pageable);
 
         List<ElementSimpleResponse> elements = elementPage.stream()
                 .map(ElementSimpleResponse::from)
