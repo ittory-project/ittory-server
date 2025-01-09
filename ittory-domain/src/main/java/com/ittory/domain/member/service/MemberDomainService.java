@@ -51,14 +51,14 @@ public class MemberDomainService {
 
     @Transactional(readOnly = true)
     public List<Letter> getParticipatedLetters(Long memberId) {
-        return letterBoxRepository.findAllByMemberIdAndLetterBoxType(memberId, LetterBoxType.PARTICIPATION).stream()
+        return letterBoxRepository.findAllByMemberIdAndLetterBoxTypeWithFetch(memberId, LetterBoxType.PARTICIPATION).stream()
                 .map(LetterBox::getLetter)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public List<Letter> getReceivedLetters(Long memberId) {
-        return letterBoxRepository.findAllByMemberIdAndLetterBoxType(memberId, LetterBoxType.RECEIVE)
+        return letterBoxRepository.findAllByMemberIdAndLetterBoxTypeWithFetch(memberId, LetterBoxType.RECEIVE)
                 .stream()
                 .map(LetterBox::getLetter)
                 .collect(Collectors.toList());
