@@ -35,11 +35,13 @@ public class ElementDomainService {
 
     @Transactional(readOnly = true)
     public Page<Element> findPageByLetterId(Long letterId, Pageable pageable) {
-        return elementRepository.findPageByLetterId(letterId, pageable);
+        // Fetch Join을 사용하여 연관된 데이터 로드
+        return elementRepository.findPageByLetterIdWithParticipant(letterId, pageable);
     }
 
     @Transactional(readOnly = true)
     public Element findElementWithImage(Long letterId, Integer sequence) {
+        // Fetch Join을 사용하여 연관된 데이터 로드
         return elementRepository.findByLetterIdAndSequenceWithImage(letterId, sequence);
     }
 
@@ -50,10 +52,12 @@ public class ElementDomainService {
 
     @Transactional(readOnly = true)
     public Element findById(Long letterElementId) {
-        return elementRepository.findById(letterElementId).orElseThrow(ElementNotFoundException::new);
+        return elementRepository.findByIdWithParticipant(letterElementId)
+                .orElseThrow(ElementNotFoundException::new);
     }
 
-    public List<Element> findAllByLetterId(Long letterId) {
-        return elementRepository.findAllByLetterId(letterId);
+    @Transactional(readOnly = true)
+    public List<Element> findAllByLetterIdWithParticipant(Long letterId) {
+        return elementRepository.findAllByLetterIdWithParticipant(letterId);
     }
 }

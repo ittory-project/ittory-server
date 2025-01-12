@@ -13,6 +13,11 @@ public class LetterInfoReadUseCase {
     private final LetterDomainService letterDomainService;
 
     // 편지 기본 정보 조회
+//    public LetterInfoResponse execute(Long letterId) {
+//        Letter letter = letterDomainService.findLetterById(letterId);
+//        return LetterInfoResponse.from(letter);
+//    }
+
     public LetterInfoResponse execute(Long letterId) {
         Letter letter = letterDomainService.findLetterById(letterId);
         return LetterInfoResponse.from(letter);

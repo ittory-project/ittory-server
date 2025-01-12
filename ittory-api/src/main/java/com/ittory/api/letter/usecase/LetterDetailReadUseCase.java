@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
 public class LetterDetailReadUseCase {
@@ -24,12 +25,12 @@ public class LetterDetailReadUseCase {
     @Transactional(readOnly = true)
     public LetterDetailResponse execute(Long letterId) {
         Letter letter = letterDomainService.findLetterById(letterId);
-        List<Element> elements = elementDomainService.findAllByLetterId(letterId);
+
+        List<Element> elements = elementDomainService.findAllByLetterIdWithParticipant(letterId);
         Set<String> nicknames = elements.stream()
                 .filter(element -> element.getParticipant() != null)
                 .map(element -> element.getParticipant().getNickname())
                 .collect(Collectors.toSet());
-
         return LetterDetailResponse.of(letter, nicknames.stream().toList(), elements);
     }
 }

@@ -51,17 +51,18 @@ public class MemberDomainService {
 
     @Transactional(readOnly = true)
     public List<Letter> getParticipatedLetters(Long memberId) {
-        return letterBoxRepository.findAllByMemberIdAndLetterBoxTypeWithFetch(memberId, LetterBoxType.PARTICIPATION).stream()
+        return letterBoxRepository.findAllByMemberIdAndLetterBoxType(memberId, LetterBoxType.PARTICIPATION)
+                .stream()
                 .map(LetterBox::getLetter)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public List<Letter> getReceivedLetters(Long memberId) {
-        return letterBoxRepository.findAllByMemberIdAndLetterBoxTypeWithFetch(memberId, LetterBoxType.RECEIVE)
+        return letterBoxRepository.findAllByMemberIdAndLetterBoxType(memberId, LetterBoxType.RECEIVE)
                 .stream()
                 .map(LetterBox::getLetter)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
@@ -72,9 +73,26 @@ public class MemberDomainService {
         memberDomainRepository.save(member);
     }
 
+    //    @Transactional(readOnly = true)
+//    public Boolean checkVisitedMember(Long memberId) {
+//        Integer participationLetterCount = letterBoxRepository.countParticipationLetterByMemberId(memberId);
+//        return participationLetterCount > 0;
+//    }
     @Transactional(readOnly = true)
-    public Boolean checkVisitedMember(Long memberId) {
-        Integer participationLetterCount = letterBoxRepository.countParticipationLetterByMemberId(memberId);
-        return participationLetterCount > 0;
+    public List<LetterBox> getLetterBoxesByType(Long memberId, LetterBoxType letterBoxType) {
+        return letterBoxRepository.findAllByMemberIdAndLetterBoxType(memberId, letterBoxType);
     }
+
+//    @Transactional(readOnly = true)
+//    public Boolean checkVisitedMember(Long memberId) {
+//        // PARTICIPATION 타입의 LetterBox가 존재하는지 확인
+//        List<LetterBox> participationLetterBoxes = getLetterBoxesByType(memberId, LetterBoxType.PARTICIPATION);
+//        return !participationLetterBoxes.isEmpty();
+//    }
+@Transactional(readOnly = true)
+public Boolean checkVisitedMember(Long memberId) {
+    return letterBoxRepository.countParticipationLetterByMemberId(memberId) > 0;
+}
+
+
 }

@@ -3,6 +3,7 @@ package com.ittory.api.config.swagger;
 
 import com.ittory.common.annotation.CurrentMemberId;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
@@ -26,13 +27,16 @@ import java.util.Arrays;
         name = "bearerAuth",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
-        scheme = "bearer"
+        scheme = "bearer",
+        in = SecuritySchemeIn.HEADER
 )
 public class SwaggerConfig {
 
     @Bean
     public OperationCustomizer operationCustomizer() {
         return (operation, handlerMethod) -> {
+
+            this.addSecurityRequirement(operation); // 보안 요구사항 추가
             this.addResponseBodyWrapper(operation);
             return operation;
         };
@@ -69,4 +73,12 @@ public class SwaggerConfig {
         };
     }
 
+    private void addSecurityRequirement(Operation operation) {
+        if (operation.getSecurity() == null || operation.getSecurity().isEmpty()) {
+            operation.addSecurityItem(new io.swagger.v3.oas.models.security.SecurityRequirement()
+                    .addList("bearerAuth"));
+        }
+    }
+
 }
+

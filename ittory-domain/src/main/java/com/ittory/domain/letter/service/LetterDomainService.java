@@ -83,10 +83,11 @@ public class LetterDomainService {
         letter.changeStatus(LetterStatus.DELETED);
     }
 
+
     @Transactional(readOnly = true)
     public Letter findLetterById(Long letterId) {
-        return letterRepository.findById(letterId)
-                .orElseThrow(() -> new LetterException.LetterNotFoundException(letterId));
+        // Fetch Join을 활용하여 Letter와 연관된 데이터 한 번에 로드
+        return letterRepository.findByIdWithAssociations(letterId);
     }
 
     @Transactional(readOnly = true)
