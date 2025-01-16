@@ -10,6 +10,7 @@ import com.ittory.socket.dto.ElementResponse;
 import com.ittory.socket.mapper.ElementMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class LetterWriteUseCase {
 
     private final ElementMapper elementMapper;
 
+    @Transactional
     public ElementResponse execute(Long memberId, Long letterId, ElementRequest request) {
         ElementEditData editData = elementMapper.toElementEditData(request);
         Participant participant = participantDomainService.findParticipant(letterId, memberId);
