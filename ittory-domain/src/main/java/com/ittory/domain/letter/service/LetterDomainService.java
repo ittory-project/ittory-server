@@ -47,7 +47,6 @@ public class LetterDomainService {
         return letterRepository.save(letter);
     }
 
-    @Transactional
     public void createLetterElements(Letter letter, int repeatCount) {
         Integer participantCount = participantRepository.countProgressByLetterId(letter.getId());
         int totalCount = participantCount * repeatCount;
@@ -64,7 +63,7 @@ public class LetterDomainService {
                 .mapToObj(sequence -> Element.create(letter, null, elementImages.get(sequence), sequence + 1, null))
                 .collect(Collectors.toList());
 
-        letterElementRepository.saveAll(elements);
+        letterElementRepository.saveAllInBatch(elements);
     }
 
     @Transactional
@@ -99,7 +98,6 @@ public class LetterDomainService {
         return letterRepository.findById(letterId).orElseThrow(() -> new LetterException.LetterNotFoundException(letterId));
     }
 
-    @Transactional
     public void changeRepeatCount(Letter letter, int repeatCount) {
         letter.changeRepeatCount(repeatCount);
         letterRepository.save(letter);
