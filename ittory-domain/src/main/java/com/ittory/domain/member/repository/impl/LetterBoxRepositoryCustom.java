@@ -19,5 +19,5 @@ public interface LetterBoxRepositoryCustom {
 
     long countReceivedLetterByCreatedAt(LocalDate date);
 
-    List<LetterBox> findAllByMemberIdAndLetterBoxTypeWithFetch(Long memberId, LetterBoxType letterBoxType);
+    List<LetterBox> findAllByMemberIdAndLetterBoxType(Long memberId, LetterBoxType letterBoxType);
 }

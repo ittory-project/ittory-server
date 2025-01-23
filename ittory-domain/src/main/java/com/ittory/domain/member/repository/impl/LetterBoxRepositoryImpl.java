@@ -34,13 +34,15 @@ public class LetterBoxRepositoryImpl implements LetterBoxRepositoryCustom {
     @Override
     public Optional<LetterBox> findReceivedByLetterIdWithLock(Long letterId) {
         LetterBox result = jpaQueryFactory.selectFrom(letterBox)
+                .leftJoin(letterBox.letter, letter).fetchJoin() // Letter 엔티티 페치 조인
                 .where(letterBox.letter.id.eq(letterId)
                         .and(letterBox.letterBoxType.eq(RECEIVE))
                 )
-//                .setLockMode(LockModeType.PESSIMISTIC_READ)
+                // .setLockMode(LockModeType.PESSIMISTIC_READ)
                 .fetchFirst();
         return Optional.ofNullable(result);
     }
+
 
     @Override
     public Integer countParticipationLetterByMemberId(Long memberId) {
@@ -66,13 +68,11 @@ public class LetterBoxRepositoryImpl implements LetterBoxRepositoryCustom {
     }
 
     @Override
-    public List<LetterBox> findAllByMemberIdAndLetterBoxTypeWithFetch(Long memberId, LetterBoxType letterBoxType) {
+    public List<LetterBox> findAllByMemberIdAndLetterBoxType(Long memberId, LetterBoxType letterBoxType) {
         return jpaQueryFactory.selectFrom(letterBox)
                 .leftJoin(letterBox.letter, letter).fetchJoin()
-                .leftJoin(letter.coverType, coverType).fetchJoin()
-                .leftJoin(letterBox.member, member).fetchJoin()
-                .where(letterBox.member.id.eq(memberId).and(letterBox.letterBoxType.eq(letterBoxType)))
-                .orderBy(letterBox.id.desc())
+                .where(letterBox.member.id.eq(memberId)
+                        .and(letterBox.letterBoxType.eq(letterBoxType)))
                 .fetch();
     }
 }

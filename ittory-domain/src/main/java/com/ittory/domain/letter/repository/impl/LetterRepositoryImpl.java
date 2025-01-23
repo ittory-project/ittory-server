@@ -1,5 +1,8 @@
 package com.ittory.domain.letter.repository.impl;
 
+import com.ittory.domain.letter.domain.Letter;
+import com.ittory.domain.letter.domain.QCoverType;
+import com.ittory.domain.letter.domain.QFont;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +24,14 @@ public class LetterRepositoryImpl implements LetterRepositoryCustom {
                         .eq(date).and(letter.letterStatus.eq(COMPLETED)))
                 .fetch()
                 .size();
+    }
+
+    @Override
+    public Letter findByIdWithAssociations(Long letterId) {
+        return jpaQueryFactory.selectFrom(letter)
+                .leftJoin(letter.coverType, QCoverType.coverType).fetchJoin()
+                .leftJoin(letter.font, QFont.font).fetchJoin()
+                .where(letter.id.eq(letterId))
+                .fetchOne();
     }
 }
