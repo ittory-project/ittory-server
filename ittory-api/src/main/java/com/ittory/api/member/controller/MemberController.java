@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
-
+    // 수정
     private final MemberDetailReadUseCase memberDetailReadUseCase;
     private final ParticipationLetterReadUseCase participationLetterReadUseCase;
     private final ReceivedLetterReadUseCase receivedLetterReadUseCase;
