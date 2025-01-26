@@ -46,9 +46,14 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DEV_DB_ADDRESS}:${DEV_DB_PORT}/${DEV_DB_SCHEMA}
+    url: jdbc:mysql://${DEV_DB_ADDRESS}:${DEV_DB_PORT}/${DEV_DB_SCHEMA}?rewriteBatchedStatements=true
     username: ${DEV_DB_USERNAME}
     password: ${DEV_DB_PASSWORD}
+
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    org.springframework.jdbc.core.StatementCreatorUtils: TRACE
 
 ---
 spring:
@@ -57,6 +62,6 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${PROD_DB_ADDRESS}:${PROD_DB_PORT}/${PROD_DB_SCHEMA}
+    url: jdbc:mysql://${PROD_DB_ADDRESS}:${PROD_DB_PORT}/${PROD_DB_SCHEMA}?rewriteBatchedStatements=true
     username: ${PROD_DB_USERNAME}
     password: ${PROD_DB_PASSWORD}

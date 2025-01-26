@@ -43,7 +43,6 @@ public class ElementDomainService {
         return elementRepository.findByLetterIdAndSequenceWithImage(letterId, sequence);
     }
 
-    @Transactional
     public void deleteAllByLetterId(Long letterId) {
         elementRepository.deleteAllByLetterId(letterId);
     }
