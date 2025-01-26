@@ -26,7 +26,6 @@ public class LetterDomainService {
     private final ElementImageRepository elementImageRepository;
     private final ParticipantRepository participantRepository;
 
-    @Transactional
     public Letter saveLetter(Long coverTypeId, Long fontId, String receiverName,
                              LocalDateTime deliveryDate, String title, String coverPhotoUrl) {
         CoverType coverType = coverTypeRepository.findById(coverTypeId)

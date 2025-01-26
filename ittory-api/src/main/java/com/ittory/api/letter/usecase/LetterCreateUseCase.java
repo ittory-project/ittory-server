@@ -6,6 +6,7 @@ import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.service.LetterDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -13,11 +14,11 @@ public class LetterCreateUseCase {
 
     private final LetterDomainService letterDomainService;
 
+    @Transactional
     public LetterCreateResponse execute(LetterCreateRequest request) {
         Letter letter = letterDomainService.saveLetter(
                 request.getCoverTypeId(),
                 request.getFontId(),
-//                request.getReceiverId(),
                 request.getReceiverName(),
                 request.getDeliveryDate(),
                 request.getTitle(),
