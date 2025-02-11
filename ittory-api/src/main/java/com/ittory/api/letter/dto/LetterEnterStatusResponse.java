@@ -12,6 +12,7 @@ public class LetterEnterStatusResponse {
     private Boolean enterStatus;
     private EnterAction enterAction;
     private Long participantId;
+    private String nickname;
 
 
     // Deprecated
@@ -21,11 +22,12 @@ public class LetterEnterStatusResponse {
                 .build();
     }
 
-    public static LetterEnterStatusResponse of(Boolean enterStatus, EnterAction enterAction, Long participantId) {
+    public static LetterEnterStatusResponse of(Boolean enterStatus, EnterAction enterAction, Long participantId, String nickname) {
         return LetterEnterStatusResponse.builder()
                 .enterStatus(enterStatus)
                 .enterAction(enterAction)
                 .participantId(participantId)
+                .nickname(nickname)
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package com.ittory.api.letter.mapper;
+package com.ittory.api.letter.convertor;
 
 import com.ittory.api.letter.dto.CoverTypeCreateRequest;
 import com.ittory.domain.letter.dto.CoverTypeImages;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CoverTypeMapper {
+public class CoverTypeConvertor {
 
     public CoverTypeImages toCoverTypeImages(CoverTypeCreateRequest request) {
         return CoverTypeImages.of(request.getListImageUrl(), request.getSelectImageUrl(), request.getNotSelectImageUrl(),

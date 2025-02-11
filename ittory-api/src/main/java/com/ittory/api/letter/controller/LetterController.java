@@ -2,6 +2,7 @@ package com.ittory.api.letter.controller;
 
 import com.ittory.api.letter.dto.*;
 import com.ittory.api.letter.usecase.*;
+import com.ittory.api.participant.dto.ParticipantNicknameRequest;
 import com.ittory.api.participant.dto.ParticipantProfile;
 import com.ittory.api.participant.dto.ParticipantSortResponse;
 import com.ittory.common.annotation.CurrentMemberId;
@@ -125,8 +126,10 @@ public class LetterController {
 
     @Operation(summary = "편지 참여 요청", description = "(Authenticated) 편지에 참여 성공 시 true, 실패 시 false 반환")
     @PostMapping("/enter/{letterId}")
-    public ResponseEntity<LetterEnterStatusResponse> checkLetterEnterStatus(@CurrentMemberId Long memberId, @PathVariable Long letterId) {
-        LetterEnterStatusResponse response = letterEnterUseCase.execute(memberId, letterId);
+    public ResponseEntity<LetterEnterStatusResponse> checkLetterEnterStatus(@CurrentMemberId Long memberId,
+                                                                            @PathVariable Long letterId,
+                                                                            @RequestBody ParticipantNicknameRequest request) {
+        LetterEnterStatusResponse response = letterEnterUseCase.execute(memberId, letterId, request);
         return ResponseEntity.ok().body(response);
     }
 
