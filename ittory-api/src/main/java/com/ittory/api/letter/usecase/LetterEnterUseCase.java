@@ -1,6 +1,7 @@
 package com.ittory.api.letter.usecase;
 
 import com.ittory.api.letter.dto.LetterEnterStatusResponse;
+import com.ittory.api.participant.dto.ParticipantNicknameRequest;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.enums.LetterStatus;
 import com.ittory.domain.letter.service.LetterDomainService;
@@ -13,6 +14,7 @@ import com.ittory.domain.participant.exception.ParticipantException;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.ittory.domain.letter.enums.LetterStatus.*;
 
@@ -25,33 +27,52 @@ public class LetterEnterUseCase {
     private final ParticipantDomainService participantDomainService;
 
     // 스케일 아웃 시 분산락 적용 필요
-    public synchronized LetterEnterStatusResponse execute(Long memberId, Long letterId) {
+    @Transactional
+    public synchronized LetterEnterStatusResponse execute(Long memberId, Long letterId, ParticipantNicknameRequest request) {
 
         // 1. 편지 상태 확인
         Letter letter = letterDomainService.findLetter(letterId);
         EnterAction enterAction = getEnterAction(letter);
         if (!enterAction.equals(EnterAction.SUCCESS)) {
-            return LetterEnterStatusResponse.of(false, enterAction, null);
+            return LetterEnterStatusResponse.of(false, enterAction, null, null);
         }
 
-        // 2. 참여자 수 확인
-        Boolean enterStatus = participantDomainService.getEnterStatus(letterId);
-        if (!enterStatus) {
-            enterAction = EnterAction.EXCEEDED;
-            return LetterEnterStatusResponse.of(false, enterAction, null);
-        }
-
-        // 3. 중복 입장 확인
+        // 2. 중복 입장 확인
         Participant participant = participantDomainService.findEnterParticipantOrNull(letterId, memberId);
         if (participant != null) {
             throw new ParticipantException.DuplicateParticipantException.DuplicateParticipantException(letterId, memberId);
+        }
+
+        // 3. 참여자 수 확인
+        Boolean enterStatus = participantDomainService.getEnterStatus(letterId);
+        if (!enterStatus) {
+            enterAction = EnterAction.EXCEEDED;
+            return LetterEnterStatusResponse.of(false, enterAction, null, null);
         }
 
         // 4. 입장
         Member member = memberDomainService.findMemberById(memberId);
         Participant newParticipant = getNewParticipant(member, letter);
 
-        return LetterEnterStatusResponse.of(true, enterAction, newParticipant.getId());
+        // 5. 닉네임 설정
+        String nickname = setNickname(letterId, request, newParticipant);
+        if (nickname != null) {
+            return LetterEnterStatusResponse.of(true, enterAction, newParticipant.getId(), nickname);
+        } else {
+            throw new ParticipantException.DuplicateNicknameException(request.getNickname());
+        }
+    }
+
+    private String setNickname(Long letterId, ParticipantNicknameRequest request, Participant newParticipant) {
+        Boolean isDuplicate = participantDomainService.checkNicknameDuplication(letterId, request.getNickname());
+
+        String nickname = null;
+        if (!isDuplicate) {
+            newParticipant.changeNickname(request.getNickname());
+            participantDomainService.saveParticipant(newParticipant);
+            nickname = request.getNickname();
+        }
+        return nickname;
     }
 
     private Participant getNewParticipant(Member member, Letter letter) {

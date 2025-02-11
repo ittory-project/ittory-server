@@ -37,6 +37,7 @@ public class ParticipantController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Deprecated
     @Operation(summary = "사용자 닉네임 설정", description = "(Authenticated) 사용자가 편지에서 사용할 닉네임 설정.")
     @PostMapping("/nickname/{letterId}")
     public ResponseEntity<ParticipantNicknameResponse> updateNickname(@CurrentMemberId Long memberId,

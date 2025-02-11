@@ -8,6 +8,7 @@ import java.util.List;
 
 import static com.ittory.domain.member.exception.MemberErrorCode.MEMBER_NOT_FOUND_ERROR;
 import static com.ittory.domain.member.exception.MemberErrorCode.MEMBER_NOT_PARTICIPATION_ERROR;
+import static com.ittory.domain.participant.exception.ParticipantErrorCode.DUPLICATE_NICKNAME_ERROR;
 import static com.ittory.domain.participant.exception.ParticipantErrorCode.DUPLICATE_PARTICIPANT_ERROR;
 
 public class ParticipantException extends GlobalException {
@@ -34,4 +35,10 @@ public class ParticipantException extends GlobalException {
         }
     }
 
+    public static class DuplicateNicknameException extends ParticipantException {
+        public DuplicateNicknameException(String nickname) {
+            super(DUPLICATE_PARTICIPANT_ERROR.getStatus(),
+                    new ErrorInfo<>(DUPLICATE_NICKNAME_ERROR.getCode(), DUPLICATE_NICKNAME_ERROR.getMessage(), nickname));
+        }
+    }
 }
