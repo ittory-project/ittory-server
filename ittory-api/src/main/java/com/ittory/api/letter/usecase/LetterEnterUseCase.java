@@ -56,14 +56,23 @@ public class LetterEnterUseCase {
 
         // 5. 닉네임 설정
         String nickname = setNickname(letterId, request, newParticipant);
-        if (nickname != null) {
-            return LetterEnterStatusResponse.of(true, enterAction, newParticipant.getId(), nickname);
-        } else {
-            throw new ParticipantException.DuplicateNicknameException(request.getNickname());
-        }
+        return LetterEnterStatusResponse.of(true, enterAction, newParticipant.getId(), nickname);
+        /*
+            // TODO : 프론트 대기실 접속 로직 반영 후 삭제 예정 25.02.12 - by junker
+            if (nickname != null) {
+                return LetterEnterStatusResponse.of(true, enterAction, newParticipant.getId(), nickname);
+            } else {
+                throw new ParticipantException.DuplicateNicknameException(request.getNickname());
+            }
+         */
     }
 
     private String setNickname(Long letterId, ParticipantNicknameRequest request, Participant newParticipant) {
+        // TODO : 프론트 대기실 접속 로직 반영 후 삭제 예정 25.02.12 - by junker
+        if (request == null) {
+            return null;
+        }
+        // TODO : ============
         Boolean isDuplicate = participantDomainService.checkNicknameDuplication(letterId, request.getNickname());
 
         String nickname = null;

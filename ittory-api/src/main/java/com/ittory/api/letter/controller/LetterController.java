@@ -128,7 +128,7 @@ public class LetterController {
     @PostMapping("/enter/{letterId}")
     public ResponseEntity<LetterEnterStatusResponse> checkLetterEnterStatus(@CurrentMemberId Long memberId,
                                                                             @PathVariable Long letterId,
-                                                                            @RequestBody ParticipantNicknameRequest request) {
+                                                                            @Nullable @RequestBody ParticipantNicknameRequest request) {
         LetterEnterStatusResponse response = letterEnterUseCase.execute(memberId, letterId, request);
         return ResponseEntity.ok().body(response);
     }
