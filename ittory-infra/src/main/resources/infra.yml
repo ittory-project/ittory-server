@@ -23,6 +23,7 @@ discord:
     signup: null
     withdraw: null
     daily-report: null
+    nplusone-occurrence: null
 
 ---
 spring:
@@ -46,3 +47,4 @@ discord:
     signup: ${SIGNUP_DISCORD_WEBHOOK_URL}
     withdraw: ${WITHDRAW_DISCORD_WEBHOOK_URL}
     daily-report: ${DAILY_REPORT_DISCORD_WEBHOOK_URL}
+    nplusone-occurrence: ${DISCORD_WEBHOOK_NPLUSONE_OCCURRENCE_URL}

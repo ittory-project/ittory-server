@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ElementDomainService {
@@ -32,8 +34,8 @@ public class ElementDomainService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Element> findAllByLetterId(Long letterId, Pageable pageable) {
-        return elementRepository.findAllByLetterId(letterId, pageable);
+    public Page<Element> findPageByLetterId(Long letterId, Pageable pageable) {
+        return elementRepository.findPageByLetterId(letterId, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -41,7 +43,6 @@ public class ElementDomainService {
         return elementRepository.findByLetterIdAndSequenceWithImage(letterId, sequence);
     }
 
-    @Transactional
     public void deleteAllByLetterId(Long letterId) {
         elementRepository.deleteAllByLetterId(letterId);
     }
@@ -49,5 +50,9 @@ public class ElementDomainService {
     @Transactional(readOnly = true)
     public Element findById(Long letterElementId) {
         return elementRepository.findById(letterElementId).orElseThrow(ElementNotFoundException::new);
+    }
+
+    public List<Element> findAllByLetterId(Long letterId) {
+        return elementRepository.findAllByLetterId(letterId);
     }
 }
