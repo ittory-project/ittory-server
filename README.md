@@ -1,8 +1,9 @@
 # ittory-server
 <div align="center">
-<img width="300" alt="sluvMain" src="https://github.com/CELEBIT/sluv-springboot-server/assets/101792740/a3799048-0fe7-4096-ae8c-0b64a8b7b48a">
+<img width="300" alt="ittory-cover" src="https://github.com/user-attachments/assets/c0cc8a6a-d1c3-4ab7-8d6f-03c4b2bf95ff">
 </div>
 <br/><br/>
+
 
 ## Workers
 <div align="center">
@@ -102,8 +103,6 @@
 
 <br><br/>
 
-
-<br>
 
 # :building_construction: Architecture <a name = "architecture"></a>
 
