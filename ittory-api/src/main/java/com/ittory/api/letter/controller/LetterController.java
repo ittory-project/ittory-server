@@ -1,7 +1,8 @@
 package com.ittory.api.letter.controller;
 
 import com.ittory.api.letter.dto.*;
-import com.ittory.api.letter.usecase.*;
+import com.ittory.api.letter.service.ElementService;
+import com.ittory.api.letter.service.LetterService;
 import com.ittory.api.participant.dto.ParticipantNicknameRequest;
 import com.ittory.api.participant.dto.ParticipantProfile;
 import com.ittory.api.participant.dto.ParticipantSortResponse;
@@ -20,31 +21,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LetterController {
 
-    private final LetterCreateUseCase letterCreateUseCase;
-    private final LetterDeleteUseCase letterDeleteUseCase;
-    private final LetterElementUseCase letterElementUseCase;
-    private final LetterRepeatCountUseCase letterRepeatCountUseCase;
-    private final LetterInfoReadUseCase letterInfoReadUseCase;
-    private final LetterDetailReadUseCase letterDetailReadUseCase;
-    private final LetterParticipantReadUseCase letterParticipantReadUseCase;
-    private final LetterStorageStatusCheckUseCase letterStorageStatusCheckUseCase;
-    private final LetterStoreInLetterBoxUseCase letterStoreInLetterBoxUseCase;
-    private final LetterElementsReadUseCase letterElementsReadUseCase;
-    private final LetterEnterStatusCheckUseCase letterEnterStatusCheckUseCase;
-    private final LetterStartInfoReadUseCase letterStartInfoReadUseCase;
-    private final LetterEnterUseCase letterEnterUseCase;
+    private final LetterService letterService;
+    private final ElementService elementsService;
 
     @Operation(summary = "편지 작성", description = "새로운 편지를 작성합니다.")
     @PostMapping
     public ResponseEntity<LetterCreateResponse> createLetter(@RequestBody LetterCreateRequest request) {
-        LetterCreateResponse response = letterCreateUseCase.execute(request);
+        LetterCreateResponse response = letterService.createLetter(request);
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "편지 반복 횟수 등록", description = "편지의 반복 횟수를 등록합니다.")
     @PostMapping("/repeat-count")
     public ResponseEntity<Void> registerRepeatCount(@RequestBody LetterRepeatCountRequest request) {
-        letterRepeatCountUseCase.execute(request);
+        letterService.changeLetterRepeatCount(request);
         return ResponseEntity.ok().build();
     }
 
@@ -52,14 +42,14 @@ public class LetterController {
     @PostMapping("/element/{letterElementId}")
     public ResponseEntity<LetterElementResponse> registerLetterElementContent(@PathVariable Long letterElementId,
                                                                               @RequestBody LetterElementRequest request) {
-        LetterElementResponse response = letterElementUseCase.execute(letterElementId, request);
+        LetterElementResponse response = elementsService.updateElement(letterElementId, request);
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "편지 삭제", description = "(Authenticated) 편지를 삭제합니다.")
     @DeleteMapping("/{letterId}")
     public ResponseEntity<Void> deleteLetter(@PathVariable Long letterId) {
-        letterDeleteUseCase.execute(letterId);
+        letterService.deleteLetter(letterId);
         return ResponseEntity.noContent().build();
     }
 
@@ -67,7 +57,7 @@ public class LetterController {
     @Operation(summary = "편지 기본 정보 조회", description = "(Authenticated) 대기실에 있는 편지의 기본 정보를 조회합니다.")
     @GetMapping("/info/{letterId}")
     public ResponseEntity<LetterInfoResponse> getLetterInfo(@PathVariable("letterId") Long letterId) {
-        LetterInfoResponse response = letterInfoReadUseCase.execute(letterId);
+        LetterInfoResponse response = letterService.getLetterInfo(letterId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -75,7 +65,7 @@ public class LetterController {
     @Operation(summary = "편지 상세 정보 조회", description = "(Authenticated) 편지의 세부 내용을 조회합니다.")
     @GetMapping("/detail/{letterId}")
     public ResponseEntity<LetterDetailResponse> getLetterDetail(@PathVariable("letterId") Long letterId) {
-        LetterDetailResponse response = letterDetailReadUseCase.execute(letterId);
+        LetterDetailResponse response = letterService.getLetterForDetails(letterId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -84,28 +74,28 @@ public class LetterController {
     @GetMapping("/participant/{letterId}")
     public ResponseEntity<ParticipantSortResponse> getParticipantInLetter(@PathVariable Long letterId,
                                                                           @Nullable @RequestParam("order") String order) {
-        List<ParticipantProfile> profiles = letterParticipantReadUseCase.execute(letterId, order);
+        List<ParticipantProfile> profiles = letterService.getAllParticipantProfile(letterId, order);
         return ResponseEntity.ok().body(ParticipantSortResponse.from(profiles));
     }
 
     @Operation(summary = "편지가 저장가능한지 확인", description = "(Authenticated) isStored가 false면 저장가능")
     @GetMapping("/{letterId}/storage-status")
     public ResponseEntity<LetterStorageStatusResponse> getLetterStorageStatus(@PathVariable Long letterId) {
-        LetterStorageStatusResponse response = letterStorageStatusCheckUseCase.execute(letterId);
+        LetterStorageStatusResponse response = letterService.getLetterStorageStatus(letterId);
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "편지를 보관함에 저장", description = "(Authenticated) 받은 편지를 받은 편지함에 저장.")
     @PostMapping("/{letterId}/store")
     public ResponseEntity<Void> getLetterStorageStatus(@CurrentMemberId Long memberId, @PathVariable Long letterId) {
-        letterStoreInLetterBoxUseCase.execute(memberId, letterId);
+        letterService.storeInLetterBox(memberId, letterId);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "편지에 소속되어 있는 요소 조회", description = "(Authenticated, Pagination) size와 page가 없으면, 편지에 소속한 모든 요소를 조회")
     @GetMapping("/{letterId}/elements")
     public ResponseEntity<LetterElementsResponse> getLetterElements(@PathVariable Long letterId, Pageable pageable) {
-        LetterElementsResponse response = letterElementsReadUseCase.execute(letterId, pageable);
+        LetterElementsResponse response = elementsService.getAllElements(letterId, pageable);
         return ResponseEntity.ok().body(response);
     }
 
@@ -113,14 +103,14 @@ public class LetterController {
     @Operation(summary = "편지 참여가능 여부 조회", description = "(Authenticated) 현재 참여중인 참여자가 5명인지 아닌지 획인.")
     @GetMapping("/{letterId}/enter-status")
     public ResponseEntity<LetterEnterStatusResponse> checkLetterEnterStatus(@PathVariable Long letterId) {
-        LetterEnterStatusResponse response = letterEnterStatusCheckUseCase.execute(letterId);
+        LetterEnterStatusResponse response = letterService.checkEnterStatus(letterId);
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "편지 시작 시 정보 조회", description = "(Authenticated) 참여인원, 반복횟수, 생성된 요소의 수.")
     @GetMapping("/{letterId}/startInfo")
     public ResponseEntity<LetterStartInfoResponse> getLetterStartInfo(@PathVariable Long letterId) {
-        LetterStartInfoResponse response = letterStartInfoReadUseCase.execute(letterId);
+        LetterStartInfoResponse response = letterService.getLetterStartInfo(letterId);
         return ResponseEntity.ok().body(response);
     }
 
@@ -129,7 +119,7 @@ public class LetterController {
     public ResponseEntity<LetterEnterStatusResponse> checkLetterEnterStatus(@CurrentMemberId Long memberId,
                                                                             @PathVariable Long letterId,
                                                                             @Nullable @RequestBody ParticipantNicknameRequest request) {
-        LetterEnterStatusResponse response = letterEnterUseCase.execute(memberId, letterId, request);
+        LetterEnterStatusResponse response = letterService.enterLetter(memberId, letterId, request);
         return ResponseEntity.ok().body(response);
     }
 

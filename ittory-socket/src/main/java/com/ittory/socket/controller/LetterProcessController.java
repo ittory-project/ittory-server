@@ -4,9 +4,8 @@ import com.ittory.common.annotation.CurrentMemberId;
 import com.ittory.socket.dto.DeleteResponse;
 import com.ittory.socket.dto.EndResponse;
 import com.ittory.socket.dto.StartResponse;
-import com.ittory.socket.usecase.LetterDeleteUseCase;
-import com.ittory.socket.usecase.LetterEndUseCase;
-import com.ittory.socket.usecase.LetterStartUseCase;
+import com.ittory.socket.service.LetterActionService;
+import com.ittory.socket.service.LetterProcessService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -20,15 +19,13 @@ import org.springframework.stereotype.Controller;
 public class LetterProcessController {
 
     private final SimpMessagingTemplate messagingTemplate;
-
-    private final LetterStartUseCase letterStartUseCase;
-    private final LetterEndUseCase letterEndUseCase;
-    private final LetterDeleteUseCase letterDeleteUseCase;
+    private final LetterProcessService letterProcessService;
+    private final LetterActionService letterActionService;
 
     @MessageMapping("/letter/start/{letterId}")
     public void startMember(@DestinationVariable Long letterId) {
         log.info("Start letter {}", letterId);
-        StartResponse response = letterStartUseCase.execute(letterId);
+        StartResponse response = letterProcessService.startLetter(letterId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
     }
@@ -36,7 +33,7 @@ public class LetterProcessController {
     @MessageMapping("/letter/end/{letterId}")
     public void endMember(@DestinationVariable Long letterId) {
         log.info("End letter {}", letterId);
-        EndResponse response = letterEndUseCase.execute(letterId);
+        EndResponse response = letterProcessService.endLetter(letterId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
     }
@@ -44,7 +41,7 @@ public class LetterProcessController {
     @MessageMapping("/letter/delete/{letterId}")
     public void deleteLetter(@CurrentMemberId Long memberId, @DestinationVariable Long letterId) {
         log.info("Delete letter {}", letterId);
-        DeleteResponse response = letterDeleteUseCase.execute(memberId, letterId);
+        DeleteResponse response = letterActionService.deleteLetter(memberId, letterId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
     }
