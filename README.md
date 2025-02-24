@@ -53,7 +53,7 @@
 
 ## Project Structure
 ### API 모듈과 Socket 모듈이 분리된 멀티모듈 구조
-<img width="500" alt="ittory-structure" src="https://github.com/user-attachments/assets/637258d4-e3fe-46b7-857a-b5e327641200">
+<img width="500" alt="ittory-structure" src="https://github.com/user-attachments/assets/d4bd586e-2063-4962-8a72-289df404f104">
 
 - API와 Socket 기능을 하나의 프로젝트에서 통합으로 관리할 수 있으며, 각각 다른 Docker 컨테이너에 독립 적으로 배포가 가능한 구조
 
