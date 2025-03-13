@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,9 @@ public class AuthController {
 
     private static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
 
+    @Value("${spring.jwt.token.refresh-expiration-time}")
+    private Long REFRESH_TOKEN_EXPIRATION_TIME;
+
 
     @Operation(summary = "카카오 소셜 로그인", description = "카카오 AccessToken 필요.")
     @PostMapping("/login/kakao")
@@ -40,7 +44,7 @@ public class AuthController {
         AuthTokenResponse tokenResponse = kaKaoLoginService.execute(request.getAccessToken());
 
         log.info("Login with {} in {}", tokenResponse.getAccessToken(), LocalDateTime.now());
-        ResponseCookie refreshTokenCookie = cookieProvider.createResponseCookie(REFRESH_TOKEN_COOKIE_NAME, tokenResponse.getRefreshToken());
+        ResponseCookie refreshTokenCookie = cookieProvider.createResponseCookie(REFRESH_TOKEN_COOKIE_NAME, tokenResponse.getRefreshToken(), REFRESH_TOKEN_EXPIRATION_TIME);
         response.addHeader("Set-Cookie", refreshTokenCookie.toString());
         // TODO: 프론트 수정 후 Response Body에서 RefreshToken 삭제 - by junker 25.03.12.
         return ResponseEntity.ok().body(tokenResponse);
@@ -61,8 +65,15 @@ public class AuthController {
 
     @Operation(summary = "로그아웃", description = "(Authenticated) RefreshToken 삭제.")
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@CurrentMemberId Long memberId) {
+    public ResponseEntity<Void> logout(@CookieValue(value = REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
+                                       @CurrentMemberId Long memberId, HttpServletResponse response) {
         authService.logout(memberId);
+        
+        // TODO: 프론트 수정 후 삭제 로직 - by junker 25.03.12.
+        if (refreshToken != null) {
+            ResponseCookie refreshTokenCookie = cookieProvider.createExpiredResponseCookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken);
+            response.addHeader("Set-Cookie", refreshTokenCookie.toString());
+        }
         return ResponseEntity.ok().build();
     }
 

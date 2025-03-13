@@ -6,12 +6,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class CookieProvider {
 
-
-    public ResponseCookie createResponseCookie(String cookieName, String value) {
+    public ResponseCookie createResponseCookie(String cookieName, String value, long maxAge) {
         return ResponseCookie.from(cookieName, value)
                 .httpOnly(true)
                 .path("/")
-                .maxAge(7 * 24 * 60 * 60) // 7일간 유지
+                .maxAge(maxAge)
+                .build();
+    }
+
+    public ResponseCookie createExpiredResponseCookie(String cookieName, String value) {
+        return ResponseCookie.from(cookieName, value)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(0) // 바로 만료
                 .build();
     }
 
