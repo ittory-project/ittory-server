@@ -20,15 +20,6 @@ import java.util.Arrays;
 
 
 @Configuration
-//@OpenAPIDefinition(info = @Info(title = "Ittory", description = "Ittory API 명세서", version = "v1"),
-//        servers = {@Server(url = "https://dev-server.ittory.co.kr", description = "Dev 도메인"),
-//                @Server(url = "/", description = "기본")})
-//@SecurityScheme(
-//        name = "bearerAuth",
-//        type = SecuritySchemeType.HTTP,
-//        bearerFormat = "JWT",
-//        scheme = "bearer"
-//)
 public class SwaggerConfig {
 
     @Bean

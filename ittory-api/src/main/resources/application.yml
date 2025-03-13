@@ -13,6 +13,11 @@ spring:
     user:
       name: user
       password: 1234
+
+swagger:
+  user: ${SWAGGER_USER}
+  password: ${SWAGGER_PASSWORD}
+
 ---
 spring:
   config:
@@ -30,4 +35,10 @@ spring:
   config:
     activate:
       on-profile: prod
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
 
