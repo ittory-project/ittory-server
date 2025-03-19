@@ -6,6 +6,7 @@ import com.ittory.domain.member.domain.Member;
 import com.ittory.domain.member.service.MemberDomainService;
 import com.ittory.infra.discord.DiscordWebHookService;
 import com.ittory.infra.oauth.kakao.KaKaoPlatformClient;
+import com.ittory.infra.oauth.kakao.dto.KaKaoTokenResponse;
 import com.ittory.infra.oauth.kakao.dto.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,14 @@ public class KaKaoLoginService {
     private final MemberDomainService memberDomainService;
     private final DiscordWebHookService discordWebHookService;
 
-    public AuthTokenResponse execute(String accessToken) {
+    public AuthTokenResponse loginOrRegister(String authorizationCode, boolean isCode) {
+        String accessToken = authorizationCode;
+        if (isCode) {
+            KaKaoTokenResponse tokenResponse = kaKaoPlatformClient.getKakaoAccessToken(authorizationCode);
+            System.out.println("====== 11");
+            accessToken = tokenResponse.getAccessToken();
+            System.out.println("====== 22");
+        }
         MemberInfo memberInfo = kaKaoPlatformClient.getMemberInfo(accessToken);
         Member member = memberDomainService.findMemberBySocialId(memberInfo.getSocialId());
 

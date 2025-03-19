@@ -14,12 +14,4 @@ public class CookieProvider {
                 .build();
     }
 
-    public ResponseCookie createExpiredResponseCookie(String cookieName, String value) {
-        return ResponseCookie.from(cookieName, value)
-                .httpOnly(true)
-                .path("/")
-                .maxAge(0) // 바로 만료
-                .build();
-    }
-
 }

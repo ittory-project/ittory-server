@@ -13,11 +13,6 @@ aws:
     bucketName: ${S3_BUCKET_NAME}
     baseUrl: ${S3_BASE_URL}
 
-kakao:
-  clientId: ${KAKAO_CLIENT_ID}
-  redirectUri: ${KAKAO_REDIRECT_URI}
-  clientSecret: ${KAKAO_CLIENT_SECRET}
-
 discord:
   webhook:
     signup: null
@@ -31,17 +26,33 @@ spring:
     activate:
       on-profile: local
 
+kakao:
+  clientId: ${KAKAO_CLIENT_ID}
+  redirectUri: ${KAKAO_LOCAL_REDIRECT_URI}
+  clientSecret: ${KAKAO_CLIENT_SECRET}
+
 ---
 spring:
   config:
     activate:
       on-profile: dev
 
+kakao:
+  clientId: ${KAKAO_CLIENT_ID}
+  redirectUri: ${KAKAO_DEV_REDIRECT_URI}
+  clientSecret: ${KAKAO_CLIENT_SECRET}
+
 ---
 spring:
   config:
     activate:
       on-profile: prod
+
+kakao:
+  clientId: ${KAKAO_CLIENT_ID}
+  redirectUri: ${KAKAO_PROD_REDIRECT_URI}
+  clientSecret: ${KAKAO_CLIENT_SECRET}
+
 discord:
   webhook:
     signup: ${SIGNUP_DISCORD_WEBHOOK_URL}

@@ -1,11 +1,10 @@
 package com.ittory.api.auth.exception;
 
-import static com.ittory.api.auth.exception.AuthErrorCode.NO_REFRESH_TOKEN;
-import static com.ittory.api.auth.exception.AuthErrorCode.REFRESH_TOKEN_NOT_MATCH;
-
 import com.ittory.common.exception.ErrorInfo;
 import com.ittory.common.exception.ErrorStatus;
 import com.ittory.common.exception.GlobalException;
+
+import static com.ittory.api.auth.exception.AuthErrorCode.*;
 
 public class AuthException extends GlobalException {
 
@@ -24,6 +23,14 @@ public class AuthException extends GlobalException {
         public RefreshTokenNotMatchException(String refreshToken) {
             super(REFRESH_TOKEN_NOT_MATCH.getStatus(),
                     new ErrorInfo<>(REFRESH_TOKEN_NOT_MATCH.getCode(), REFRESH_TOKEN_NOT_MATCH.getMessage(),
+                            refreshToken));
+        }
+    }
+
+    public static class NotARefreshTokenTypeException extends AuthException {
+        public NotARefreshTokenTypeException(String refreshToken) {
+            super(NOT_A_REFRESH_TOKEN_TYPE.getStatus(),
+                    new ErrorInfo<>(NOT_A_REFRESH_TOKEN_TYPE.getCode(), NOT_A_REFRESH_TOKEN_TYPE.getMessage(),
                             refreshToken));
         }
     }
