@@ -74,15 +74,8 @@ public class AuthController {
 
     @Operation(summary = "로그아웃", description = "(Authenticated) RefreshToken 삭제.")
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@CookieValue(value = REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
-                                       @CurrentMemberId Long memberId, HttpServletResponse response) {
+    public ResponseEntity<Void> logout(@CurrentMemberId Long memberId) {
         authService.logout(memberId);
-
-        // TODO: 프론트 수정 후 삭제 로직 - by junker 25.03.12.
-        if (refreshToken != null) {
-            ResponseCookie refreshTokenCookie = cookieProvider.createExpiredResponseCookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken);
-            response.addHeader("Set-Cookie", refreshTokenCookie.toString());
-        }
         return ResponseEntity.ok().build();
     }
 
