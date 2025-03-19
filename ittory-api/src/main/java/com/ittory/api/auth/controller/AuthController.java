@@ -42,7 +42,15 @@ public class AuthController {
     @PostMapping("/login/kakao")
     public ResponseEntity<AuthTokenResponse> loginByKaKao(@Valid @RequestBody KaKaoLoginRequest request,
                                                           HttpServletResponse response) {
-        AuthTokenResponse tokenResponse = kaKaoLoginService.execute(request.getAccessToken());
+        // TODO: 프론트 수정 후 다음 로직으로 변경할 예정 - by junker 25.03.19.
+//        AuthTokenResponse tokenResponse = kaKaoLoginService.loginOrRegister(request.getAuthorizationCode());
+        AuthTokenResponse tokenResponse;
+        if (request.getAccessToken() != null) {
+            tokenResponse = kaKaoLoginService.loginOrRegister(request.getAccessToken(), false);
+        } else {
+            tokenResponse = kaKaoLoginService.loginOrRegister(request.getAuthorizationCode(), true);
+        }
+
 
         log.info("Login with {} in {}", tokenResponse.getAccessToken(), LocalDateTime.now());
         ResponseCookie refreshTokenCookie = cookieProvider.createResponseCookie(REFRESH_TOKEN_COOKIE_NAME, tokenResponse.getRefreshToken(), REFRESH_TOKEN_EXPIRATION_TIME);

@@ -1,8 +1,5 @@
 package com.ittory.infra.oauth.kakao;
 
-import static com.ittory.common.constant.TokenConstant.ACCESS_TOKEN_HEADER;
-import static com.ittory.common.constant.TokenConstant.TOKEN_TYPER;
-
 import com.ittory.infra.oauth.exception.OAuthException.OAuthServerException;
 import com.ittory.infra.oauth.exception.OAuthException.SocialMemberNoInfoException;
 import com.ittory.infra.oauth.exception.OAuthException.UnauthorizedTokenException;
@@ -17,6 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import static com.ittory.common.constant.TokenConstant.ACCESS_TOKEN_HEADER;
+import static com.ittory.common.constant.TokenConstant.TOKEN_TYPER;
 
 @Component
 public class KaKaoPlatformClient {
@@ -35,7 +35,7 @@ public class KaKaoPlatformClient {
     @Value("${kakao.clientSecret}")
     private String CLIENT_SECRET;
 
-    public KaKaoTokenResponse getToken(String code) {
+    public KaKaoTokenResponse getKakaoAccessToken(String authorizationCode) {
         WebClient client = WebClient.create();
 
         Mono<KaKaoTokenResponse> kaKaoTokenResponseMono = client.post()
@@ -44,12 +44,12 @@ public class KaKaoPlatformClient {
                 .body(BodyInserters.fromFormData("grant_type", GRANT_TYPE)
                         .with("client_id", CLIENT_ID)
                         .with("redirect_uri", REDIRECT_URI)
-                        .with("code", code)
+                        .with("code", authorizationCode)
                         .with("client_secret", CLIENT_SECRET)
                 )
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
-                        response -> Mono.error(new UnauthorizedTokenException(code)))
+                        response -> Mono.error(new UnauthorizedTokenException(authorizationCode)))
                 .onStatus(HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new OAuthServerException(ACCESS_TOKEN_URL)))
                 .bodyToMono(KaKaoTokenResponse.class);
