@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -55,7 +56,6 @@ public class AuthServiceTest {
     @Test
     void renewTokenTest() {
         //given
-        String accessToken = "expired.access.token";
         String refreshToken = "member.refresh.token";
         Member member = Member.builder()
                 .id(1L)
@@ -66,12 +66,12 @@ public class AuthServiceTest {
                 .refreshToken(refreshToken)
                 .build();
 
-        when(jwtProvider.getSubByExpiredToken(any(String.class))).thenReturn(1L);
-        when(memberDomainService.findMemberById(any(Long.class))).thenReturn(member);
+        when(jwtProvider.isRefreshToken(eq(refreshToken))).thenReturn(true);
+        when(memberDomainService.findMemberByRefreshToken(any(String.class))).thenReturn(member);
         when(jwtProvider.createAccessToken(any(Long.class), any(String.class))).thenReturn("new.access.token");
 
         //when
-        TokenRefreshResponse execute = authService.renewToken(accessToken, refreshToken);
+        TokenRefreshResponse execute = authService.renewToken(refreshToken);
 
         //then
         assertThat(execute.getAccessToken()).isEqualTo("new.access.token");
@@ -82,7 +82,6 @@ public class AuthServiceTest {
     @Test
     void renewTokenTest_NoRefreshTokenException() {
         //given
-        String accessToken = "expired.access.token";
         String refreshToken = "member.refresh.token";
         Member member = Member.builder()
                 .id(1L)
@@ -93,36 +92,32 @@ public class AuthServiceTest {
                 .refreshToken(null)
                 .build();
 
-        when(jwtProvider.getSubByExpiredToken(any(String.class))).thenReturn(1L);
-        when(memberDomainService.findMemberById(any(Long.class))).thenReturn(member);
+        when(jwtProvider.isRefreshToken(eq(refreshToken))).thenReturn(true);
+        when(memberDomainService.findMemberByRefreshToken(any(String.class))).thenReturn(null);
 
         //when & then
-        assertThatThrownBy(() -> authService.renewToken(accessToken, refreshToken))
+        assertThatThrownBy(() -> authService.renewToken(refreshToken))
                 .isInstanceOf(AuthException.NoRefreshTokenException.class);
 
     }
 
-    @DisplayName("리프레시 토큰이 일치하지 않으면 예외 발생.")
+    @DisplayName("토큰 타입이 REFRESH가 아닐 경우 예외 발생.")
     @Test
-    void renewTokenTest_RefreshTokenNotMatchException() {
+    void renewTokenTest_NotARefreshTokenTypeException() {
         //given
-        String accessToken = "expired.access.token";
-        String refreshToken = "wrong.refresh.token";
+        String refreshToken = "member.refresh.token";
         Member member = Member.builder()
                 .id(1L)
                 .socialId(1L)
                 .name("test man")
                 .profileImage(null)
                 .memberStatus(MemberStatus.ACTIVE)
-                .refreshToken("member.refresh.token")
+                .refreshToken(null)
                 .build();
 
-        when(jwtProvider.getSubByExpiredToken(any(String.class))).thenReturn(1L);
-        when(memberDomainService.findMemberById(any(Long.class))).thenReturn(member);
-
         //when & then
-        assertThatThrownBy(() -> authService.renewToken(accessToken, refreshToken))
-                .isInstanceOf(AuthException.RefreshTokenNotMatchException.class);
+        assertThatThrownBy(() -> authService.renewToken(refreshToken))
+                .isInstanceOf(AuthException.NotARefreshTokenTypeException.class);
 
     }
 

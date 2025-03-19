@@ -111,4 +111,17 @@ public class JwtProvider {
         }
     }
 
+    public boolean isRefreshToken(String refreshToken) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String[] splitToken = refreshToken.split("\\.");
+            String base64EncodedBody = splitToken[1];
+            String body = new String(Base64.getUrlDecoder().decode(base64EncodedBody));
+            JsonNode payloadJson = objectMapper.readTree(body);
+            return payloadJson.get("type").asText().equals("REFRESH");
+        } catch (Exception exception) {
+            throw new InvalidateTokenException(refreshToken);
+        }
+    }
 }

@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -53,13 +54,13 @@ public class AuthController {
     @Operation(summary = "Access Token 갱신", description = "잇토리 AccessToken, 잇토리 RefreshToken 필요.")
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshMemberToken(@CookieValue(value = REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
-                                                                   @Valid @RequestBody TokenRefreshRequest request) {
+                                                                   @Nullable @RequestBody TokenRefreshRequest request) {
 
         // TODO: 프론트 수정 후 삭제 로직 - by junker 25.03.12.
         if (refreshToken == null) {
             refreshToken = request.getRefreshToken();
         }
-        TokenRefreshResponse tokenResponse = authService.renewToken(request.getAccessToken(), refreshToken);
+        TokenRefreshResponse tokenResponse = authService.renewToken(refreshToken);
         return ResponseEntity.ok().body(tokenResponse);
     }
 
@@ -68,7 +69,7 @@ public class AuthController {
     public ResponseEntity<Void> logout(@CookieValue(value = REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
                                        @CurrentMemberId Long memberId, HttpServletResponse response) {
         authService.logout(memberId);
-        
+
         // TODO: 프론트 수정 후 삭제 로직 - by junker 25.03.12.
         if (refreshToken != null) {
             ResponseCookie refreshTokenCookie = cookieProvider.createExpiredResponseCookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken);
