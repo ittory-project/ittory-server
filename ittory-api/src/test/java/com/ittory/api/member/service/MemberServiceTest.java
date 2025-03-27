@@ -1,9 +1,6 @@
 package com.ittory.api.member.service;
 
-import com.ittory.api.member.dto.MemberDetailResponse;
-import com.ittory.api.member.dto.MemberLetterCountResponse;
-import com.ittory.api.member.dto.ParticipationResponse;
-import com.ittory.api.member.dto.ReceivedLetterResponse;
+import com.ittory.api.member.dto.*;
 import com.ittory.domain.letter.domain.CoverType;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.dto.CoverTypeImages;
@@ -137,6 +134,23 @@ public class MemberServiceTest {
         // then
         assertThat(response.getParticipationLetterCount()).isEqualTo(participationLetterCount);
         assertThat(response.getReceiveLetterCount()).isEqualTo(receiveLetterCount);
+    }
+
+    @DisplayName("참여자가 이미 방문했는지 확인")
+    @Test
+    public void getMemberAlreadyVisitStatusTest() {
+        // given
+        Long memberId = 1L;
+        boolean isVisited = true;
+
+        when(memberDomainService.findMemberById(memberId)).thenReturn(null);
+        when(memberDomainService.checkVisitedMember(memberId)).thenReturn(isVisited);
+
+        // when
+        MemberAlreadyVisitResponse response = memberService.getMemberAlreadyVisitStatus(memberId);
+
+        // then
+        assertThat(response.getIsVisited()).isEqualTo(isVisited);
     }
 
 }

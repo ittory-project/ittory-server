@@ -1,9 +1,6 @@
 package com.ittory.api.member.controller;
 
-import com.ittory.api.member.dto.MemberDetailResponse;
-import com.ittory.api.member.dto.MemberLetterCountResponse;
-import com.ittory.api.member.dto.ParticipationResponse;
-import com.ittory.api.member.dto.ReceivedLetterResponse;
+import com.ittory.api.member.dto.*;
 import com.ittory.api.member.service.LetterBoxService;
 import com.ittory.api.member.service.MemberService;
 import com.ittory.common.jwt.AccessTokenInfo;
@@ -144,6 +141,25 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.data.participationLetterCount").value(participationLetterCount));
 
         verify(memberService).getMemberLetterCount(memberId);
+    }
+
+    @Test
+    @DisplayName("재방문 여부 확인")
+    void checkMemberAlreadyVisitTest() throws Exception {
+        // given
+        Long memberId = 1L;
+        MemberAlreadyVisitResponse response = MemberAlreadyVisitResponse.from(true);
+        AccessTokenInfo memberTokenInfo = AccessTokenInfo.of("1", "MEMBER");
+        when(jwtProvider.resolveToken(ACCESS_TOKEN)).thenReturn(memberTokenInfo);
+        when(memberService.getMemberAlreadyVisitStatus(memberId)).thenReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/member/visit")
+                        .header(AUTH_HEADER, ACCESS_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.isVisited").value(true));
+
+        verify(memberService).getMemberAlreadyVisitStatus(memberId);
     }
 
 }
