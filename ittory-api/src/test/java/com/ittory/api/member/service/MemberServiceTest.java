@@ -5,6 +5,7 @@ import com.ittory.domain.letter.domain.CoverType;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.dto.CoverTypeImages;
 import com.ittory.domain.member.domain.Member;
+import com.ittory.domain.member.enums.WithdrawReason;
 import com.ittory.domain.member.service.LetterBoxDomainService;
 import com.ittory.domain.member.service.MemberDomainService;
 import com.ittory.domain.member.service.MemberWithdrawDomainService;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class MemberServiceTest {
@@ -151,6 +152,32 @@ public class MemberServiceTest {
 
         // then
         assertThat(response.getIsVisited()).isEqualTo(isVisited);
+    }
+
+    @DisplayName("사용자 탈퇴")
+    @Test
+    public void withdrawMemberTest() {
+        // given
+        Long memberId = 1L;
+        MemberWithdrawRequest request = new MemberWithdrawRequest(WithdrawReason.ETC, "withdraw");
+        Member member = Member.builder()
+                .id(memberId)
+                .name("test")
+                .build();
+
+        when(memberDomainService.findMemberById(memberId)).thenReturn(member);
+        doNothing().when(memberDomainService).withdrawMember(member);
+        doNothing().when(memberWithdrawDomainService).saveMemberWithdraw(member, request.getWithdrawReason(), request.getContent());
+        doNothing().when(discordWebHookService).sendWithdrawMessage(member, request.getWithdrawReason(), request.getContent());
+
+        // when
+        memberService.withdrawMember(memberId, request);
+
+        // then
+        verify(memberDomainService).findMemberById(memberId);
+        verify(memberDomainService).withdrawMember(member);
+        verify(memberWithdrawDomainService).saveMemberWithdraw(member, request.getWithdrawReason(), request.getContent());
+        verify(discordWebHookService).sendWithdrawMessage(member, request.getWithdrawReason(), request.getContent());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.ittory.api.member.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ittory.api.member.dto.*;
 import com.ittory.api.member.service.LetterBoxService;
 import com.ittory.api.member.service.MemberService;
@@ -11,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +35,8 @@ public class MemberControllerTest {
 
     @MockBean
     private JwtProvider jwtProvider;
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String ACCESS_TOKEN = "access_token";
     private static final String AUTH_HEADER = "Authorization";
@@ -160,6 +163,26 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.data.isVisited").value(true));
 
         verify(memberService).getMemberAlreadyVisitStatus(memberId);
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴")
+    void withdrawMemberByIdTest() throws Exception {
+        // given
+        Long memberId = 1L;
+        MemberWithdrawRequest request = new MemberWithdrawRequest();
+        AccessTokenInfo memberTokenInfo = AccessTokenInfo.of("1", "MEMBER");
+        when(jwtProvider.resolveToken(ACCESS_TOKEN)).thenReturn(memberTokenInfo);
+        doNothing().when(memberService).withdrawMember(eq(memberId), any(MemberWithdrawRequest.class));
+
+        // when & then
+        mockMvc.perform(post("/api/member/withdraw")
+                        .header(AUTH_HEADER, ACCESS_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        verify(memberService).withdrawMember(eq(memberId), refEq(request));
     }
 
 }

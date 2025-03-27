@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.*;
@@ -48,7 +49,7 @@ public class LetterBoxControllerTest {
         //then
         mockMvc.perform(post("/api/letter-box/participation")
                         .header("Authorization", ACCESS_TOKEN)
-                        .contentType("application/json")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk());
