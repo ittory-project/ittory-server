@@ -23,13 +23,11 @@ public class KaKaoLoginService {
     private final MemberDomainService memberDomainService;
     private final DiscordWebHookService discordWebHookService;
 
-    public AuthTokenResponse loginOrRegister(String authorizationCode, boolean isCode) {
+    public AuthTokenResponse loginOrRegister(String authorizationCode, String origin, boolean isCode) {
         String accessToken = authorizationCode;
         if (isCode) {
-            KaKaoTokenResponse tokenResponse = kaKaoPlatformClient.getKakaoAccessToken(authorizationCode);
-            System.out.println("====== 11");
+            KaKaoTokenResponse tokenResponse = kaKaoPlatformClient.getKakaoAccessToken(authorizationCode, origin);
             accessToken = tokenResponse.getAccessToken();
-            System.out.println("====== 22");
         }
         MemberInfo memberInfo = kaKaoPlatformClient.getMemberInfo(accessToken);
         Member member = memberDomainService.findMemberBySocialId(memberInfo.getSocialId());

@@ -51,7 +51,7 @@ public class KaKaoLoginServiceTest {
                 .refreshToken(null)
                 .build();
 
-        when(kaKaoPlatformClient.getKakaoAccessToken(any(String.class))).thenReturn(new KaKaoTokenResponse(kakaoAccessToken));
+        when(kaKaoPlatformClient.getKakaoAccessToken(any(String.class), any(String.class))).thenReturn(new KaKaoTokenResponse(kakaoAccessToken));
         when(kaKaoPlatformClient.getMemberInfo(any(String.class))).thenReturn(new MemberInfo(1L, "test man", null));
         when(memberDomainService.findMemberBySocialId(any(Long.class))).thenReturn(null);
         when(memberDomainService.saveMember(1L, "test man", null)).thenReturn(member);
@@ -81,7 +81,7 @@ public class KaKaoLoginServiceTest {
                 .refreshToken(null)
                 .build();
 
-        when(kaKaoPlatformClient.getKakaoAccessToken(any(String.class))).thenReturn(new KaKaoTokenResponse(kakaoAccessToken));
+        when(kaKaoPlatformClient.getKakaoAccessToken(any(String.class), any(String.class))).thenReturn(new KaKaoTokenResponse(kakaoAccessToken));
         when(kaKaoPlatformClient.getMemberInfo(any(String.class))).thenReturn(new MemberInfo(1L, "test man", null));
         when(memberDomainService.findMemberBySocialId(any(Long.class))).thenReturn(member);
         when(jwtProvider.createAccessToken(any(Long.class), any(String.class))).thenReturn("access.token");
