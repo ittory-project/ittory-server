@@ -35,7 +35,7 @@ public class KaKaoPlatformClient {
     @Value("${kakao.clientSecret}")
     private String CLIENT_SECRET;
 
-    public KaKaoTokenResponse getKakaoAccessToken(String authorizationCode) {
+    public KaKaoTokenResponse getKakaoAccessToken(String authorizationCode, String origin) {
         WebClient client = WebClient.create();
 
         Mono<KaKaoTokenResponse> kaKaoTokenResponseMono = client.post()
@@ -43,7 +43,7 @@ public class KaKaoPlatformClient {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .body(BodyInserters.fromFormData("grant_type", GRANT_TYPE)
                         .with("client_id", CLIENT_ID)
-                        .with("redirect_uri", REDIRECT_URI)
+                        .with("redirect_uri", origin + REDIRECT_URI)
                         .with("code", authorizationCode)
                         .with("client_secret", CLIENT_SECRET)
                 )
