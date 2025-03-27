@@ -2,6 +2,7 @@ package com.ittory.api.member.service;
 
 import com.ittory.api.member.dto.MemberDetailResponse;
 import com.ittory.api.member.dto.ParticipationResponse;
+import com.ittory.api.member.dto.ReceivedLetterResponse;
 import com.ittory.domain.letter.domain.CoverType;
 import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.dto.CoverTypeImages;
@@ -86,6 +87,35 @@ public class MemberServiceTest {
         ParticipationResponse.LetterDto letterDto = response.getLetters().get(0);
         assertThat(letterDto.getLetterId()).isEqualTo(1L);
         assertThat(letterDto.getReceiverName()).isEqualTo("홍길동");
+        assertThat(letterDto.getCoverTypeImage()).isEqualTo("url1");
+    }
+
+    @DisplayName("참여자가 참여한 편지 조회")
+    @Test
+    public void getMemberReceivedLettersTest() {
+        // given
+        Long memberId = 1L;
+        CoverTypeImages images = new CoverTypeImages("url1", "url2", "url3", "url4", "url5", "url6", "url7");
+
+        CoverType coverType = CoverType.create("cover", images);
+        Letter letter = Letter.builder()
+                .id(memberId)
+                .receiverName("홍길동")
+                .coverType(coverType)
+                .deliveryDate(LocalDateTime.of(2024, 3, 1, 12, 0))
+                .build();
+
+        List<Letter> mockLetters = List.of(letter);
+
+        when(memberDomainService.getReceivedLetters(memberId)).thenReturn(mockLetters);
+
+        // when
+        ReceivedLetterResponse response = memberService.getMemberReceivedLetters(memberId);
+
+        // then
+        assertThat(response.getLetters()).hasSize(1);
+        ReceivedLetterResponse.LetterDto letterDto = response.getLetters().get(0);
+        assertThat(letterDto.getLetterId()).isEqualTo(1L);
         assertThat(letterDto.getCoverTypeImage()).isEqualTo("url1");
     }
 
