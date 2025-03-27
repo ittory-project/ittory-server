@@ -3,12 +3,14 @@ package com.ittory.api.member.dto;
 import com.ittory.domain.letter.domain.Letter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class ReceivedLetterResponse {
     private List<LetterDto> letters;
