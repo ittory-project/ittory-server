@@ -1,6 +1,7 @@
 package com.ittory.api.member.controller;
 
 import com.ittory.api.member.dto.MemberDetailResponse;
+import com.ittory.api.member.dto.MemberLetterCountResponse;
 import com.ittory.api.member.dto.ParticipationResponse;
 import com.ittory.api.member.dto.ReceivedLetterResponse;
 import com.ittory.api.member.service.LetterBoxService;
@@ -121,6 +122,28 @@ public class MemberControllerTest {
                 .andExpect(status().isOk());
 
         verify(memberService).getMemberReceivedLetters(memberId);
+    }
+
+    @Test
+    @DisplayName("참여 및 받은 편지 수 조회")
+    void getMemberLetterCountsTest() throws Exception {
+        // given
+        Long memberId = 1L;
+        int participationLetterCount = 5;
+        int receiveLetterCount = 5;
+        MemberLetterCountResponse response = MemberLetterCountResponse.of(participationLetterCount, receiveLetterCount);
+        AccessTokenInfo memberTokenInfo = AccessTokenInfo.of("1", "MEMBER");
+        when(jwtProvider.resolveToken(ACCESS_TOKEN)).thenReturn(memberTokenInfo);
+        when(memberService.getMemberLetterCount(memberId)).thenReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/member/letter-counts")
+                        .header(AUTH_HEADER, ACCESS_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.receiveLetterCount").value(receiveLetterCount))
+                .andExpect(jsonPath("$.data.participationLetterCount").value(participationLetterCount));
+
+        verify(memberService).getMemberLetterCount(memberId);
     }
 
 }

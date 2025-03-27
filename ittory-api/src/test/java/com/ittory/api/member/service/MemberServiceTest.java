@@ -1,6 +1,7 @@
 package com.ittory.api.member.service;
 
 import com.ittory.api.member.dto.MemberDetailResponse;
+import com.ittory.api.member.dto.MemberLetterCountResponse;
 import com.ittory.api.member.dto.ParticipationResponse;
 import com.ittory.api.member.dto.ReceivedLetterResponse;
 import com.ittory.domain.letter.domain.CoverType;
@@ -119,5 +120,23 @@ public class MemberServiceTest {
         assertThat(letterDto.getCoverTypeImage()).isEqualTo("url1");
     }
 
+    @DisplayName("참여 및 받은 편지 개수 조회")
+    @Test
+    public void getMemberLetterCountTest() {
+        // given
+        Long memberId = 1L;
+        int participationLetterCount = 1;
+        int receiveLetterCount = 1;
+
+        when(letterBoxDomainService.countParticipationLetterByMemberId(memberId)).thenReturn(participationLetterCount);
+        when(letterBoxDomainService.countReceiveLetterByMemberId(memberId)).thenReturn(receiveLetterCount);
+
+        // when
+        MemberLetterCountResponse response = memberService.getMemberLetterCount(memberId);
+
+        // then
+        assertThat(response.getParticipationLetterCount()).isEqualTo(participationLetterCount);
+        assertThat(response.getReceiveLetterCount()).isEqualTo(receiveLetterCount);
+    }
 
 }
