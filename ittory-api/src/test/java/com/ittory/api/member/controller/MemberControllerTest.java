@@ -1,6 +1,7 @@
 package com.ittory.api.member.controller;
 
 import com.ittory.api.member.dto.MemberDetailResponse;
+import com.ittory.api.member.dto.ParticipationResponse;
 import com.ittory.api.member.service.LetterBoxService;
 import com.ittory.api.member.service.MemberService;
 import com.ittory.common.jwt.AccessTokenInfo;
@@ -81,6 +82,25 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.data.name").value(memberName));
 
         verify(memberService).getMemberDetails(memberId);
+    }
+
+    @Test
+    @DisplayName("참여한 편지 조회")
+    void getParticipationsTest() throws Exception {
+        // given
+        Long memberId = 1L;
+        ParticipationResponse response = new ParticipationResponse();
+        AccessTokenInfo memberTokenInfo = AccessTokenInfo.of("1", "MEMBER");
+        when(memberService.getMemberParticipatedLetters(memberId)).thenReturn(response);
+        when(jwtProvider.resolveToken(ACCESS_TOKEN)).thenReturn(memberTokenInfo);
+
+
+        // when & then
+        mockMvc.perform(get("/api/member/participations")
+                        .header(AUTH_HEADER, ACCESS_TOKEN))
+                .andExpect(status().isOk());
+
+        verify(memberService).getMemberParticipatedLetters(memberId);
     }
 
 }
