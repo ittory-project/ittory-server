@@ -48,7 +48,6 @@ public class MemberControllerTest {
         Long letterId = 1L;
         AccessTokenInfo memberTokenInfo = AccessTokenInfo.of("1", "MEMBER");
         when(jwtProvider.resolveToken(ACCESS_TOKEN)).thenReturn(memberTokenInfo);
-        when(jwtProvider.resolveToken(ACCESS_TOKEN)).thenReturn(memberTokenInfo);
         doNothing().when(letterBoxService).deleteLetterInLetterBox(1L, letterId);
 
         // when & then
