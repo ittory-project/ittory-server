@@ -10,6 +10,8 @@ public class CookieProvider {
         return ResponseCookie.from(cookieName, value)
                 .httpOnly(true)
                 .path("/")
+                .sameSite("None")
+                .secure(true)
                 .maxAge(maxAge)
                 .build();
     }
