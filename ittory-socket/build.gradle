@@ -7,8 +7,9 @@ dependencies {
 
     implementation project(':ittory-domain')
     implementation project(':ittory-common')
+    implementation project(':ittory-infra')
 }
 
 tasks.named('test') {
-    dependsOn ':ittory-domain:test', ':ittory-common:test'
+    dependsOn ':ittory-domain:test', ':ittory-common:test', ':ittory-infra:test'
 }

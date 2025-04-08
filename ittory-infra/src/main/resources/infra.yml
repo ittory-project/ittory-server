@@ -19,6 +19,7 @@ discord:
     withdraw: null
     daily-report: null
     nplusone-occurrence: null
+    error: null
 
 kakao:
   clientId: ${KAKAO_CLIENT_ID}
@@ -37,6 +38,10 @@ spring:
     activate:
       on-profile: dev
 
+discord:
+  webhook:
+    error: ${DISCORD_WEBHOOK_ERROR_DEV_URL}
+
 ---
 spring:
   config:
@@ -49,3 +54,4 @@ discord:
     withdraw: ${WITHDRAW_DISCORD_WEBHOOK_URL}
     daily-report: ${DAILY_REPORT_DISCORD_WEBHOOK_URL}
     nplusone-occurrence: ${DISCORD_WEBHOOK_NPLUSONE_OCCURRENCE_URL}
+    error: ${DISCORD_WEBHOOK_ERROR_PROD_URL}
