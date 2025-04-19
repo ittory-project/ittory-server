@@ -82,4 +82,8 @@ public class MemberDomainService {
     public Member findMemberByRefreshToken(String refreshToken) {
         return memberDomainRepository.findByRefreshToken(refreshToken).orElse(null);
     }
+
+    public Member findMemberByLoginId(String loginId) {
+        return memberDomainRepository.findByLoginId(loginId).orElseThrow(() -> new MemberNotFoundException(loginId));
+    }
 }
