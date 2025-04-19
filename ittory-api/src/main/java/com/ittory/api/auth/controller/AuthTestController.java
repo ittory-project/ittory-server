@@ -38,8 +38,8 @@ public class AuthTestController {
 
     @Operation(summary = "아이디로 로그인", description = "테스트를 위한 로그인")
     @PostMapping("/login/id")
-    public ResponseEntity<AuthTokenResponse> loginByKaKao(@Valid @RequestBody IdLoginRequest request,
-                                                          HttpServletResponse response) {
+    public ResponseEntity<AuthTokenResponse> loginByLoginId(@Valid @RequestBody IdLoginRequest request,
+                                                            HttpServletResponse response) {
         AuthTokenResponse tokenResponse = idLoginService.login(request.getLoginId());
 
         log.info("Login with {} in {}", tokenResponse.getAccessToken(), LocalDateTime.now());
