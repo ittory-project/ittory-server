@@ -2,18 +2,8 @@ package com.ittory.domain.member.domain;
 
 import com.ittory.domain.common.BaseEntity;
 import com.ittory.domain.member.enums.MemberStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity(name = "member")
 @Getter
@@ -37,6 +27,8 @@ public class Member extends BaseEntity {
     private MemberStatus memberStatus;
 
     private String refreshToken;
+
+    private String loginId;
 
 
     public static Member create(Long socialId, String name, String profileImage) {
