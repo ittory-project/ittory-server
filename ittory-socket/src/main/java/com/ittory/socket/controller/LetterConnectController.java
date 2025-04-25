@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -20,9 +21,10 @@ public class LetterConnectController {
     private final LetterActionService letterActionService;
 
     @MessageMapping("/letter/enter/{letterId}")
-    public void enterMember(@CurrentMemberId Long memberId, @DestinationVariable Long letterId) {
-        log.info("member {}, enter to letter {}", memberId, letterId);
-        EnterResponse response = letterActionService.enterToLetter(memberId, letterId);
+    public void enterMember(@CurrentMemberId Long memberId, @DestinationVariable Long letterId, SimpMessageHeaderAccessor headerAccessor) {
+        String sessionId = headerAccessor.getSessionId();
+        log.info("member {}, enter to letter {} with SessionId: {}", memberId, letterId, sessionId);
+        EnterResponse response = letterActionService.enterToLetter(memberId, letterId, sessionId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
     }

@@ -12,6 +12,7 @@ import static com.ittory.domain.participant.enums.ParticipantStatus.GHOST;
 @Entity(name = "participant")
 @Getter
 @Builder
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Participant extends BaseEntity {

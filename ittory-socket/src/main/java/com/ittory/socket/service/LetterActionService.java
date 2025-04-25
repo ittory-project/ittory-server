@@ -6,8 +6,10 @@ import com.ittory.domain.letter.service.ElementDomainService;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.enums.ParticipantStatus;
 import com.ittory.domain.participant.service.ParticipantDomainService;
+import com.ittory.socket.config.handler.WebSocketSessionDisconnectHandler;
 import com.ittory.socket.dto.*;
 import com.ittory.socket.mapper.ElementConvertor;
+import com.ittory.socket.utils.SessionUserStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +27,22 @@ public class LetterActionService {
     private final ParticipantDomainService participantDomainService;
     private final ElementDomainService elementDomainService;
     private final ElementConvertor elementConvertor;
+    private final SessionUserStore sessionUserStore;
+    private final WebSocketSessionDisconnectHandler webSocketSessionDisconnectHandler;
 
     @Transactional
-    public EnterResponse enterToLetter(Long memberId, Long letterId) {
+    public EnterResponse enterToLetter(Long memberId, Long letterId, String sessionId) {
         Participant participant = participantDomainService.findParticipant(letterId, memberId);
         participant.changeParticipantStatus(ParticipantStatus.ENTER);
         List<ParticipantProfile> participants = participantDomainService.findAllCurrentParticipantsOrderedBySequence(letterId, null)
                 .stream()
                 .map(ParticipantProfile::from)
                 .toList();
+
+        if (sessionUserStore.getUserIdBySession(sessionId).isEmpty()) {
+            sessionUserStore.registerSession(sessionId, participant);
+        }
+
         return EnterResponse.from(participant, participants);
     }
 
