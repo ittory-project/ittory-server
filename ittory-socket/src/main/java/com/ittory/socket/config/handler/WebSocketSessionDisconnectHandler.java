@@ -41,7 +41,7 @@ public class WebSocketSessionDisconnectHandler {
                     String destination = "/topic/letter/" + participant.getLetter().getId();
                     messagingTemplate.convertAndSend(destination, ExitResponse.from(participant, true));
                 } catch (Exception e) {
-                    log.error(e.getMessage());
+                    log.error("An error occurred while processing the disconnect for sessionId={}: {}", sessionId, e.getMessage(), e);
                 }
             }, EXIT_WAIT_TIME, TimeUnit.SECONDS);
             futureMap.put(sessionId, future);
