@@ -46,7 +46,7 @@ public class WebSocketConnectListener {
     private Long getMemberId(StompHeaderAccessor accessor) {
         List<String> authorizationHeaders = accessor.getNativeHeader("Authorization");
         if (authorizationHeaders == null || authorizationHeaders.isEmpty()) {
-            log.warn("No Auhorization header found.");
+            log.warn("No Authorization header found.");
             return null;
         }
 
