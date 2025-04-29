@@ -11,12 +11,6 @@ public class ParticipantSessionService {
 
     private final SessionParticipantStore sessionParticipantStore;
 
-    public Participant exitParticipantBySession(String sessionId) {
-        Participant sessionParticipant = sessionParticipantStore.getParticipantBySessionId(sessionId).orElse(null);
-        sessionParticipantStore.removeParticipantBySession(sessionId);
-        return sessionParticipant;
-    }
-
     public Participant findParticipantByMemberId(Long memberId) {
         return sessionParticipantStore.getParticipantByMemberId(memberId).orElse(null);
     }
@@ -31,5 +25,9 @@ public class ParticipantSessionService {
 
     public Boolean existParticipantBySessionId(String sessionId) {
         return sessionParticipantStore.getParticipantBySessionId(sessionId).isPresent();
+    }
+
+    public Participant findParticipantBySessionId(String sessionId) {
+        return sessionParticipantStore.getParticipantBySessionId(sessionId).orElse(null);
     }
 }
