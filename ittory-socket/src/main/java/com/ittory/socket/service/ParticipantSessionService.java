@@ -1,26 +1,35 @@
 package com.ittory.socket.service;
 
 import com.ittory.domain.participant.domain.Participant;
-import com.ittory.socket.utils.SessionUserStore;
+import com.ittory.socket.utils.SessionParticipantStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ParticipantSessionService {
 
-    private final SessionUserStore sessionUserStore;
+    private final SessionParticipantStore sessionParticipantStore;
 
-    @Transactional
-    public Participant exitUserBySession(String sessionId) {
-        Participant sessionParticipant = sessionUserStore.getUserIdBySession(sessionId).orElse(null);
-        sessionUserStore.removeSession(sessionId);
+    public Participant exitParticipantBySession(String sessionId) {
+        Participant sessionParticipant = sessionParticipantStore.getParticipantBySessionId(sessionId).orElse(null);
+        sessionParticipantStore.removeSession(sessionId);
         return sessionParticipant;
     }
 
-    @Transactional(readOnly = true)
-    public Participant findUerBySession(String sessionId) {
-        return sessionUserStore.getUserIdBySession(sessionId).orElse(null);
+    public Participant findParticipantByMemberId(Long memberId) {
+        return sessionParticipantStore.getParticipantByMemberId(memberId).orElse(null);
+    }
+
+    public void changeSessionIdByMemberId(String sessionId, Long memberId) {
+        sessionParticipantStore.changeSessionIdByMemberId(sessionId, memberId);
+    }
+
+    public String findSessionIdByMemberId(Long memberId) {
+        return sessionParticipantStore.getSessionIdByMemberId(memberId).orElse(null);
+    }
+
+    public Boolean existParticipantBySessionId(String sessionId) {
+        return sessionParticipantStore.getParticipantBySessionId(sessionId).isPresent();
     }
 }

@@ -24,20 +24,42 @@ public class WebSocketSessionDisconnectHandler {
     private static final int EXIT_WAIT_TIME = 15;
 
     public void handleDisconnect(String sessionId) {
-        ScheduledFuture<?> future = scheduler.schedule(() -> {
-            try {
-                Participant participant = participantSessionService.exitUserBySession(sessionId);
+        Boolean isExist = participantSessionService.existParticipantBySessionId(sessionId);
+
+        if (isExist) {
+            ScheduledFuture<?> future = scheduler.schedule(() -> {
+                // 퇴장 처리
+                Participant participant = participantSessionService.exitParticipantBySession(sessionId);
                 futureMap.remove(sessionId);
-                if (participant != null) {
-                    String destination = "/topic/letter/" + participant.getLetter().getId();
-                    log.info("Bye {}", sessionId);
-                    messagingTemplate.convertAndSend(destination, ExitResponse.from(participant, true));
-                }
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        }, EXIT_WAIT_TIME, TimeUnit.SECONDS);
-        futureMap.put(sessionId, future);
+
+                // 메세지 전달
+                String destination = "/topic/letter/" + participant.getLetter().getId();
+                log.info("Bye {}", sessionId);
+                messagingTemplate.convertAndSend(destination, ExitResponse.from(participant, true));
+            }, EXIT_WAIT_TIME, TimeUnit.SECONDS);
+            futureMap.put(sessionId, future);
+        }
+    }
+
+    /**
+     *
+     * 1. 퇴장 예약 취소
+     * 2. SessionId 변경
+     */
+    public void handleReconnect(String sessionId, Long memberId) {
+        // 퇴장 예약 취소
+        String oldSessionId = participantSessionService.findSessionIdByMemberId(memberId);
+        ScheduledFuture<?> future = null;
+        if (oldSessionId != null) {
+            future = futureMap.remove(oldSessionId);
+        }
+        if (future != null) {
+            future.cancel(false);
+            log.info("Cancelled scheduled exit for sessionId={}", sessionId);
+        }
+
+        // SessionId 변경
+        participantSessionService.changeSessionIdByMemberId(sessionId, memberId);
     }
 
 }

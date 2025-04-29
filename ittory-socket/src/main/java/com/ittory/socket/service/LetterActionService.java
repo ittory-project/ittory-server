@@ -9,7 +9,7 @@ import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.config.handler.WebSocketSessionDisconnectHandler;
 import com.ittory.socket.dto.*;
 import com.ittory.socket.mapper.ElementConvertor;
-import com.ittory.socket.utils.SessionUserStore;
+import com.ittory.socket.utils.SessionParticipantStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +27,7 @@ public class LetterActionService {
     private final ParticipantDomainService participantDomainService;
     private final ElementDomainService elementDomainService;
     private final ElementConvertor elementConvertor;
-    private final SessionUserStore sessionUserStore;
-    private final WebSocketSessionDisconnectHandler webSocketSessionDisconnectHandler;
+    private final SessionParticipantStore sessionParticipantStore;
 
     @Transactional
     public EnterResponse enterToLetter(Long memberId, Long letterId, String sessionId) {
@@ -39,8 +38,8 @@ public class LetterActionService {
                 .map(ParticipantProfile::from)
                 .toList();
 
-        if (sessionUserStore.getUserIdBySession(sessionId).isEmpty()) {
-            sessionUserStore.registerSession(sessionId, participant);
+        if (sessionParticipantStore.getParticipantBySessionId(sessionId).isEmpty()) {
+            sessionParticipantStore.registerSession(sessionId, participant);
         }
 
         return EnterResponse.from(participant, participants);
