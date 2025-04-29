@@ -24,7 +24,7 @@ public class SessionParticipantStore {
 
     public void removeParticipantBySession(String sessionId) {
         Participant removedParticipant = sessionToParticipantMap.remove(sessionId);
-        memberIdToSessionMap.remove(removedParticipant.getId());
+        memberIdToSessionMap.remove(removedParticipant.getMember().getId());
     }
 
     public Optional<Participant> getParticipantByMemberId(Long memberId) {

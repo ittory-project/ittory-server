@@ -27,8 +27,12 @@ public class WebSocketConnectListener {
     public void onConnect(SessionConnectEvent event) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = accessor.getSessionId();
+
         Long memberId = getMemberId(accessor);
-        Participant participant = participantSessionService.findParticipantByMemberId(memberId);
+        Participant participant = null;
+        if (memberId != null) {
+            participant = participantSessionService.findParticipantByMemberId(memberId);
+        }
 
         if (participant != null) {
             log.info("Reconnected: SessionId = {}, MemberId = {}", sessionId, memberId);
