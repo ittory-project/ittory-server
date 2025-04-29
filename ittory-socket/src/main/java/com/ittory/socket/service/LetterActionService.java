@@ -6,7 +6,6 @@ import com.ittory.domain.letter.service.ElementDomainService;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.enums.ParticipantStatus;
 import com.ittory.domain.participant.service.ParticipantDomainService;
-import com.ittory.socket.config.handler.WebSocketSessionDisconnectHandler;
 import com.ittory.socket.dto.*;
 import com.ittory.socket.mapper.ElementConvertor;
 import com.ittory.socket.utils.SessionParticipantStore;
@@ -39,28 +38,27 @@ public class LetterActionService {
                 .toList();
 
         if (sessionParticipantStore.getParticipantBySessionId(sessionId).isEmpty()) {
-            sessionParticipantStore.registerSession(sessionId, participant);
+            sessionParticipantStore.addBySessionId(sessionId, participant);
         }
 
         return EnterResponse.from(participant, participants);
     }
 
     @Transactional
-    public ExitResponse exitFromLetter(Long memberId, Long letterId) {
+    public ExitResponse exitFromLetter(Long memberId, Long letterId, String sessionId) {
         Participant manager = participantDomainService.findManagerByLetterId(letterId);
         Participant nowParticipant = participantDomainService.findParticipant(letterId, memberId);
         changeParticipantOrder(letterId, nowParticipant);
-        exitParticipant(nowParticipant);
+        changeParticipantStatus(nowParticipant);
+        sessionParticipantStore.removeParticipantBySession(sessionId);
         return ExitResponse.from(nowParticipant, Objects.equals(manager.getId(), nowParticipant.getId()));
     }
 
-    private void exitParticipant(Participant participant) {
+    private void changeParticipantStatus(Participant participant) {
         if (!checkNoElement(participant)) {
             participant.changeParticipantStatus(GUEST);
-            participantDomainService.exitParticipant(participant);
         } else {
             participant.changeParticipantStatus(EXITED);
-//            participantDomainService.deleteParticipant(participant);
         }
     }
 

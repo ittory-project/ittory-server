@@ -13,7 +13,7 @@ public class SessionParticipantStore {
     private final Map<String, Participant> sessionToParticipantMap = new ConcurrentHashMap<>();
     private final Map<Long, String> memberIdToSessionMap = new ConcurrentHashMap<>();
 
-    public void registerSession(String sessionId, Participant participant) {
+    public void addBySessionId(String sessionId, Participant participant) {
         sessionToParticipantMap.put(sessionId, participant);
         memberIdToSessionMap.put(participant.getMember().getId(), sessionId);
     }
@@ -22,7 +22,7 @@ public class SessionParticipantStore {
         return Optional.ofNullable(sessionToParticipantMap.get(sessionId));
     }
 
-    public void removeSession(String sessionId) {
+    public void removeParticipantBySession(String sessionId) {
         Participant removedParticipant = sessionToParticipantMap.remove(sessionId);
         memberIdToSessionMap.remove(removedParticipant.getId());
     }

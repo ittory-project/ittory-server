@@ -13,7 +13,7 @@ public class ParticipantSessionService {
 
     public Participant exitParticipantBySession(String sessionId) {
         Participant sessionParticipant = sessionParticipantStore.getParticipantBySessionId(sessionId).orElse(null);
-        sessionParticipantStore.removeSession(sessionId);
+        sessionParticipantStore.removeParticipantBySession(sessionId);
         return sessionParticipant;
     }
 
