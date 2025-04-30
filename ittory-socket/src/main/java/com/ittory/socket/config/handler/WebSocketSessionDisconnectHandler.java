@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 import com.ittory.domain.participant.domain.Participant;
+import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.dto.ExitResponse;
 import com.ittory.socket.service.LetterActionService;
 import com.ittory.socket.service.ParticipantSessionService;
@@ -19,6 +20,7 @@ public class WebSocketSessionDisconnectHandler {
     private final ParticipantSessionService participantSessionService;
     private final SimpMessagingTemplate messagingTemplate;
     private final LetterActionService letterActionService;
+    private final ParticipantDomainService participantDomainService;
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final Map<String, ScheduledFuture<?>> futureMap = new ConcurrentHashMap<>();
@@ -33,13 +35,14 @@ public class WebSocketSessionDisconnectHandler {
                 try {
                     // 퇴장 처리
                     Participant participant = participantSessionService.findParticipantBySessionId(sessionId);
+                    Participant manager = participantDomainService.findManagerByLetterId(participant.getLetter().getId());
                     letterActionService.exitFromLetter(participant.getMember().getId(), participant.getLetter().getId(), sessionId);
                     futureMap.remove(sessionId);
 
                     // 메세지 전달
                     log.info("Bye {}", sessionId);
                     String destination = "/topic/letter/" + participant.getLetter().getId();
-                    messagingTemplate.convertAndSend(destination, ExitResponse.from(participant, true));
+                    messagingTemplate.convertAndSend(destination, ExitResponse.from(participant, manager.getId().equals(participant.getId())));
                 } catch (Exception e) {
                     log.error("An error occurred while processing the disconnect for sessionId={}: {}", sessionId, e.getMessage(), e);
                 }

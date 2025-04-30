@@ -92,7 +92,7 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.letter, letter).fetchJoin()
                 .where(letter.id.eq(letterId))
-                .orderBy(participant.createdAt.asc())
+                .orderBy(participant.updatedAt.asc())
                 .limit(1)
                 .fetchOne();
     }
