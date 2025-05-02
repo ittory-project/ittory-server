@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static com.ittory.domain.member.domain.QMember.member;
@@ -31,5 +32,13 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .fetchOne();
 
         return Optional.ofNullable(content);
+    }
+
+    @Override
+    public List<Member> findAllAuthId() {
+        return jpaQueryFactory.selectFrom(member)
+                .where(member.loginId.isNotNull())
+                .orderBy(member.id.asc())
+                .fetch();
     }
 }

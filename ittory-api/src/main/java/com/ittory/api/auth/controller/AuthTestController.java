@@ -4,6 +4,7 @@ import com.ittory.api.auth.dto.AuthTokenResponse;
 import com.ittory.api.auth.dto.IdLoginRequest;
 import com.ittory.api.auth.service.IdLoginService;
 import com.ittory.api.auth.util.CookieProvider;
+import com.ittory.api.common.response.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -13,12 +14,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Profile("dev")
 @Slf4j
@@ -47,5 +46,12 @@ public class AuthTestController {
         response.addHeader("Set-Cookie", refreshTokenCookie.toString());
 
         return ResponseEntity.ok().body(tokenResponse);
+    }
+
+    @Operation(summary = "테스트 계정 목록 조회", description = "테스트를 위한 계정 목록 조회")
+    @GetMapping("/login/id")
+    public ResponseEntity<List<String>> findAllIdAuth() {
+        List<String> idAuths = idLoginService.findAllIdAuth();
+        return ResponseEntity.ok().body(idAuths);
     }
 }

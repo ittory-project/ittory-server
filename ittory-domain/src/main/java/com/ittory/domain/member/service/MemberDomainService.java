@@ -86,4 +86,8 @@ public class MemberDomainService {
     public Member findMemberByLoginId(String loginId) {
         return memberDomainRepository.findByLoginId(loginId).orElseThrow(() -> new MemberNotFoundException(loginId));
     }
+
+    public List<Member> findAllIdMember() {
+        return memberDomainRepository.findAllAuthId();
+    }
 }

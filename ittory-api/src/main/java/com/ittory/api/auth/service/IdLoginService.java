@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.ittory.common.constant.MemberRole.MEMBER;
 
 @Service
@@ -28,5 +30,12 @@ public class IdLoginService {
         String memberRefreshToken = jwtProvider.createRefreshToken(member.getId());
         memberDomainService.changeRefreshToken(member, memberRefreshToken);
         return AuthTokenResponse.of(memberAccessToken, memberRefreshToken);
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> findAllIdAuth() {
+        return memberDomainService.findAllIdMember().stream()
+                .map(Member::getLoginId)
+                .toList();
     }
 }
