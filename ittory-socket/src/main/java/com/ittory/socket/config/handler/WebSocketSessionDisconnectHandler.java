@@ -25,7 +25,7 @@ public class WebSocketSessionDisconnectHandler {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final Map<String, ScheduledFuture<?>> futureMap = new ConcurrentHashMap<>();
 
-    private static final int EXIT_WAIT_TIME = 15;
+    private static final int EXIT_WAIT_TIME = 5;
 
     public void handleDisconnect(String sessionId) {
         Boolean isExist = participantSessionService.existParticipantBySessionId(sessionId);
