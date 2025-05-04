@@ -117,4 +117,8 @@ public class ParticipantDomainService {
     public Participant findParticipantOrNull(Long letterId, Long memberId) {
         return participantRepository.findByLetterIdAndMemberId(letterId, memberId).orElse(null);
     }
+
+    public Participant findParticipantBySequence(Long letterId, Integer sequence) {
+        return participantRepository.findByLetterIdAndSequence(letterId, sequence);
+    }
 }

@@ -144,4 +144,14 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
 
         return Optional.ofNullable(fetch);
     }
+
+    @Override
+    public Participant findByLetterIdAndSequence(Long letterId, Integer sequence) {
+        return jpaQueryFactory.selectFrom(participant)
+                .where(participant.letter.id.eq(letterId)
+                        .and(participant.sequence.eq(sequence))
+                )
+                .limit(1)
+                .fetchOne();
+    }
 }

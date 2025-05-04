@@ -5,6 +5,8 @@ import com.ittory.domain.participant.domain.Participant;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity(name = "element")
 @Getter
 @Builder
@@ -34,6 +36,8 @@ public class Element extends BaseEntity {
 
     private String content;
 
+    private LocalDateTime startTime;
+
     public static Element create(Letter letter, Participant participant, ElementImage elementImage, Integer sequence,
                                  String content) {
         return Element.builder()
@@ -51,6 +55,10 @@ public class Element extends BaseEntity {
 
     public void changeParticipant(Participant participant) {
         this.participant = participant;
+    }
+
+    public void changeStartTime(LocalDateTime starTime) {
+        this.startTime = starTime;
     }
 
 }

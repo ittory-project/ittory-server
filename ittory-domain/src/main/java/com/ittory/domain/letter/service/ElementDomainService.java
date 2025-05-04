@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -54,5 +55,12 @@ public class ElementDomainService {
 
     public List<Element> findAllByLetterId(Long letterId) {
         return elementRepository.findAllByLetterId(letterId);
+    }
+
+    public void updateStartTimeAndWriter(Long letterId, Integer sequence, Participant participant, LocalDateTime starTime) {
+        Element element = elementRepository.findByLetterIdAndSequence(letterId, sequence).orElseThrow(ElementNotFoundException::new);
+        System.out.println("=======1234: " + participant.getId() + "  " + starTime);
+        element.changeParticipant(participant);
+        element.changeStartTime(starTime);
     }
 }
