@@ -42,4 +42,13 @@ public class ElementWriteTimer {
         log.warn("WriteTimer Size = {}", TIMEOUT_TASKS.size());
     }
 
+    public void removeWriteTimer(Long letterId) {
+        ScheduledFuture<?> future = TIMEOUT_TASKS.remove(letterId);
+        if (future != null) {
+            future.cancel(false);
+            log.info("Letter {}'s elements were written in time.", letterId);
+        }
+
+        log.warn("WriteTimer Size = {}", TIMEOUT_TASKS.size());
+    }
 }

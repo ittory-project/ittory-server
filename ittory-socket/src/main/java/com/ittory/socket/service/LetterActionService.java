@@ -8,6 +8,7 @@ import com.ittory.domain.participant.enums.ParticipantStatus;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.dto.*;
 import com.ittory.socket.mapper.ElementConvertor;
+import com.ittory.socket.utils.ElementWriteTimer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class LetterActionService {
     private final ParticipantDomainService participantDomainService;
     private final ElementDomainService elementDomainService;
     private final ElementConvertor elementConvertor;
+    private final ElementWriteTimer elementWriteTimer;
 
     @Transactional
     public EnterResponse enterToLetter(Long memberId, Long letterId, String sessionId) {
@@ -70,6 +72,7 @@ public class LetterActionService {
 
     @Transactional
     public ElementResponse writeElement(Long memberId, Long letterId, ElementRequest request) {
+        elementWriteTimer.removeWriteTimer(letterId);
         ElementEditData editData = elementConvertor.toElementEditData(request);
         Participant participant = participantDomainService.findParticipant(letterId, memberId);
         Element element = elementDomainService.changeContent(letterId, participant, editData);
