@@ -8,7 +8,6 @@ import com.ittory.domain.participant.enums.ParticipantStatus;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.dto.*;
 import com.ittory.socket.mapper.ElementConvertor;
-import com.ittory.socket.utils.SessionParticipantStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,6 @@ public class LetterActionService {
     private final ParticipantDomainService participantDomainService;
     private final ElementDomainService elementDomainService;
     private final ElementConvertor elementConvertor;
-    private final SessionParticipantStore sessionParticipantStore;
 
     @Transactional
     public EnterResponse enterToLetter(Long memberId, Long letterId, String sessionId) {
@@ -37,10 +35,6 @@ public class LetterActionService {
                 .map(ParticipantProfile::from)
                 .toList();
 
-        if (sessionParticipantStore.getParticipantBySessionId(sessionId).isEmpty()) {
-            sessionParticipantStore.addBySessionId(sessionId, participant);
-        }
-
         return EnterResponse.from(participant, participants);
     }
 
@@ -50,7 +44,6 @@ public class LetterActionService {
         Participant nowParticipant = participantDomainService.findParticipant(letterId, memberId);
         changeParticipantOrder(letterId, nowParticipant);
         changeParticipantStatus(nowParticipant);
-        sessionParticipantStore.removeParticipantBySession(sessionId);
         return ExitResponse.from(nowParticipant, Objects.equals(manager.getId(), nowParticipant.getId()));
     }
 

@@ -2,8 +2,6 @@ package com.ittory.socket.config.handler;
 
 import com.ittory.common.jwt.AccessTokenInfo;
 import com.ittory.common.jwt.JwtProvider;
-import com.ittory.domain.participant.domain.Participant;
-import com.ittory.socket.service.ParticipantSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -13,34 +11,22 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class WebSocketConnectListener {
 
-    private final WebSocketSessionDisconnectHandler webSocketSessionDisconnectHandler;
     private final JwtProvider jwtProvider;
-    private final ParticipantSessionService participantSessionService;
 
     @EventListener
     public void onConnect(SessionConnectEvent event) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = accessor.getSessionId();
-
         Long memberId = getMemberId(accessor);
-        Participant participant = null;
-        if (memberId != null) {
-            participant = participantSessionService.findParticipantByMemberId(memberId);
-        }
 
-        if (participant != null) {
-            log.info("Reconnected: SessionId = {}, MemberId = {}", sessionId, memberId);
-            webSocketSessionDisconnectHandler.handleReconnect(sessionId, memberId);
-        } else {
-            log.info("Connected: SessionId = {}, MemberId = {}", sessionId, memberId);
-        }
-
+        log.info("Connected: SessionId = {}, MemberId = {}", sessionId, memberId);
     }
 
     private Long getMemberId(StompHeaderAccessor accessor) {
@@ -57,9 +43,14 @@ public class WebSocketConnectListener {
 
     @EventListener
     public void onDisconnect(SessionDisconnectEvent event) {
-        String sessionId = event.getSessionId();
-        log.info("Disconnect: SessionId = {}", sessionId);
-        webSocketSessionDisconnectHandler.handleDisconnect(sessionId);
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+        String sessionId = accessor.getSessionId();
+        Long memberId = null;
+        if (Objects.requireNonNull(accessor.getSessionAttributes()).containsKey("member_id")) {
+            memberId = Long.parseLong(accessor.getSessionAttributes().get("member_id").toString());
+        }
+
+        log.info("Disconnect: SessionId = {}, MemberId = {}", sessionId, memberId);
     }
 }
 
