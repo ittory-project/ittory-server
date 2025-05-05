@@ -2,7 +2,6 @@ package com.ittory.socket.controller;
 
 import com.ittory.common.annotation.CurrentMemberId;
 import com.ittory.socket.dto.DeleteResponse;
-import com.ittory.socket.dto.EndResponse;
 import com.ittory.socket.dto.StartResponse;
 import com.ittory.socket.service.LetterActionService;
 import com.ittory.socket.service.LetterProcessService;
@@ -26,14 +25,6 @@ public class LetterProcessController {
     public void startMember(@DestinationVariable Long letterId) {
         log.info("Start letter {}", letterId);
         StartResponse response = letterProcessService.startLetter(letterId);
-        String destination = "/topic/letter/" + letterId;
-        messagingTemplate.convertAndSend(destination, response);
-    }
-
-    @MessageMapping("/letter/end/{letterId}")
-    public void endMember(@DestinationVariable Long letterId) {
-        log.info("End letter {}", letterId);
-        EndResponse response = letterProcessService.endLetter(letterId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
     }

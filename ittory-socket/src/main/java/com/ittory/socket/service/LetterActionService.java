@@ -3,12 +3,14 @@ package com.ittory.socket.service;
 import com.ittory.domain.letter.domain.Element;
 import com.ittory.domain.letter.dto.ElementEditData;
 import com.ittory.domain.letter.service.ElementDomainService;
+import com.ittory.domain.letter.service.LetterDomainService;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.enums.ParticipantStatus;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.dto.*;
 import com.ittory.socket.utils.ElementWriteTimer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class LetterActionService {
 
     private final ParticipantDomainService participantDomainService;
     private final ElementDomainService elementDomainService;
+
     private final ElementWriteTimer elementWriteTimer;
 
     @Transactional
@@ -86,7 +89,9 @@ public class LetterActionService {
         LocalDateTime now = LocalDateTime.now();
         Element nextElement = prepareNextElement(letterId, currentElement, nextParticipant, now);
 
-        elementWriteTimer.registerWriteTimer(letterId, now);
+        if (nextElement != null) {
+            elementWriteTimer.registerWriteTimer(letterId, now);
+        }
 
         return SubmitResponse.of(currentElement, nextElement);
     }
@@ -105,8 +110,10 @@ public class LetterActionService {
 
     private Element prepareNextElement(Long letterId, Element currentElement, Participant nextParticipant, LocalDateTime now) {
         Element nextElement = elementDomainService.findNextElementByLetterIdAndSequence(letterId, currentElement.getSequence());
-        nextElement.changeStartTime(now);
-        nextElement.changeParticipant(nextParticipant);
+        if (nextElement != null) {
+            nextElement.changeStartTime(now);
+            nextElement.changeParticipant(nextParticipant);
+        }
         return nextElement;
     }
 
