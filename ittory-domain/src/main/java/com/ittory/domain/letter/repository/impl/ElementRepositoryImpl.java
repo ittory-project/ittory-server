@@ -14,6 +14,7 @@ import java.util.Optional;
 import static com.ittory.domain.letter.domain.QElement.element;
 import static com.ittory.domain.letter.domain.QElementImage.elementImage;
 import static com.ittory.domain.letter.domain.QLetter.letter;
+import static com.ittory.domain.member.domain.QMember.member;
 import static com.ittory.domain.participant.domain.QParticipant.participant;
 
 @RequiredArgsConstructor
@@ -42,6 +43,8 @@ public class ElementRepositoryImpl implements ElementRepositoryCustom {
     @Override
     public Optional<Element> findByLetterIdAndSequence(Long letterId, Integer sequence) {
         Element result = jpaQueryFactory.selectFrom(element)
+                .leftJoin(element.participant, participant).fetchJoin()
+                .leftJoin(participant.member, member).fetchJoin()
                 .where(element.letter.id.eq(letterId).and(element.sequence.eq(sequence)))
                 .fetchOne();
         return Optional.ofNullable(result);

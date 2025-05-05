@@ -21,9 +21,8 @@ public class ElementDomainService {
     private final ElementRepository elementRepository;
 
     @Transactional
-    public Element changeContent(Long letterId, Participant participant, ElementEditData editData) {
-        Element element = elementRepository.findByLetterIdAndSequence(letterId, editData.getSequence())
-                .orElseThrow(ElementNotFoundException::new);
+    public Element changeContent(Participant participant, ElementEditData editData) {
+        Element element = elementRepository.findById(editData.getElementId()).orElseThrow(ElementNotFoundException::new);
         element.changeParticipant(participant);
         element.changeContent(editData.getContent());
         return element;
@@ -59,8 +58,12 @@ public class ElementDomainService {
 
     public void updateStartTimeAndWriter(Long letterId, Integer sequence, Participant participant, LocalDateTime starTime) {
         Element element = elementRepository.findByLetterIdAndSequence(letterId, sequence).orElseThrow(ElementNotFoundException::new);
-        System.out.println("=======1234: " + participant.getId() + "  " + starTime);
         element.changeParticipant(participant);
         element.changeStartTime(starTime);
     }
+
+    public Element findNextElementByLetterIdAndSequence(Long letterId, Integer sequence) {
+        return elementRepository.findByLetterIdAndSequence(letterId, sequence + 1).orElse(null);
+    }
+
 }

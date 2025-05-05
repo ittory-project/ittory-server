@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity(name = "element")
 @Getter
 @Builder
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Element extends BaseEntity {

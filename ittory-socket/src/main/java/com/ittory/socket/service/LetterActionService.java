@@ -7,12 +7,12 @@ import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.enums.ParticipantStatus;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.dto.*;
-import com.ittory.socket.mapper.ElementConvertor;
 import com.ittory.socket.utils.ElementWriteTimer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +25,6 @@ public class LetterActionService {
 
     private final ParticipantDomainService participantDomainService;
     private final ElementDomainService elementDomainService;
-    private final ElementConvertor elementConvertor;
     private final ElementWriteTimer elementWriteTimer;
 
     @Transactional
@@ -70,14 +69,47 @@ public class LetterActionService {
         participantDomainService.reorderParticipantsAfterLeave(letterId, participant);
     }
 
+    /**
+     * = 편지 요소 작성 =
+     * 1. 작성 타이머 제거
+     * 2. 작성 내용 등록
+     * 3. 다음 참여자 계산
+     * 4. 다음 요소 설정
+     * 5. 작성 타이머 재설정
+     */
     @Transactional
-    public ElementResponse writeElement(Long memberId, Long letterId, ElementRequest request) {
+    public SubmitResponse writeElement(Long memberId, Long letterId, ElementRequest request) {
         elementWriteTimer.removeWriteTimer(letterId);
-        ElementEditData editData = elementConvertor.toElementEditData(request);
-        Participant participant = participantDomainService.findParticipant(letterId, memberId);
-        Element element = elementDomainService.changeContent(letterId, participant, editData);
-        return ElementResponse.of(participant, element);
+
+        Element currentElement = updateCurrentElement(memberId, letterId, request);
+        Participant nextParticipant = calculateNextParticipant(letterId, currentElement.getParticipant());
+        LocalDateTime now = LocalDateTime.now();
+        Element nextElement = prepareNextElement(letterId, currentElement, nextParticipant, now);
+
+        elementWriteTimer.registerWriteTimer(letterId, now);
+
+        return SubmitResponse.of(currentElement, nextElement);
     }
+
+    private Element updateCurrentElement(Long memberId, Long letterId, ElementRequest request) {
+        ElementEditData editData = ElementEditData.of(request.getElementId(), request.getContent());
+        Participant participant = participantDomainService.findParticipant(letterId, memberId);
+        return elementDomainService.changeContent(participant, editData);
+    }
+
+    private Participant calculateNextParticipant(Long letterId, Participant currentParticipant) {
+        int totalParticipants = participantDomainService.findAllParticipants(letterId).size();
+        int nextSequence = (currentParticipant.getSequence() % totalParticipants) + 1;
+        return participantDomainService.findParticipantBySequence(letterId, nextSequence);
+    }
+
+    private Element prepareNextElement(Long letterId, Element currentElement, Participant nextParticipant, LocalDateTime now) {
+        Element nextElement = elementDomainService.findNextElementByLetterIdAndSequence(letterId, currentElement.getSequence());
+        nextElement.changeStartTime(now);
+        nextElement.changeParticipant(nextParticipant);
+        return nextElement;
+    }
+
 
     public DeleteResponse deleteLetter(Long memberId, Long letterId) {
         Participant manager = participantDomainService.findManagerByLetterId(letterId);
