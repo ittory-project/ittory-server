@@ -2,8 +2,10 @@ package com.ittory.socket.controller;
 
 import com.ittory.common.annotation.CurrentMemberId;
 import com.ittory.socket.dto.ElementRequest;
+import com.ittory.socket.dto.FinishResponse;
 import com.ittory.socket.dto.SubmitResponse;
 import com.ittory.socket.service.LetterActionService;
+import com.ittory.socket.service.LetterProcessService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -19,6 +21,7 @@ public class LetterWriteController {
     private final SimpMessagingTemplate messagingTemplate;
 
     private final LetterActionService letterActionService;
+    private final LetterProcessService letterProcessService;
 
     @MessageMapping("/letter/{letterId}/elements")
     public void sendElement(@CurrentMemberId Long memberId, @DestinationVariable Long letterId,
@@ -27,6 +30,12 @@ public class LetterWriteController {
         String destination = "/topic/letter/" + letterId;
         SubmitResponse response = letterActionService.writeElement(memberId, letterId, request);
         messagingTemplate.convertAndSend(destination, response);
+
+        if (response.getUpcomingElement() == null) {
+            letterProcessService.finishLetter(letterId);
+            String finishDestination = "/topic/letter/" + letterId;
+            messagingTemplate.convertAndSend(finishDestination, FinishResponse.from());
+        }
     }
 
 

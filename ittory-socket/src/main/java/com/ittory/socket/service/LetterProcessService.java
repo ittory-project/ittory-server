@@ -1,11 +1,13 @@
 package com.ittory.socket.service;
 
+import com.ittory.domain.letter.domain.Letter;
 import com.ittory.domain.letter.enums.LetterStatus;
 import com.ittory.domain.letter.service.ElementDomainService;
 import com.ittory.domain.letter.service.LetterDomainService;
+import com.ittory.domain.member.service.LetterBoxDomainService;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.service.ParticipantDomainService;
-import com.ittory.socket.dto.EndResponse;
+import com.ittory.socket.dto.FinishResponse;
 import com.ittory.socket.dto.StartResponse;
 import com.ittory.socket.utils.ElementWriteTimer;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -22,6 +25,7 @@ public class LetterProcessService {
     private final ParticipantDomainService participantDomainService;
     private final LetterDomainService letterDomainService;
     private final ElementDomainService elementDomainService;
+    private final LetterBoxDomainService letterBoxDomainService;
 
     private final ElementWriteTimer elementWriteTimer;
 
@@ -42,9 +46,14 @@ public class LetterProcessService {
         return StartResponse.from(letterId);
     }
 
-    public EndResponse endLetter(Long letterId) {
+    public void finishLetter(Long letterId) {
+        // 종료 상태로 변경
         participantDomainService.updateAllStatusToEnd(letterId);
         letterDomainService.updateLetterStatus(letterId, LetterStatus.COMPLETED);
-        return EndResponse.from(letterId);
+
+        // 참여자들의 편지함에 편지 저장
+        Letter letter = letterDomainService.findLetter(letterId);
+        List<Participant> participants = participantDomainService.findAllParticipants(letterId);
+        letterBoxDomainService.saveAllInParticipationLetterBox(participants, letter);
     }
 }
