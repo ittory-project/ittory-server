@@ -48,7 +48,11 @@ public class LetterActionService {
         Participant nowParticipant = participantDomainService.findParticipant(letterId, memberId);
         changeParticipantOrder(letterId, nowParticipant);
         changeParticipantStatus(nowParticipant);
-        return ExitResponse.from(nowParticipant, Objects.equals(manager.getId(), nowParticipant.getId()));
+
+        List<ParticipantProfile> nowParticipants = participantDomainService.findAllCurrentParticipantsOrderedBySequence(letterId, true).stream()
+                .map(ParticipantProfile::from)
+                .toList();
+        return ExitResponse.from(nowParticipant, Objects.equals(manager.getId(), nowParticipant.getId()), nowParticipants);
     }
 
     private void changeParticipantStatus(Participant participant) {

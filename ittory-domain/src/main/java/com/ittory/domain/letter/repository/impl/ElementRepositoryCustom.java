@@ -1,6 +1,7 @@
 package com.ittory.domain.letter.repository.impl;
 
 import com.ittory.domain.letter.domain.Element;
+import com.ittory.domain.participant.domain.Participant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,4 +16,6 @@ public interface ElementRepositoryCustom {
     Element findByLetterIdAndSequenceWithImage(Long elementId, Integer sequence);
 
     List<Element> findAllByLetterId(Long letterId);
+
+    Integer countNotNullByParticipant(Participant participant);
 }
