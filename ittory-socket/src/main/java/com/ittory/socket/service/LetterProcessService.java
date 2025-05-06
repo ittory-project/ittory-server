@@ -7,7 +7,6 @@ import com.ittory.domain.letter.service.LetterDomainService;
 import com.ittory.domain.member.service.LetterBoxDomainService;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.service.ParticipantDomainService;
-import com.ittory.socket.dto.FinishResponse;
 import com.ittory.socket.dto.StartResponse;
 import com.ittory.socket.utils.ElementWriteTimer;
 import lombok.RequiredArgsConstructor;

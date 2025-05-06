@@ -1,9 +1,9 @@
 package com.ittory.socket.dto;
 
-import com.ittory.socket.enums.ProcessAction;
+import com.ittory.socket.enums.ActionType;
 import lombok.*;
 
-import static com.ittory.socket.enums.ProcessAction.DELETE;
+import static com.ittory.socket.enums.ActionType.DELETE;
 
 @Getter
 @Builder
@@ -12,7 +12,7 @@ import static com.ittory.socket.enums.ProcessAction.DELETE;
 public class DeleteResponse {
 
     private Long letterId;
-    private ProcessAction action;
+    private ActionType action;
 
     public static DeleteResponse from(Long letterId) {
         return DeleteResponse.builder()

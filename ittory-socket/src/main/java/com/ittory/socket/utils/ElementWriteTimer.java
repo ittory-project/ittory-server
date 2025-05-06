@@ -1,5 +1,7 @@
 package com.ittory.socket.utils;
 
+import com.ittory.socket.dto.SimpleResponse;
+import com.ittory.socket.enums.ActionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,10 +32,11 @@ public class ElementWriteTimer {
         ScheduledFuture<?> timeoutTask = SCHEDULER.schedule(() -> {
             messagingTemplate.convertAndSend(
                     "/topic/letter/" + letterId,
-                    "TIMEOUT"
+                    SimpleResponse.from(ActionType.TIMEOUT)
             );
             TIMEOUT_TASKS.remove(letterId);
             log.info("Letter {} TIMEOUT", letterId);
+
         }, delayMillis, TimeUnit.MILLISECONDS);
 
         // 3. 타이머 등록

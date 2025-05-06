@@ -2,8 +2,9 @@ package com.ittory.socket.controller;
 
 import com.ittory.common.annotation.CurrentMemberId;
 import com.ittory.socket.dto.ElementRequest;
-import com.ittory.socket.dto.FinishResponse;
+import com.ittory.socket.dto.SimpleResponse;
 import com.ittory.socket.dto.SubmitResponse;
+import com.ittory.socket.enums.ActionType;
 import com.ittory.socket.service.LetterActionService;
 import com.ittory.socket.service.LetterProcessService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class LetterWriteController {
         if (response.getUpcomingElement() == null) {
             letterProcessService.finishLetter(letterId);
             String finishDestination = "/topic/letter/" + letterId;
-            messagingTemplate.convertAndSend(finishDestination, FinishResponse.from());
+            messagingTemplate.convertAndSend(finishDestination, SimpleResponse.from(ActionType.FINISH));
         }
     }
 
