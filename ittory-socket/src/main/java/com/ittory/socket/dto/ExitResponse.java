@@ -4,6 +4,8 @@ import com.ittory.domain.participant.domain.Participant;
 import com.ittory.socket.enums.ConnectAction;
 import lombok.*;
 
+import java.util.List;
+
 import static com.ittory.socket.enums.ConnectAction.EXIT;
 
 @Getter
@@ -12,17 +14,17 @@ import static com.ittory.socket.enums.ConnectAction.EXIT;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExitResponse {
 
-    private Long participantId;
-    private String nickname;
-    private ConnectAction action;
+    private ConnectAction actionType;
+    private Long exitMemberId;
     private Boolean isManager;
+    private List<ParticipantProfile> nowParticipants;
 
-    public static ExitResponse from(Participant participant, Boolean isManager) {
+    public static ExitResponse from(Participant participant, Boolean isManager, List<ParticipantProfile> nowParticipants) {
         return ExitResponse.builder()
-                .participantId(participant.getId())
-                .nickname(participant.getNickname())
-                .action(EXIT)
+                .actionType(EXIT)
+                .exitMemberId(participant.getMember().getId())
                 .isManager(isManager)
+                .nowParticipants(nowParticipants)
                 .build();
     }
 

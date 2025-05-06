@@ -30,7 +30,7 @@ public class ElementDomainService {
 
     @Transactional(readOnly = true)
     public Integer countByParticipant(Participant participant) {
-        return elementRepository.countByParticipant(participant);
+        return elementRepository.countNotNullByParticipant(participant);
     }
 
     @Transactional(readOnly = true)

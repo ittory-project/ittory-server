@@ -1,6 +1,7 @@
 package com.ittory.domain.letter.repository.impl;
 
 import com.ittory.domain.letter.domain.Element;
+import com.ittory.domain.participant.domain.Participant;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -66,5 +67,13 @@ public class ElementRepositoryImpl implements ElementRepositoryCustom {
                 .leftJoin(element.elementImage, elementImage).fetchJoin()
                 .where(element.letter.id.eq(letterId))
                 .fetch();
+    }
+
+    @Override
+    public Integer countNotNullByParticipant(Participant participant) {
+        return jpaQueryFactory.selectFrom(element)
+                .where(element.participant.eq(participant)
+                        .and(element.content.isNotNull())
+                ).fetch().size();
     }
 }
