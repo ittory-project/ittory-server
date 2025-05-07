@@ -14,7 +14,7 @@ import static com.ittory.socket.enums.ActionType.ENTER;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class EnterResponse {
 
-    private Long participantId;
+    private Long memberId;
     private String nickname;
     private String imageUrl;
     private ActionType action;
@@ -22,7 +22,7 @@ public class EnterResponse {
 
     public static EnterResponse from(Participant participant, List<ParticipantProfile> participants) {
         return EnterResponse.builder()
-                .participantId(participant.getId())
+                .memberId(participant.getMember().getId())
                 .nickname(participant.getNickname())
                 .imageUrl(participant.getMember().getProfileImage())
                 .participants(participants)

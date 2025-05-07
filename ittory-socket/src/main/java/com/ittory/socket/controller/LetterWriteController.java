@@ -3,7 +3,7 @@ package com.ittory.socket.controller;
 import com.ittory.common.annotation.CurrentMemberId;
 import com.ittory.socket.dto.ElementRequest;
 import com.ittory.socket.dto.SimpleResponse;
-import com.ittory.socket.dto.SubmitResponse;
+import com.ittory.socket.dto.WriteResponse;
 import com.ittory.socket.enums.ActionType;
 import com.ittory.socket.service.LetterProcessService;
 import com.ittory.socket.service.LetterWriteService;
@@ -24,12 +24,12 @@ public class LetterWriteController {
     private final LetterWriteService letterWriteService;
     private final LetterProcessService letterProcessService;
 
-    @MessageMapping("/letter/{letterId}/elements")
-    public void sendElement(@CurrentMemberId Long memberId, @DestinationVariable Long letterId,
-                            ElementRequest request) {
+    @MessageMapping("/letter/element/write/{letterId}")
+    public void writeElement(@CurrentMemberId Long memberId, @DestinationVariable Long letterId,
+                             ElementRequest request) {
         log.info("Write member {}, in letter {} => {}", memberId, letterId, request.getContent());
         String destination = "/topic/letter/" + letterId;
-        SubmitResponse response = letterWriteService.writeElement(memberId, letterId, request);
+        WriteResponse response = letterWriteService.writeElement(memberId, letterId, request);
         messagingTemplate.convertAndSend(destination, response);
 
         if (response.getUpcomingElement() == null) {

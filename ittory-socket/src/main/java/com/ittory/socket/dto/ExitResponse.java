@@ -17,14 +17,12 @@ public class ExitResponse {
     private ActionType actionType;
     private Long exitMemberId;
     private Boolean isManager;
-    private List<ParticipantProfile> nowParticipants;
 
-    public static ExitResponse from(Participant participant, Boolean isManager, List<ParticipantProfile> nowParticipants) {
+    public static ExitResponse from(Participant participant, Boolean isManager) {
         return ExitResponse.builder()
                 .actionType(EXIT)
                 .exitMemberId(participant.getMember().getId())
                 .isManager(isManager)
-                .nowParticipants(nowParticipants)
                 .build();
     }
 

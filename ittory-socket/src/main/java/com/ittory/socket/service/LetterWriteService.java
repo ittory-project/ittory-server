@@ -6,7 +6,7 @@ import com.ittory.domain.letter.service.ElementDomainService;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.dto.ElementRequest;
-import com.ittory.socket.dto.SubmitResponse;
+import com.ittory.socket.dto.WriteResponse;
 import com.ittory.socket.utils.WriteTimeManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class LetterWriteService {
      * 5. 작성 타이머 재설정
      */
     @Transactional
-    public SubmitResponse writeElement(Long memberId, Long letterId, ElementRequest request) {
+    public WriteResponse writeElement(Long memberId, Long letterId, ElementRequest request) {
         writeTimeManager.removeWriteTimer(letterId);
 
         Element currentElement = updateCurrentElement(memberId, letterId, request);
@@ -45,7 +45,7 @@ public class LetterWriteService {
             writeTimeManager.registerWriteTimer(letterId, now, nextParticipant);
         }
 
-        return SubmitResponse.of(currentElement, nextElement);
+        return WriteResponse.of(currentElement, nextElement);
     }
 
     private Element updateCurrentElement(Long memberId, Long letterId, ElementRequest request) {
