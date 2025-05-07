@@ -61,7 +61,7 @@ public class WebSocketExceptionAdvice {
             webHookMessage = webHookMessage.substring(0, 1999);
         }
 
-//        webHookService.sendErrorLog(webHookMessage);
+        webHookService.sendErrorLog(webHookMessage);
     }
 
     @MessageExceptionHandler(RuntimeException.class)
@@ -98,7 +98,7 @@ public class WebSocketExceptionAdvice {
             webHookMessage = webHookMessage.substring(0, 1999);
         }
 
-//        webHookService.sendErrorLog(webHookMessage);
+        webHookService.sendErrorLog(webHookMessage);
     }
 
 }
