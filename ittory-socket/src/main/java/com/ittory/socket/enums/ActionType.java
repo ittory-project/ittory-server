@@ -6,7 +6,7 @@ public enum ActionType {
     START,
     FINISH,
     DELETE,
-    SUBMIT,
+    WRITE,
     TIMEOUT
 
 }

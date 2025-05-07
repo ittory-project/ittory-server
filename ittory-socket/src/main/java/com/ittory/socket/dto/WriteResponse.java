@@ -10,16 +10,16 @@ import static com.ittory.socket.enums.ActionType.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class SubmitResponse {
+public class WriteResponse {
 
     private ActionType actionType;
     private ElementResponse completedElement;
     private ElementResponse upcomingElement;
 
 
-    public static SubmitResponse of(Element completedElement, Element upcomingElement) {
-        return SubmitResponse.builder()
-                .actionType(SUBMIT)
+    public static WriteResponse of(Element completedElement, Element upcomingElement) {
+        return WriteResponse.builder()
+                .actionType(WRITE)
                 .completedElement(ElementResponse.of(completedElement))
                 .upcomingElement(upcomingElement != null ? ElementResponse.of(upcomingElement) : null)
                 .build();
