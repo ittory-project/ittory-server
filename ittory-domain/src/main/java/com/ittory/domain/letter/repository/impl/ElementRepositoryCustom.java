@@ -18,4 +18,6 @@ public interface ElementRepositoryCustom {
     List<Element> findAllByLetterId(Long letterId);
 
     Integer countNotNullByParticipant(Participant participant);
+
+    Optional<Element> findNextElement(Long letterId);
 }

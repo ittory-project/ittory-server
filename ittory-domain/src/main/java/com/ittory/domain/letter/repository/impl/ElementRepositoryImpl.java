@@ -76,4 +76,17 @@ public class ElementRepositoryImpl implements ElementRepositoryCustom {
                         .and(element.content.isNotNull())
                 ).fetch().size();
     }
+
+    @Override
+    public Optional<Element> findNextElement(Long letterId) {
+        Element content = jpaQueryFactory.selectFrom(element)
+                .where(element.participant.isNotNull()
+                        .and(element.startTime.isNotNull())
+                        .and(element.content.isNotNull())
+                )
+                .limit(1)
+                .fetchOne();
+
+        return Optional.ofNullable(content);
+    }
 }

@@ -20,7 +20,7 @@ import java.util.concurrent.*;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class ElementWriteTimer {
+public class WriteTimeManager {
 
     private final LetterActionService letterActionService;
     private final ParticipantService participantService;
@@ -30,44 +30,53 @@ public class ElementWriteTimer {
     private final Map<Long, ScheduledFuture<?>> TIMEOUT_TASKS = new ConcurrentHashMap<>();
     private final SimpMessagingTemplate messagingTemplate;
 
-    private static final Integer WRITE_TIME = 5;
+    private static final Integer WRITE_TIME = 100;
 
     public void registerWriteTimer(Long letterId, LocalDateTime startTime, Participant participant) {
         // 1. TIME OUT 시간 결정
         Duration delay = Duration.between(LocalDateTime.now(), startTime.plusSeconds(WRITE_TIME));
         long delayMillis = Math.max(delay.toMillis(), 0);
 
-        // 2. 타이머 생성
+        // 2. Task 생성
         ScheduledFuture<?> timeoutTask = SCHEDULER.schedule(() -> {
-            // TimeOut 보내기
-            String destination = "/topic/letter/" + letterId;
-            SimpleResponse message = SimpleResponse.from(ActionType.TIMEOUT);
-            messagingTemplate.convertAndSend(destination, message);
+            sendTimeoutMessage(letterId);
             TIMEOUT_TASKS.remove(letterId);
             log.info("Letter {} TIMEOUT", letterId);
 
-            // TimeOut Count 계산
-            participantService.changeTimeoutCount(participant, participant.getTimeoutCount()+1);
-            if (participant.getTimeoutCount() >= 2) {
-                Long memberId = participant.getMember().getId();
-                letterActionService.exitFromLetter(memberId, letterId);
-                log.info("Member {} TIMEOUT Exit from Letter {}", memberId, letterId);
-            }
-
-            // NextTimer 설정
-            Participant nextParticipant = participantService.findNextParticipant(letterId, participant);
-            if (nextParticipant != null) {
-                registerWriteTimer(letterId, LocalDateTime.now(), nextParticipant);
-            } else {
-                letterDomainService.updateLetterStatus(letterId, LetterStatus.COMPLETED);
-            }
+            handleParticipantTimeout(letterId, participant);
+            proceedToNextParticipant(letterId, participant);
 
         }, delayMillis, TimeUnit.MILLISECONDS);
 
-        // 3. 타이머 등록
+        // 3. Task 등록
         TIMEOUT_TASKS.put(letterId, timeoutTask);
 
         log.warn("WriteTimer Size = {}", TIMEOUT_TASKS.size());
+    }
+
+    private void sendTimeoutMessage(Long letterId) {
+        String destination = "/topic/letter/" + letterId;
+        SimpleResponse message = SimpleResponse.from(ActionType.TIMEOUT);
+        messagingTemplate.convertAndSend(destination, message);
+    }
+
+    private void handleParticipantTimeout(Long letterId, Participant participant) {
+        participantService.changeTimeoutCount(participant, participant.getTimeoutCount()+1);
+        if (participant.getTimeoutCount() >= 2) {
+            Long memberId = participant.getMember().getId();
+            letterActionService.exitFromLetter(memberId, letterId);
+            log.info("Member {} TIMEOUT Exit from Letter {}", memberId, letterId);
+        }
+    }
+
+    private void proceedToNextParticipant(Long letterId, Participant participant) {
+        Participant nextParticipant = participantService.findNextParticipant(letterId, participant);
+        if (nextParticipant != null) {
+            registerWriteTimer(letterId, LocalDateTime.now(), nextParticipant);
+        } else {
+            letterDomainService.updateLetterStatus(letterId, LetterStatus.COMPLETED);
+            log.info("Finish Letter {} with No Participant", letterId);
+        }
     }
 
     public void removeWriteTimer(Long letterId) {

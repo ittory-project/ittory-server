@@ -8,7 +8,7 @@ import com.ittory.domain.member.service.LetterBoxDomainService;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.domain.participant.service.ParticipantDomainService;
 import com.ittory.socket.dto.StartResponse;
-import com.ittory.socket.utils.ElementWriteTimer;
+import com.ittory.socket.utils.WriteTimeManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ public class LetterProcessService {
     private final ElementDomainService elementDomainService;
     private final LetterBoxDomainService letterBoxDomainService;
 
-    private final ElementWriteTimer elementWriteTimer;
+    private final WriteTimeManager writeTimeManager;
 
     @Transactional
     public StartResponse startLetter(Long letterId) {
@@ -40,14 +40,14 @@ public class LetterProcessService {
         elementDomainService.updateStartTimeAndWriter(letterId, 1, participant, now);
 
         // 타이머 설정
-        elementWriteTimer.registerWriteTimer(letterId, now, participant);
+        writeTimeManager.registerWriteTimer(letterId, now, participant);
 
         return StartResponse.from(letterId);
     }
 
     public void finishLetter(Long letterId) {
         // 타이머 제거
-        elementWriteTimer.removeWriteTimer(letterId);
+        writeTimeManager.removeWriteTimer(letterId);
 
         // 관련된 데이터의 상제 변경
         participantDomainService.updateAllStatusToEnd(letterId);
