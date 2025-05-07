@@ -31,6 +31,7 @@ public class WriteTimeManager {
     private final SimpMessagingTemplate messagingTemplate;
 
     private static final Integer WRITE_TIME = 100;
+    private static final Integer TIMEOUT_EJECTION_COUNT = 2;
 
     public void registerWriteTimer(Long letterId, LocalDateTime startTime, Participant participant) {
         // 1. TIME OUT 시간 결정
@@ -62,7 +63,7 @@ public class WriteTimeManager {
 
     private void handleParticipantTimeout(Long letterId, Participant participant) {
         participantService.changeTimeoutCount(participant, participant.getTimeoutCount()+1);
-        if (participant.getTimeoutCount() >= 2) {
+        if (participant.getTimeoutCount() >= TIMEOUT_EJECTION_COUNT) {
             Long memberId = participant.getMember().getId();
             letterActionService.exitFromLetter(memberId, letterId);
             log.info("Member {} TIMEOUT Exit from Letter {}", memberId, letterId);
