@@ -5,8 +5,8 @@ import com.ittory.socket.dto.ElementRequest;
 import com.ittory.socket.dto.SimpleResponse;
 import com.ittory.socket.dto.SubmitResponse;
 import com.ittory.socket.enums.ActionType;
-import com.ittory.socket.service.LetterActionService;
 import com.ittory.socket.service.LetterProcessService;
+import com.ittory.socket.service.LetterWriteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,7 +21,7 @@ public class LetterWriteController {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    private final LetterActionService letterActionService;
+    private final LetterWriteService letterWriteService;
     private final LetterProcessService letterProcessService;
 
     @MessageMapping("/letter/{letterId}/elements")
@@ -29,7 +29,7 @@ public class LetterWriteController {
                             ElementRequest request) {
         log.info("Write member {}, in letter {} => {}", memberId, letterId, request.getContent());
         String destination = "/topic/letter/" + letterId;
-        SubmitResponse response = letterActionService.writeElement(memberId, letterId, request);
+        SubmitResponse response = letterWriteService.writeElement(memberId, letterId, request);
         messagingTemplate.convertAndSend(destination, response);
 
         if (response.getUpcomingElement() == null) {

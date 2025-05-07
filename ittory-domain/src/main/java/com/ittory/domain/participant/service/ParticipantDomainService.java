@@ -119,6 +119,10 @@ public class ParticipantDomainService {
     }
 
     public Participant findParticipantBySequence(Long letterId, Integer sequence) {
-        return participantRepository.findByLetterIdAndSequence(letterId, sequence);
+        return participantRepository.findByLetterIdAndSequence(letterId, sequence).orElse(null);
+    }
+
+    public List<Participant> findAllNowParticipants(Long letterId) {
+        return participantRepository.findAllProgressParticipantsWithMember(letterId);
     }
 }

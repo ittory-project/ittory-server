@@ -33,7 +33,7 @@ public class LetterConnectController {
     public void exitMember(@CurrentMemberId Long memberId, @DestinationVariable Long letterId, SimpMessageHeaderAccessor headerAccessor) {
         String sessionId = headerAccessor.getSessionId();
         log.info("member {}, exit from letter {} with SessionId: {}", memberId, letterId, sessionId);
-        ExitResponse response = letterActionService.exitFromLetter(memberId, letterId, sessionId);
+        ExitResponse response = letterActionService.exitFromLetter(memberId, letterId);
         String destination = "/topic/letter/" + letterId;
         messagingTemplate.convertAndSend(destination, response);
     }

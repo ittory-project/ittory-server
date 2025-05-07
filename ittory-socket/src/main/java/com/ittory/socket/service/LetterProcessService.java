@@ -40,13 +40,16 @@ public class LetterProcessService {
         elementDomainService.updateStartTimeAndWriter(letterId, 1, participant, now);
 
         // 타이머 설정
-        elementWriteTimer.registerWriteTimer(letterId, now);
+        elementWriteTimer.registerWriteTimer(letterId, now, participant);
 
         return StartResponse.from(letterId);
     }
 
     public void finishLetter(Long letterId) {
-        // 종료 상태로 변경
+        // 타이머 제거
+        elementWriteTimer.removeWriteTimer(letterId);
+
+        // 관련된 데이터의 상제 변경
         participantDomainService.updateAllStatusToEnd(letterId);
         letterDomainService.updateLetterStatus(letterId, LetterStatus.COMPLETED);
 
