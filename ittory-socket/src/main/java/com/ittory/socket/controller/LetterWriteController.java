@@ -33,6 +33,7 @@ public class LetterWriteController {
         messagingTemplate.convertAndSend(destination, response);
 
         if (response.getUpcomingElement() == null) {
+            log.info("Finish Letter {}", letterId);
             letterProcessService.finishLetter(letterId);
             String finishDestination = "/topic/letter/" + letterId;
             messagingTemplate.convertAndSend(finishDestination, SimpleResponse.from(ActionType.FINISH));
