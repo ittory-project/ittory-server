@@ -24,9 +24,9 @@ public class LetterWriteController {
     private final LetterWriteService letterWriteService;
     private final LetterProcessService letterProcessService;
 
-    @MessageMapping("/letter/{letterId}/elements")
-    public void sendElement(@CurrentMemberId Long memberId, @DestinationVariable Long letterId,
-                            ElementRequest request) {
+    @MessageMapping("/letter/element/submit/{letterId}")
+    public void submitElement(@CurrentMemberId Long memberId, @DestinationVariable Long letterId,
+                              ElementRequest request) {
         log.info("Write member {}, in letter {} => {}", memberId, letterId, request.getContent());
         String destination = "/topic/letter/" + letterId;
         SubmitResponse response = letterWriteService.writeElement(memberId, letterId, request);
