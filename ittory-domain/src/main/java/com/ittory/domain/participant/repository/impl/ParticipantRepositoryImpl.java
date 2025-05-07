@@ -64,7 +64,7 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     public List<Participant> findAllParticipantsWithMember(Long letterId) {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.member, member).fetchJoin()
-                .where(participant.letter.id.eq(letterId))
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.ne(GUEST)))
                 .fetch();
     }
 
@@ -146,12 +146,22 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     }
 
     @Override
-    public Participant findByLetterIdAndSequence(Long letterId, Integer sequence) {
-        return jpaQueryFactory.selectFrom(participant)
+    public Optional<Participant> findByLetterIdAndSequence(Long letterId, Integer sequence) {
+        Participant content = jpaQueryFactory.selectFrom(participant)
                 .where(participant.letter.id.eq(letterId)
                         .and(participant.sequence.eq(sequence))
                 )
                 .limit(1)
                 .fetchOne();
+
+        return Optional.ofNullable(content);
+    }
+
+    @Override
+    public List<Participant> findAllProgressParticipantsWithMember(Long letterId) {
+        return jpaQueryFactory.selectFrom(participant)
+                .leftJoin(participant.member, member).fetchJoin()
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.eq(PROGRESS)))
+                .fetch();
     }
 }

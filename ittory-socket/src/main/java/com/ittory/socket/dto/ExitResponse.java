@@ -1,12 +1,12 @@
 package com.ittory.socket.dto;
 
 import com.ittory.domain.participant.domain.Participant;
-import com.ittory.socket.enums.ConnectAction;
+import com.ittory.socket.enums.ActionType;
 import lombok.*;
 
 import java.util.List;
 
-import static com.ittory.socket.enums.ConnectAction.EXIT;
+import static com.ittory.socket.enums.ActionType.EXIT;
 
 @Getter
 @Builder
@@ -14,7 +14,7 @@ import static com.ittory.socket.enums.ConnectAction.EXIT;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExitResponse {
 
-    private ConnectAction actionType;
+    private ActionType actionType;
     private Long exitMemberId;
     private Boolean isManager;
     private List<ParticipantProfile> nowParticipants;

@@ -62,8 +62,7 @@ public class ElementDomainService {
         element.changeStartTime(starTime);
     }
 
-    public Element findNextElementByLetterIdAndSequence(Long letterId, Integer sequence) {
-        return elementRepository.findByLetterIdAndSequence(letterId, sequence + 1).orElse(null);
+    public Element findNextElement(Long letterId) {
+        return elementRepository.findNextElement(letterId).orElse(null);
     }
-
 }

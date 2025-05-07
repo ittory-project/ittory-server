@@ -1,9 +1,9 @@
 package com.ittory.socket.dto;
 
-import com.ittory.socket.enums.ProcessAction;
+import com.ittory.socket.enums.ActionType;
 import lombok.*;
 
-import static com.ittory.socket.enums.ProcessAction.START;
+import static com.ittory.socket.enums.ActionType.START;
 
 @Getter
 @Builder
@@ -12,7 +12,7 @@ import static com.ittory.socket.enums.ProcessAction.START;
 public class StartResponse {
 
     private Long letterId;
-    private ProcessAction action;
+    private ActionType action;
 
     public static StartResponse from(Long letterId) {
         return StartResponse.builder()

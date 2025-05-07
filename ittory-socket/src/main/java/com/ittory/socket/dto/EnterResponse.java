@@ -1,12 +1,12 @@
 package com.ittory.socket.dto;
 
 import com.ittory.domain.participant.domain.Participant;
-import com.ittory.socket.enums.ConnectAction;
+import com.ittory.socket.enums.ActionType;
 import lombok.*;
 
 import java.util.List;
 
-import static com.ittory.socket.enums.ConnectAction.ENTER;
+import static com.ittory.socket.enums.ActionType.ENTER;
 
 @Getter
 @Builder
@@ -17,7 +17,7 @@ public class EnterResponse {
     private Long participantId;
     private String nickname;
     private String imageUrl;
-    private ConnectAction action;
+    private ActionType action;
     private List<ParticipantProfile> participants;
 
     public static EnterResponse from(Participant participant, List<ParticipantProfile> participants) {
