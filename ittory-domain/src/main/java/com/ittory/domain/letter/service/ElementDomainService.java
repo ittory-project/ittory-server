@@ -65,4 +65,9 @@ public class ElementDomainService {
     public Element findNextElement(Long letterId) {
         return elementRepository.findNextElement(letterId).orElse(null);
     }
+
+    @Transactional
+    public void changeProcessDataByLetterId(Long letterId, LocalDateTime nowTime, Participant nextParticipant) {
+        elementRepository.changeProcessDataByLetterId(letterId, nowTime, nextParticipant);
+    }
 }

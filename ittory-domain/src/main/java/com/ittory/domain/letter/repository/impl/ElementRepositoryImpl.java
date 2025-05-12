@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,13 +82,28 @@ public class ElementRepositoryImpl implements ElementRepositoryCustom {
     public Optional<Element> findNextElement(Long letterId) {
         Element content = jpaQueryFactory.selectFrom(element)
                 .where(element.letter.id.eq(letterId)
-                        .and(element.participant.isNotNull())
-                        .and(element.startTime.isNotNull())
+                        .and(element.participant.isNull())
+                        .and(element.startTime.isNull())
                         .and(element.content.isNull())
                 )
+                .orderBy(element.createdAt.asc())
                 .limit(1)
                 .fetchOne();
 
         return Optional.ofNullable(content);
+    }
+
+    @Override
+    public void changeProcessDataByLetterId(Long letterId, LocalDateTime nowTime, Participant nextParticipant) {
+        jpaQueryFactory.update(element)
+                .set(element.startTime, nowTime)
+                .set(element.participant, nextParticipant)
+                .where(element.letter.id.eq(letterId)
+                        .and(element.participant.isNotNull())
+                        .and(element.startTime.isNotNull())
+                        .and(element.content.isNull())
+                )
+                .
+                execute();
     }
 }

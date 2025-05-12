@@ -1,6 +1,7 @@
 package com.ittory.socket.utils;
 
 import com.ittory.domain.letter.enums.LetterStatus;
+import com.ittory.domain.letter.service.ElementDomainService;
 import com.ittory.domain.letter.service.LetterDomainService;
 import com.ittory.domain.participant.domain.Participant;
 import com.ittory.socket.dto.SimpleResponse;
@@ -25,6 +26,7 @@ public class WriteTimeManager {
     private final LetterActionService letterActionService;
     private final ParticipantService participantService;
     private final LetterDomainService letterDomainService;
+    private final ElementDomainService elementDomainService;
 
     private final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(10);
     private final Map<Long, ScheduledFuture<?>> TIMEOUT_TASKS = new ConcurrentHashMap<>();
@@ -73,7 +75,9 @@ public class WriteTimeManager {
     private void proceedToNextParticipant(Long letterId, Participant participant) {
         Participant nextParticipant = participantService.findNextParticipant(letterId, participant);
         if (nextParticipant != null) {
-            registerWriteTimer(letterId, LocalDateTime.now(), nextParticipant);
+            LocalDateTime nowTime = LocalDateTime.now();
+            elementDomainService.changeProcessDataByLetterId(letterId, nowTime, nextParticipant);
+            registerWriteTimer(letterId, nowTime, nextParticipant);
         } else {
             letterDomainService.updateLetterStatus(letterId, LetterStatus.COMPLETED);
             log.info("Finish Letter {} with No Participant", letterId);
