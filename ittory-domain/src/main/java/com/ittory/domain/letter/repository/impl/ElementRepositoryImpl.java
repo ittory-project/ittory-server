@@ -80,9 +80,10 @@ public class ElementRepositoryImpl implements ElementRepositoryCustom {
     @Override
     public Optional<Element> findNextElement(Long letterId) {
         Element content = jpaQueryFactory.selectFrom(element)
-                .where(element.participant.isNotNull()
+                .where(element.letter.id.eq(letterId)
+                        .and(element.participant.isNotNull())
                         .and(element.startTime.isNotNull())
-                        .and(element.content.isNotNull())
+                        .and(element.content.isNull())
                 )
                 .limit(1)
                 .fetchOne();
