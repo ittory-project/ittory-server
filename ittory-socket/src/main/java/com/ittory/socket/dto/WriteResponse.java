@@ -12,14 +12,14 @@ import static com.ittory.socket.enums.ActionType.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class WriteResponse {
 
-    private ActionType actionType;
+    private ActionType action;
     private ElementResponse completedElement;
     private ElementResponse upcomingElement;
 
 
     public static WriteResponse of(Element completedElement, Element upcomingElement) {
         return WriteResponse.builder()
-                .actionType(WRITE)
+                .action(WRITE)
                 .completedElement(ElementResponse.of(completedElement))
                 .upcomingElement(upcomingElement != null ? ElementResponse.of(upcomingElement) : null)
                 .build();
