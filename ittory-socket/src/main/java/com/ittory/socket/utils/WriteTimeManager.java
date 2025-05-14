@@ -4,6 +4,7 @@ import com.ittory.domain.letter.enums.LetterStatus;
 import com.ittory.domain.letter.service.ElementDomainService;
 import com.ittory.domain.letter.service.LetterDomainService;
 import com.ittory.domain.participant.domain.Participant;
+import com.ittory.socket.dto.ExitResponse;
 import com.ittory.socket.dto.SimpleResponse;
 import com.ittory.socket.enums.ActionType;
 import com.ittory.socket.service.LetterActionService;
@@ -66,9 +67,15 @@ public class WriteTimeManager {
     private void handleParticipantTimeout(Long letterId, Participant participant) {
         participantService.changeTimeoutCount(participant, participant.getTimeoutCount()+1);
         if (participant.getTimeoutCount() >= TIMEOUT_EJECTION_COUNT) {
+            // 퇴장 로직
             Long memberId = participant.getMember().getId();
             letterActionService.exitFromLetter(memberId, letterId);
             log.info("Member {} TIMEOUT Exit from Letter {}", memberId, letterId);
+
+            // 퇴장 메세지
+            String destination = "/topic/letter/" + letterId;
+            ExitResponse message = ExitResponse.from(participant, false);
+            messagingTemplate.convertAndSend(destination, message);
         }
     }
 
