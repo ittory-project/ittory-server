@@ -31,4 +31,9 @@ public class ParticipantService {
         return participantDomainService.findParticipantBySequence(letterId, nextSequence);
     }
 
+    @Transactional(readOnly = true)
+    public Participant findById(Long participantId) {
+        return participantDomainService.findById(participantId);
+    }
+
 }

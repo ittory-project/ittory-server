@@ -125,4 +125,8 @@ public class ParticipantDomainService {
     public List<Participant> findAllNowParticipants(Long letterId) {
         return participantRepository.findAllProgressParticipantsWithMember(letterId);
     }
+
+    public Participant findById(Long participantId) {
+        return participantRepository.findById(participantId).orElseThrow(() -> new ParticipantNotFoundException(participantId));
+    }
 }

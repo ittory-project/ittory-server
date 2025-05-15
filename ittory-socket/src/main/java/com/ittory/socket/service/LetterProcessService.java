@@ -40,7 +40,7 @@ public class LetterProcessService {
         elementDomainService.updateStartTimeAndWriter(letterId, 1, participant, now);
 
         // 타이머 설정
-        writeTimeManager.registerWriteTimer(letterId, now, participant);
+        writeTimeManager.registerWriteTimer(letterId, now, participant.getId());
 
         return StartResponse.from(letterId);
     }

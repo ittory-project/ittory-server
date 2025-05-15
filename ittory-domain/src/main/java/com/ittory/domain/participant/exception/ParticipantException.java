@@ -24,6 +24,14 @@ public class ParticipantException extends GlobalException {
                     new ErrorInfo<>(MEMBER_NOT_PARTICIPATION_ERROR.getCode(), MEMBER_NOT_PARTICIPATION_ERROR.getMessage(),
                             List.of(letterId, memberId)));
         }
+
+        public ParticipantNotFoundException(Long participantId) {
+
+            super(MEMBER_NOT_FOUND_ERROR.getStatus(),
+                    new ErrorInfo<>(MEMBER_NOT_PARTICIPATION_ERROR.getCode(), MEMBER_NOT_PARTICIPATION_ERROR.getMessage(),
+                            List.of(participantId)));
+        }
+
     }
 
     public static class DuplicateParticipantException extends ParticipantException {
