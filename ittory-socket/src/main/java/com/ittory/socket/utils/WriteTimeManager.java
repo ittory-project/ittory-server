@@ -56,7 +56,7 @@ public class WriteTimeManager {
         // 3. Task 등록
         TIMEOUT_TASKS.put(letterId, timeoutTask);
 
-        log.warn("WriteTimer Size = {}", TIMEOUT_TASKS.size());
+        log.info("Register WriteTimer Size = {}", TIMEOUT_TASKS.size());
     }
 
     private void sendTimeoutMessage(Long letterId) {
@@ -99,6 +99,6 @@ public class WriteTimeManager {
             log.info("Letter {}'s elements were written in time.", letterId);
         }
 
-        log.warn("WriteTimer Size = {}", TIMEOUT_TASKS.size());
+        log.info("Remove WriteTimer Size = {}", TIMEOUT_TASKS.size());
     }
 }
