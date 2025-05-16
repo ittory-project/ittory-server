@@ -98,7 +98,6 @@ public class ParticipantDomainService {
         return participantRepository.findManagerByLetterId(letterId);
     }
 
-    @Transactional
     public void updateAllStatusToStart(Long letterId) {
         participantRepository.updateAllStatusToStart(letterId);
     }
