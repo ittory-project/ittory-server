@@ -98,7 +98,6 @@ public class ParticipantDomainService {
         return participantRepository.findManagerByLetterId(letterId);
     }
 
-    @Transactional
     public void updateAllStatusToStart(Long letterId) {
         participantRepository.updateAllStatusToStart(letterId);
     }
@@ -116,5 +115,17 @@ public class ParticipantDomainService {
     @Transactional(readOnly = true)
     public Participant findParticipantOrNull(Long letterId, Long memberId) {
         return participantRepository.findByLetterIdAndMemberId(letterId, memberId).orElse(null);
+    }
+
+    public Participant findParticipantBySequence(Long letterId, Integer sequence) {
+        return participantRepository.findByLetterIdAndSequence(letterId, sequence).orElse(null);
+    }
+
+    public List<Participant> findAllNowParticipants(Long letterId) {
+        return participantRepository.findAllProgressParticipantsWithMember(letterId);
+    }
+
+    public Participant findById(Long participantId) {
+        return participantRepository.findById(participantId).orElseThrow(() -> new ParticipantNotFoundException(participantId));
     }
 }

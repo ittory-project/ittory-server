@@ -33,6 +33,8 @@ public class Participant extends BaseEntity {
 
     private Integer sequence;
 
+    private Integer timeoutCount;
+
     @Enumerated(EnumType.STRING)
     private ParticipantStatus participantStatus;
 
@@ -40,6 +42,7 @@ public class Participant extends BaseEntity {
         return Participant.builder()
                 .member(member)
                 .letter(letter)
+                .timeoutCount(0)
                 .participantStatus(GHOST)
                 .build();
     }
@@ -54,6 +57,9 @@ public class Participant extends BaseEntity {
 
     public void changeNickname(String nickname) {
         this.nickname = nickname;
+    }
+    public void changeTimeoutCount(Integer timeoutCount) {
+        this.timeoutCount = timeoutCount;
     }
 
 }

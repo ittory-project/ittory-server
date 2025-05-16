@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthMemberIdArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final MemberDomainService memberDomainService;
-
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(CurrentMemberId.class) &&
@@ -28,8 +26,7 @@ public class AuthMemberIdArgumentResolver implements HandlerMethodArgumentResolv
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.wrap(message);
         Long memberId = Long.parseLong((String) headerAccessor.getSessionAttributes().get("member_id"));
         if (memberId == null) {
-            System.out.println("error");
-//            throw new WebSocketMessageSendingException("No member_id found in session attributes");
+            log.error("No member_id found in session attributes");
         }
 
         return memberId;

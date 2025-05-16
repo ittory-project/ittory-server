@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,9 +21,8 @@ public class ElementDomainService {
     private final ElementRepository elementRepository;
 
     @Transactional
-    public Element changeContent(Long letterId, Participant participant, ElementEditData editData) {
-        Element element = elementRepository.findByLetterIdAndSequence(letterId, editData.getSequence())
-                .orElseThrow(ElementNotFoundException::new);
+    public Element changeContent(Participant participant, ElementEditData editData) {
+        Element element = elementRepository.findById(editData.getElementId()).orElseThrow(ElementNotFoundException::new);
         element.changeParticipant(participant);
         element.changeContent(editData.getContent());
         return element;
@@ -30,7 +30,7 @@ public class ElementDomainService {
 
     @Transactional(readOnly = true)
     public Integer countByParticipant(Participant participant) {
-        return elementRepository.countByParticipant(participant);
+        return elementRepository.countNotNullByParticipant(participant);
     }
 
     @Transactional(readOnly = true)
@@ -54,5 +54,20 @@ public class ElementDomainService {
 
     public List<Element> findAllByLetterId(Long letterId) {
         return elementRepository.findAllByLetterId(letterId);
+    }
+
+    public void updateStartTimeAndWriter(Long letterId, Integer sequence, Participant participant, LocalDateTime starTime) {
+        Element element = elementRepository.findByLetterIdAndSequence(letterId, sequence).orElseThrow(ElementNotFoundException::new);
+        element.changeParticipant(participant);
+        element.changeStartTime(starTime);
+    }
+
+    public Element findNextElement(Long letterId) {
+        return elementRepository.findNextElement(letterId).orElse(null);
+    }
+
+    @Transactional
+    public void changeProcessDataByLetterId(Long letterId, LocalDateTime nowTime, Participant nextParticipant) {
+        elementRepository.changeProcessDataByLetterId(letterId, nowTime, nextParticipant);
     }
 }

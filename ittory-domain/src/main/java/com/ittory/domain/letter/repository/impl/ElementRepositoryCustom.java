@@ -1,9 +1,11 @@
 package com.ittory.domain.letter.repository.impl;
 
 import com.ittory.domain.letter.domain.Element;
+import com.ittory.domain.participant.domain.Participant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +17,10 @@ public interface ElementRepositoryCustom {
     Element findByLetterIdAndSequenceWithImage(Long elementId, Integer sequence);
 
     List<Element> findAllByLetterId(Long letterId);
+
+    Integer countNotNullByParticipant(Participant participant);
+
+    Optional<Element> findNextElement(Long letterId);
+
+    void changeProcessDataByLetterId(Long letterId, LocalDateTime nowTime, Participant nextParticipant);
 }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 @Slf4j
@@ -36,21 +38,30 @@ public class WebSocketExceptionAdvice {
         }
         Object memberId = accessor.getSessionAttributes().get("member_id");
 
+        List<StackTraceElement> stackTrace = Arrays.stream(exception.getStackTrace())
+                .filter(stackTraceElement -> stackTraceElement.toString().contains("com.ittory."))
+                .collect(Collectors.toList());
+
         StringBuilder sb = new StringBuilder();
-        StringBuilder webHookMessage = sb.append("======= Socket Error =======").append("\n")
+        String webHookMessage = sb.append("======= Socket Error =======").append("\n")
                 .append(exception.getClass().getName())
                 .append(" : ")
                 .append(exception.getErrorInfo().getCode())
                 .append(" -> ")
                 .append(exception.getMessage()).append("\n\n")
-                .append("== Stack Trace ==").append("\n")
-                .append(Arrays.toString(exception.getStackTrace()), 0, 1500).append("\n\n")
                 .append("== Request Trace ==").append("\n")
                 .append("Destination: ").append(destination).append("\n")
                 .append("Message Content: ").append(messageBody).append("\n")
-                .append("MemberId: ").append(memberId.toString()).append("\n");
+                .append("MemberId: ").append(memberId.toString()).append("\n\n")
+                .append("== Stack Trace ==").append("\n")
+                .append(stackTrace)
+                .toString();
 
-        webHookService.sendErrorLog(webHookMessage.toString());
+        if (webHookMessage.length() >= 2000) {
+            webHookMessage = webHookMessage.substring(0, 1999);
+        }
+
+        webHookService.sendErrorLog(webHookMessage);
     }
 
     @MessageExceptionHandler(RuntimeException.class)
@@ -66,19 +77,28 @@ public class WebSocketExceptionAdvice {
         }
         Object memberId = accessor.getSessionAttributes().get("member_id");
 
+        List<StackTraceElement> stackTrace = Arrays.stream(exception.getStackTrace())
+                .filter(stackTraceElement -> stackTraceElement.toString().contains("com.ittory."))
+                .collect(Collectors.toList());
+
         StringBuilder sb = new StringBuilder();
-        StringBuilder webHookMessage = sb.append("======= Socket Error =======").append("\n")
+        String webHookMessage = sb.append("======= Socket Error =======").append("\n")
                 .append(exception.getClass().getName())
                 .append(" -> ")
                 .append(exception.getMessage()).append("\n\n")
-                .append("== Stack Trace ==").append("\n")
-                .append(Arrays.toString(exception.getStackTrace()), 0, 1500).append("\n\n")
                 .append("== Request Trace ==").append("\n")
                 .append("Destination: ").append(destination).append("\n")
                 .append("Message Content: ").append(messageBody).append("\n")
-                .append("MemberId: ").append(memberId.toString()).append("\n");
+                .append("MemberId: ").append(memberId.toString()).append("\n\n")
+                .append("== Stack Trace ==").append("\n")
+                .append(stackTrace)
+                .toString();
 
-        webHookService.sendErrorLog(webHookMessage.toString());
+        if (webHookMessage.length() >= 2000) {
+            webHookMessage = webHookMessage.substring(0, 1999);
+        }
+
+        webHookService.sendErrorLog(webHookMessage);
     }
 
 }

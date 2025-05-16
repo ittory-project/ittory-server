@@ -29,4 +29,8 @@ public interface ParticipantRepositoryCustom {
     Integer countEnterParticipantByLetterId(Long letterId);
 
     Optional<Participant> findEnterParticipantByLetterIdAndMemberId(Long letterId, Long memberId);
+
+    Optional<Participant> findByLetterIdAndSequence(Long letterId, Integer sequence);
+
+    List<Participant> findAllProgressParticipantsWithMember(Long letterId);
 }

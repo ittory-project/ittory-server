@@ -43,4 +43,12 @@ public class ElementService {
                 element.getElementImage().getUrl(), request.getContent(), element.getSequence());
     }
 
+    @Transactional(readOnly = true)
+    public AllElementsResponse getCurrentElements(Long letterId) {
+        List<ElementSimpleResponse> content = elementDomainService.findAllByLetterId(letterId).stream()
+                .map(ElementSimpleResponse::from)
+                .toList();
+
+        return AllElementsResponse.from(content);
+    }
 }

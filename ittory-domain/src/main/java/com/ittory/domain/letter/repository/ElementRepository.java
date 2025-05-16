@@ -6,7 +6,5 @@ import com.ittory.domain.participant.domain.Participant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ElementRepository extends JpaRepository<Element, Long>, ElementRepositoryCustom {
-    Integer countByParticipant(Participant participant);
-
     void deleteAllByLetterId(Long letterId);
 }
