@@ -44,12 +44,12 @@ public class WriteTimeManager {
         // 2. Task 생성
         ScheduledFuture<?> timeoutTask = SCHEDULER.schedule(() -> {
             Participant participant = participantService.findById(participantId);
+            handleParticipantTimeout(letterId, participant);
+            proceedToNextParticipant(letterId, participant);
+
             sendTimeoutMessage(letterId);
             TIMEOUT_TASKS.remove(letterId);
             log.info("Letter {} TIMEOUT", letterId);
-
-            handleParticipantTimeout(letterId, participant);
-            proceedToNextParticipant(letterId, participant);
 
         }, delayMillis, TimeUnit.MILLISECONDS);
 
