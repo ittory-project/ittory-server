@@ -36,19 +36,19 @@ public class WriteTimeManager {
     private static final Integer WRITE_TIME = 30;
     private static final Integer TIMEOUT_EJECTION_COUNT = 2;
 
-    public void registerWriteTimer(Long letterId, LocalDateTime startTime, Long participantId) {
+    public void registerWriteTimer(Long letterId, LocalDateTime startTime, Long participantId, Integer timeWeight) {
         // 1. TIME OUT 시간 결정
-        Duration delay = Duration.between(LocalDateTime.now(), startTime.plusSeconds(WRITE_TIME));
+        Duration delay = Duration.between(LocalDateTime.now(), startTime.plusSeconds(WRITE_TIME + timeWeight));
         long delayMillis = Math.max(delay.toMillis(), 0);
 
         // 2. Task 생성
         ScheduledFuture<?> timeoutTask = SCHEDULER.schedule(() -> {
+            log.warn("Letter {} TIMEOUT, participant: {}", letterId, participantId);
             Participant participant = participantService.findById(participantId);
             handleParticipantTimeout(letterId, participant);
             proceedToNextParticipant(letterId, participant);
 
             sendTimeoutMessage(letterId);
-            TIMEOUT_TASKS.remove(letterId);
             log.info("Letter {} TIMEOUT", letterId);
 
         }, delayMillis, TimeUnit.MILLISECONDS);
@@ -85,7 +85,9 @@ public class WriteTimeManager {
         if (nextParticipant != null) {
             LocalDateTime nowTime = LocalDateTime.now();
             elementDomainService.changeProcessDataByLetterId(letterId, nowTime, nextParticipant);
-            registerWriteTimer(letterId, nowTime, nextParticipant.getId());
+            removeWriteTimer(letterId);
+            registerWriteTimer(letterId, nowTime, nextParticipant.getId(), 0);
+            log.warn("register WriteTimer for Letter {} with Next Participant {}", letterId, nextParticipant.getId());
         } else {
             letterDomainService.updateLetterStatus(letterId, LetterStatus.COMPLETED);
             log.info("Finish Letter {} with No Participant", letterId);
@@ -95,10 +97,10 @@ public class WriteTimeManager {
     public void removeWriteTimer(Long letterId) {
         ScheduledFuture<?> future = TIMEOUT_TASKS.remove(letterId);
         if (future != null) {
-            future.cancel(false);
-            log.info("Letter {}'s elements were written in time.", letterId);
+            future.cancel(true);
+            log.info("Timer Cancel because Letter {}'s elements were written in time.", letterId);
         }
 
-        log.info("Remove WriteTimer Size = {}", TIMEOUT_TASKS.size());
+        log.info("Remove WriteTimer Size = {}, future: {}", TIMEOUT_TASKS.size(), future==null);
     }
 }
