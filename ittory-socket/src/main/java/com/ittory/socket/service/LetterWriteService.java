@@ -37,7 +37,7 @@ public class LetterWriteService {
         writeTimeManager.removeWriteTimer(letterId);
 
         Element currentElement = updateCurrentElement(memberId, letterId, request);
-        Participant nextParticipant = participantService.findNextParticipant(letterId, currentElement.getParticipant());
+        Participant nextParticipant = participantService.findNextParticipant(letterId, currentElement.getParticipant(), false);
         LocalDateTime now = LocalDateTime.now();
         Element nextElement = prepareNextElement(letterId, nextParticipant, now);
 

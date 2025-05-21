@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-
 @Service
 @RequiredArgsConstructor
 public class ParticipantService {
@@ -22,12 +20,16 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public Participant findNextParticipant(Long letterId, Participant currentParticipant) {
+    public Participant findNextParticipant(Long letterId, Participant currentParticipant, boolean isExited) {
         Integer totalParticipants = participantDomainService.findAllNowParticipants(letterId).size();
         if (totalParticipants == 0) {
             return null;
         }
         int nextSequence = (currentParticipant.getSequence() % totalParticipants) + 1;
+
+        if (isExited && nextSequence > 1) {
+            nextSequence--;
+        }
         return participantDomainService.findParticipantBySequence(letterId, nextSequence);
     }
 

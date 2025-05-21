@@ -45,8 +45,8 @@ public class WriteTimeManager {
         ScheduledFuture<?> timeoutTask = SCHEDULER.schedule(() -> {
             log.warn("Letter {} TIMEOUT, participant: {}", letterId, participantId);
             Participant participant = participantService.findById(participantId);
-            handleParticipantTimeout(letterId, participant);
-            proceedToNextParticipant(letterId, participant);
+            boolean isExited = handleParticipantTimeout(letterId, participant);
+            proceedToNextParticipant(letterId, participant, isExited);
 
             sendTimeoutMessage(letterId);
             log.info("Letter {} TIMEOUT", letterId);
@@ -65,7 +65,7 @@ public class WriteTimeManager {
         messagingTemplate.convertAndSend(destination, message);
     }
 
-    private void handleParticipantTimeout(Long letterId, Participant participant) {
+    private boolean handleParticipantTimeout(Long letterId, Participant participant) {
         participantService.changeTimeoutCount(participant, participant.getTimeoutCount()+1);
         if (participant.getTimeoutCount() >= TIMEOUT_EJECTION_COUNT) {
             // 퇴장 로직
@@ -77,11 +77,14 @@ public class WriteTimeManager {
             String destination = "/topic/letter/" + letterId;
             ExitResponse message = ExitResponse.from(participant, false);
             messagingTemplate.convertAndSend(destination, message);
+            return true;
         }
+        return false;
     }
 
-    private void proceedToNextParticipant(Long letterId, Participant participant) {
-        Participant nextParticipant = participantService.findNextParticipant(letterId, participant);
+    private void proceedToNextParticipant(Long letterId, Participant participant, boolean isExited) {
+        Participant nextParticipant = participantService.findNextParticipant(letterId, participant, isExited);
+        log.warn("Next Participant Id: {}, nickname: {}", nextParticipant.getId(), nextParticipant.getNickname());
         if (nextParticipant != null) {
             LocalDateTime nowTime = LocalDateTime.now();
             elementDomainService.changeProcessDataByLetterId(letterId, nowTime, nextParticipant);
