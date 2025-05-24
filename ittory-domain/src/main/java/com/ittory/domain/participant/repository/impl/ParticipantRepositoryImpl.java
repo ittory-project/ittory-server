@@ -64,7 +64,7 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
     public List<Participant> findAllParticipantsWithMember(Long letterId) {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.member, member).fetchJoin()
-                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.ne(GUEST)))
+                .where(participant.letter.id.eq(letterId).and(participant.participantStatus.ne(EXITED)))
                 .fetch();
     }
 
