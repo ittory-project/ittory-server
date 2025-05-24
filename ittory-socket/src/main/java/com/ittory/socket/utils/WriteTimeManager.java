@@ -70,7 +70,7 @@ public class WriteTimeManager {
         if (participant.getTimeoutCount() >= TIMEOUT_EJECTION_COUNT) {
             // 퇴장 로직
             Long memberId = participant.getMember().getId();
-            letterActionService.exitFromLetter(memberId, letterId);
+            letterActionService.exitFromLetter(memberId, letterId, null);
             log.info("Member {} TIMEOUT Exit from Letter {}", memberId, letterId);
 
             // 퇴장 메세지
@@ -84,7 +84,7 @@ public class WriteTimeManager {
 
     private void proceedToNextParticipant(Long letterId, Participant participant, boolean isExited) {
         Participant nextParticipant = participantService.findNextParticipant(letterId, participant, isExited);
-        log.warn("Next Participant Id: {}, nickname: {}", nextParticipant.getId(), nextParticipant.getNickname());
+
         if (nextParticipant != null) {
             LocalDateTime nowTime = LocalDateTime.now();
             elementDomainService.changeProcessDataByLetterId(letterId, nowTime, nextParticipant);

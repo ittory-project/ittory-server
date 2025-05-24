@@ -25,6 +25,7 @@ public class LetterProcessService {
     private final LetterDomainService letterDomainService;
     private final ElementDomainService elementDomainService;
     private final LetterBoxDomainService letterBoxDomainService;
+    private final ParticipantSessionService participantSessionService;
 
     private final WriteTimeManager writeTimeManager;
 
@@ -38,6 +39,10 @@ public class LetterProcessService {
         Participant participant = participantDomainService.findParticipantBySequence(letterId, 1);
         LocalDateTime now = LocalDateTime.now();
         elementDomainService.updateStartTimeAndWriter(letterId, 1, participant, now);
+
+        // ConnectSession 삭제
+        List<Participant> allParticipants = participantDomainService.findAllParticipants(letterId);
+        participantSessionService.removeAllSessions(allParticipants);
 
         // 타이머 설정
         writeTimeManager.registerWriteTimer(letterId, now, participant.getId(), 14);

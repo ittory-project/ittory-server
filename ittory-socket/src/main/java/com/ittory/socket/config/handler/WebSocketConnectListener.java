@@ -2,6 +2,8 @@ package com.ittory.socket.config.handler;
 
 import com.ittory.common.jwt.AccessTokenInfo;
 import com.ittory.common.jwt.JwtProvider;
+import com.ittory.domain.participant.domain.Participant;
+import com.ittory.socket.service.ParticipantSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -19,6 +21,8 @@ import java.util.Objects;
 public class WebSocketConnectListener {
 
     private final JwtProvider jwtProvider;
+    private final WebSocketSessionDisconnectHandler webSocketSessionDisconnectHandler;
+    private final ParticipantSessionService participantSessionService;
 
     @EventListener
     public void onConnect(SessionConnectEvent event) {
@@ -26,7 +30,17 @@ public class WebSocketConnectListener {
         String sessionId = accessor.getSessionId();
         Long memberId = getMemberId(accessor);
 
-        log.info("Connected: SessionId = {}, MemberId = {}", sessionId, memberId);
+        Participant participant = null;
+        if (memberId != null) {
+            participant = participantSessionService.findParticipantByMemberId(memberId);
+        }
+
+        if (participant != null) {
+            log.info("Reconnected: SessionId = {}, MemberId = {}", sessionId, memberId);
+            webSocketSessionDisconnectHandler.handleReconnect(sessionId, memberId);
+        } else {
+            log.info("Connected: SessionId = {}, MemberId = {}", sessionId, memberId);
+        }
     }
 
     private Long getMemberId(StompHeaderAccessor accessor) {
@@ -50,6 +64,7 @@ public class WebSocketConnectListener {
             memberId = Long.parseLong(accessor.getSessionAttributes().get("member_id").toString());
         }
 
+        webSocketSessionDisconnectHandler.handleDisconnect(sessionId);
         log.info("Disconnect: SessionId = {}, MemberId = {}", sessionId, memberId);
     }
 }
