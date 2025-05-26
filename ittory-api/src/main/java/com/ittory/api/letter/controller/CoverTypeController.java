@@ -32,10 +32,10 @@ public class CoverTypeController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "커버타입 모두 조회", description = "생성 순서대로 오름차순 정렬.")
+    @Operation(summary = "커버타입 모두 조회", description = "ACTIVE 상태의 커버타입만, 생성 순서대로 오름차순 정렬.")
     @GetMapping("/all")
-    public ResponseEntity<List<CoverTypeSearchResponse>> getAllCoverType() {
-        List<CoverTypeSearchResponse> response = coverTypeService.getAllCoverTypes();
+    public ResponseEntity<List<CoverTypeSearchResponse>> getAllActiveCoverType() {
+        List<CoverTypeSearchResponse> response = coverTypeService.getAllActiveCoverType();
         return ResponseEntity.ok().body(response);
     }
 }
