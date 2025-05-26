@@ -25,6 +25,8 @@ public class CorsConfig {
 
         if (activeProfile.equals("dev")) {
             configuration.addAllowedOriginPattern("https://*.ngrok-free.app");
+            configuration.addAllowedOriginPattern("*.ittory-client.pages.dev");
+
         }
 
         configuration.addAllowedHeader("Authorization");
