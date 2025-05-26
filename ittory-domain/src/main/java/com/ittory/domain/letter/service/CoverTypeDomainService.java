@@ -28,7 +28,7 @@ public class CoverTypeDomainService {
     }
 
     @Transactional(readOnly = true)
-    public List<CoverType> findAllCoverType() {
+    public List<CoverType> getAllCoverType() {
         return coverTypeRepository.findAll();
     }
 }

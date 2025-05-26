@@ -2,6 +2,7 @@ package com.ittory.domain.letter.domain;
 
 import com.ittory.domain.common.BaseEntity;
 import com.ittory.domain.letter.dto.CoverTypeImages;
+import com.ittory.domain.letter.enums.CoverTypeStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -46,6 +47,10 @@ public class CoverType extends BaseEntity {
     @Column(name = "list_color")
     private String listColor;
 
+    @Column(name = "cover_type_status")
+    @Enumerated(EnumType.STRING)
+    private CoverTypeStatus coverTypeStatus;
+
 
     public static CoverType create(String name, CoverTypeImages request) {
         return CoverType.builder()
@@ -57,6 +62,11 @@ public class CoverType extends BaseEntity {
                 .confirmImageUrl(request.getConfirmImageUrl())
                 .outputBackgroundImageUrl(request.getOutputBackgroundImageUrl())
                 .loadingBackgroundImageUrl(request.getLoadingBackgroundImageUrl())
+                .coverTypeStatus(CoverTypeStatus.ACTIVE)
                 .build();
+    }
+
+    public boolean isActive() {
+        return this.coverTypeStatus.equals(CoverTypeStatus.ACTIVE);
     }
 }

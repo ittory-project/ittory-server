@@ -6,6 +6,7 @@ import com.ittory.api.letter.dto.CoverTypeCreateResponse;
 import com.ittory.api.letter.dto.CoverTypeSearchResponse;
 import com.ittory.domain.letter.domain.CoverType;
 import com.ittory.domain.letter.dto.CoverTypeImages;
+import com.ittory.domain.letter.enums.CoverTypeStatus;
 import com.ittory.domain.letter.service.CoverTypeDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,9 @@ public class CoverTypeService {
         return CoverTypeSearchResponse.from(coverType);
     }
 
-    public List<CoverTypeSearchResponse> getAllCoverTypes() {
-        return coverTypeDomainService.findAllCoverType().stream()
+    public List<CoverTypeSearchResponse> getAllActiveCoverType() {
+        return coverTypeDomainService.getAllCoverType().stream()
+                .filter(CoverType::isActive)
                 .map(CoverTypeSearchResponse::from)
                 .toList();
     }
