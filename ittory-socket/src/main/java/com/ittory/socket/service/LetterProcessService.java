@@ -45,7 +45,7 @@ public class LetterProcessService {
         participantSessionService.removeAllSessions(allParticipants);
 
         // 타이머 설정
-        writeTimeManager.registerWriteTimer(letterId, now, participant.getId(), 14);
+        writeTimeManager.registerWriteTimer(letterId, now, participant.getId(), 12);
 
         return StartResponse.from(letterId);
     }

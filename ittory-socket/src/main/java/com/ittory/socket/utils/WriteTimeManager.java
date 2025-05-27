@@ -33,7 +33,7 @@ public class WriteTimeManager {
     private final Map<Long, ScheduledFuture<?>> TIMEOUT_TASKS = new ConcurrentHashMap<>();
     private final SimpMessagingTemplate messagingTemplate;
 
-    private static final Integer WRITE_TIME = 1200;
+    private static final Integer WRITE_TIME = 100;
     private static final Integer TIMEOUT_EJECTION_COUNT = 2;
 
     public void registerWriteTimer(Long letterId, LocalDateTime startTime, Long participantId, Integer timeWeight) {
