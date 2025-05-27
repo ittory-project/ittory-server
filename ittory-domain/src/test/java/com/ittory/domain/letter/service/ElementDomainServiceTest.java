@@ -80,10 +80,10 @@ public class ElementDomainServiceTest {
         participantRepository.save(participant);
         Element savedElement = elementRepository.save(element);
 
-        ElementEditData editData = ElementEditData.of(1, "New Letter Element");
+        ElementEditData editData = ElementEditData.of(1L, "New Letter Element");
 
         //when
-        elementDomainService.changeContent(letter.getId(), participant, editData);
+        elementDomainService.changeContent(participant, editData);
 
         //then
         Element findElement = elementRepository.findById(savedElement.getId()).orElse(null);

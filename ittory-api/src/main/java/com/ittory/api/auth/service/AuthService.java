@@ -23,19 +23,19 @@ public class AuthService {
         memberDomainService.changeRefreshToken(member, null);
     }
 
-    public TokenRefreshResponse renewToken(String accessToken, String refreshToken) {
-        Long memberId = jwtProvider.getSubByExpiredToken(accessToken);
-        Member member = memberDomainService.findMemberById(memberId);
+    public TokenRefreshResponse renewToken(String refreshToken) {
 
-        if (member.getRefreshToken() == null) {
+        if (!jwtProvider.isRefreshToken(refreshToken)) {
+            throw new AuthException.NotARefreshTokenTypeException(refreshToken);
+        }
+
+        Member member = memberDomainService.findMemberByRefreshToken(refreshToken);
+
+        if (member == null) {
             throw new AuthException.NoRefreshTokenException();
         }
 
-        if (!member.getRefreshToken().equals(refreshToken)) {
-            throw new AuthException.RefreshTokenNotMatchException(refreshToken);
-        }
-
-        String newCreatedAccessToken = createdAccessToken(memberId);
+        String newCreatedAccessToken = createdAccessToken(member.getId());
 
         return TokenRefreshResponse.of(newCreatedAccessToken);
 

@@ -11,4 +11,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     Optional<Member> findBySocialId(Long socialId);
 
     long countByMemberStatus(MemberStatus memberStatus);
+
+    Optional<Member> findByRefreshToken(String refreshToken);
+
 }

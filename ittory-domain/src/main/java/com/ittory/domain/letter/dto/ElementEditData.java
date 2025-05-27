@@ -10,12 +10,12 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ElementEditData {
 
-    private Integer sequence;
+    private Long elementId;
     private String content;
 
-    public static ElementEditData of(Integer sequence, String content) {
+    public static ElementEditData of(Long elementId, String content) {
         return ElementEditData.builder()
-                .sequence(sequence)
+                .elementId(elementId)
                 .content(content)
                 .build();
     }

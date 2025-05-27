@@ -12,4 +12,6 @@ public interface WebHookService {
 
     void sendNPlusOneOccurrence(String message);
 
+    void sendErrorLog(String message);
+
 }

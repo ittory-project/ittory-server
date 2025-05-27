@@ -7,6 +7,7 @@ spring:
     import:
       - domain.yml
       - common.yml
+      - infra.yml
 
 ---
 spring:

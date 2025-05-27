@@ -1,17 +1,17 @@
 package com.ittory.api.auth.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TokenRefreshRequest {
 
-    @NotNull
+    @Nullable
     private String accessToken;
-    @NotNull
+    @Nullable
     private String refreshToken;
 
 }

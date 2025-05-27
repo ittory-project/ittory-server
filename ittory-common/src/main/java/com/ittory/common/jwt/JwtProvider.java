@@ -1,7 +1,5 @@
 package com.ittory.common.jwt;
 
-import static com.ittory.common.constant.TokenConstant.TOKEN_TYPER;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ittory.common.jwt.exception.JwtException;
@@ -13,14 +11,17 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Base64;
-import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Base64;
+import java.util.Date;
+
+import static com.ittory.common.constant.TokenConstant.TOKEN_TYPER;
 
 @Slf4j
 @Component
@@ -52,7 +53,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME * 1000))
+                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .claim("role", role)
                 .claim("type", "ACCESS")
@@ -66,7 +67,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION_TIME * 1000))
+                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION_TIME))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .claim("type", "REFRESH")
                 .compact();
@@ -110,4 +111,17 @@ public class JwtProvider {
         }
     }
 
+    public boolean isRefreshToken(String refreshToken) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String[] splitToken = refreshToken.split("\\.");
+            String base64EncodedBody = splitToken[1];
+            String body = new String(Base64.getUrlDecoder().decode(base64EncodedBody));
+            JsonNode payloadJson = objectMapper.readTree(body);
+            return payloadJson.get("type").asText().equals("REFRESH");
+        } catch (Exception exception) {
+            throw new InvalidateTokenException(refreshToken);
+        }
+    }
 }

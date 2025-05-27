@@ -77,4 +77,17 @@ public class MemberDomainService {
         Integer participationLetterCount = letterBoxRepository.countParticipationLetterByMemberId(memberId);
         return participationLetterCount > 0;
     }
+
+    @Transactional(readOnly = true)
+    public Member findMemberByRefreshToken(String refreshToken) {
+        return memberDomainRepository.findByRefreshToken(refreshToken).orElse(null);
+    }
+
+    public Member findMemberByLoginId(String loginId) {
+        return memberDomainRepository.findByLoginId(loginId).orElseThrow(() -> new MemberNotFoundException(loginId));
+    }
+
+    public List<Member> findAllIdMember() {
+        return memberDomainRepository.findAllAuthId();
+    }
 }
