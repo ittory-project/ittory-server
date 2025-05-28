@@ -29,6 +29,8 @@ public class LetterProcessService {
 
     private final WriteTimeManager writeTimeManager;
 
+    private static final Integer START_WEIGHT_TIME= 15;
+
     @Transactional
     public StartResponse startLetter(Long letterId) {
         // 상태 변경
@@ -37,7 +39,7 @@ public class LetterProcessService {
 
         // 시작시간과 작성자 설정
         Participant participant = participantDomainService.findParticipantBySequence(letterId, 1);
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().plusSeconds(START_WEIGHT_TIME);
         elementDomainService.updateStartTimeAndWriter(letterId, 1, participant, now);
 
         // ConnectSession 삭제
@@ -45,7 +47,7 @@ public class LetterProcessService {
         participantSessionService.removeAllSessions(allParticipants);
 
         // 타이머 설정
-        writeTimeManager.registerWriteTimer(letterId, now, participant.getId(), 15);
+        writeTimeManager.registerWriteTimer(letterId, now, participant.getId());
 
         return StartResponse.from(letterId);
     }
