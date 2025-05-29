@@ -93,6 +93,7 @@ public class WriteTimeManager {
             log.warn("register WriteTimer for Letter {} with Next Participant {}", letterId, nextParticipant.getId());
         } else {
             letterDomainService.updateLetterStatus(letterId, LetterStatus.COMPLETED);
+            removeWriteTimer(letterId);
             log.info("Finish Letter {} with No Participant", letterId);
         }
     }
