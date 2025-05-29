@@ -36,9 +36,9 @@ public class WriteTimeManager {
     private static final Integer WRITE_TIME = 100;
     private static final Integer TIMEOUT_EJECTION_COUNT = 2;
 
-    public void registerWriteTimer(Long letterId, LocalDateTime startTime, Long participantId, Integer timeWeight) {
+    public void registerWriteTimer(Long letterId, LocalDateTime startTime, Long participantId) {
         // 1. TIME OUT 시간 결정
-        Duration delay = Duration.between(LocalDateTime.now(), startTime.plusSeconds(WRITE_TIME + timeWeight));
+        Duration delay = Duration.between(LocalDateTime.now(), startTime.plusSeconds(WRITE_TIME));
         long delayMillis = Math.max(delay.toMillis(), 0);
 
         // 2. Task 생성
@@ -89,10 +89,11 @@ public class WriteTimeManager {
             LocalDateTime nowTime = LocalDateTime.now();
             elementDomainService.changeProcessDataByLetterId(letterId, nowTime, nextParticipant);
             removeWriteTimer(letterId);
-            registerWriteTimer(letterId, nowTime, nextParticipant.getId(), 0);
+            registerWriteTimer(letterId, nowTime, nextParticipant.getId());
             log.warn("register WriteTimer for Letter {} with Next Participant {}", letterId, nextParticipant.getId());
         } else {
             letterDomainService.updateLetterStatus(letterId, LetterStatus.COMPLETED);
+            removeWriteTimer(letterId);
             log.info("Finish Letter {} with No Participant", letterId);
         }
     }

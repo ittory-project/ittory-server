@@ -65,6 +65,7 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.member, member).fetchJoin()
                 .where(participant.letter.id.eq(letterId).and(participant.participantStatus.ne(EXITED)))
+                .orderBy(participant.updatedAt.desc())
                 .fetch();
     }
 

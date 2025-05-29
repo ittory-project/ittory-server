@@ -42,7 +42,7 @@ public class LetterWriteService {
         Element nextElement = prepareNextElement(letterId, nextParticipant, now);
 
         if (nextElement != null) {
-            writeTimeManager.registerWriteTimer(letterId, now, nextParticipant.getId(), 0);
+            writeTimeManager.registerWriteTimer(letterId, now, nextParticipant.getId());
         }
 
         return WriteResponse.of(currentElement, nextElement);
