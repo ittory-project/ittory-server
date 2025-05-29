@@ -57,12 +57,11 @@ public class LetterService {
     public LetterDetailResponse getLetterForDetails(Long letterId) {
         Letter letter = letterDomainService.findLetterById(letterId);
         List<Element> elements = elementDomainService.findAllByLetterId(letterId);
-        Set<String> nicknames = elements.stream()
-                .filter(element -> element.getParticipant() != null)
-                .map(element -> element.getParticipant().getNickname())
-                .collect(Collectors.toSet());
+        List<String> nicknames = participantDomainService.findAllParticipants(letterId).stream()
+                .map(Participant::getNickname)
+                .toList();
 
-        return LetterDetailResponse.of(letter, nicknames.stream().toList(), elements);
+        return LetterDetailResponse.of(letter, nicknames, elements);
     }
 
     public LetterEnterStatusResponse checkEnterStatus(Long letterId) {
