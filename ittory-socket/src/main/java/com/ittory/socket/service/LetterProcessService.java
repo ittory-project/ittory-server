@@ -29,7 +29,7 @@ public class LetterProcessService {
 
     private final WriteTimeManager writeTimeManager;
 
-    private static final Integer START_WEIGHT_TIME= 15;
+    private static final Integer START_WEIGHT_TIME= 17;
 
     @Transactional
     public StartResponse startLetter(Long letterId) {
