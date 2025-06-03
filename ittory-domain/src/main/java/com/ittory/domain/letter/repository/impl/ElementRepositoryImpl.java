@@ -86,7 +86,7 @@ public class ElementRepositoryImpl implements ElementRepositoryCustom {
                         .and(element.startTime.isNull())
                         .and(element.content.isNull())
                 )
-                .orderBy(element.createdAt.asc())
+                .orderBy(element.id.asc())
                 .limit(1)
                 .fetchOne();
 
