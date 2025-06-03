@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-import static com.ittory.domain.participant.enums.ParticipantStatus.EXITED;
-import static com.ittory.domain.participant.enums.ParticipantStatus.GUEST;
+import static com.ittory.domain.participant.enums.ParticipantStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,10 @@ public class LetterActionService {
     @Transactional
     public EnterResponse enterToLetter(Long memberId, Long letterId, String sessionId) {
         Participant participant = participantDomainService.findParticipant(letterId, memberId);
-        participant.changeParticipantStatus(ParticipantStatus.ENTER);
+        if (!Objects.equals(participant.getParticipantStatus(), PROGRESS)) {
+            participant.changeParticipantStatus(ENTER);
+        }
+
         List<ParticipantProfile> participants = participantDomainService.findAllCurrentParticipantsOrderedBySequence(letterId, null)
                 .stream()
                 .map(ParticipantProfile::from)
