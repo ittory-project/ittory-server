@@ -38,7 +38,10 @@ public class ParticipantRepositoryImpl implements ParticipantRepositoryCustom {
         return jpaQueryFactory.selectFrom(participant)
                 .leftJoin(participant.member, member).fetchJoin()
                 .where(participant.letter.id.in(letterId)
-                        .and(participant.participantStatus.eq(ENTER).or(participant.participantStatus.eq(PROGRESS)))
+                        .and(participant.participantStatus.eq(ENTER)
+                                .or(participant.participantStatus.eq(PROGRESS))
+                                .or(participant.participantStatus.eq(COMPLETED))
+                        )
                 )
                 .orderBy(getOrderParticipant(isAscending))
                 .fetch();
