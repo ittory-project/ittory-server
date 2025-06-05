@@ -46,6 +46,9 @@ public class Letter extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LetterStatus letterStatus;
 
+    private LocalDateTime finishedAt;
+
+
     public static Letter create(CoverType coverType, Font font, String receiverName, LocalDateTime deliveryDate,
                                 String title, String coverPhotoUrl, Integer repeatCount) {
         return Letter.builder()
@@ -66,6 +69,9 @@ public class Letter extends BaseEntity {
 
     public void changeStatus(LetterStatus letterStatus) {
         this.letterStatus = letterStatus;
+    }
+    public void changeFinishedAt(LocalDateTime finishedAt) {
+        this.finishedAt = finishedAt;
     }
 
 }
