@@ -23,6 +23,7 @@ public class LetterDetailResponse {
     private LocalDateTime deliveryDate;
     private String title;
     private String coverPhotoUrl;
+    private LocalDateTime finishedAt;
     private List<String> participantNames;
     private List<LetterElementResponse> elements;
 
@@ -35,6 +36,7 @@ public class LetterDetailResponse {
                 .deliveryDate(letter.getDeliveryDate())
                 .title(letter.getTitle())
                 .coverPhotoUrl(letter.getCoverPhotoUrl())
+                .finishedAt(letter.getFinishedAt())
                 .participantNames(participantNames)
                 .elements(elements.stream()
                         .map(LetterElementResponse::from)

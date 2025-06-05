@@ -45,7 +45,7 @@ public class ParticipantException extends GlobalException {
 
     public static class DuplicateNicknameException extends ParticipantException {
         public DuplicateNicknameException(String nickname) {
-            super(DUPLICATE_PARTICIPANT_ERROR.getStatus(),
+            super(DUPLICATE_NICKNAME_ERROR.getStatus(),
                     new ErrorInfo<>(DUPLICATE_NICKNAME_ERROR.getCode(), DUPLICATE_NICKNAME_ERROR.getMessage(), nickname));
         }
     }

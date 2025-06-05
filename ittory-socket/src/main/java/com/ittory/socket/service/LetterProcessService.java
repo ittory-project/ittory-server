@@ -52,6 +52,7 @@ public class LetterProcessService {
         return StartResponse.from(letterId);
     }
 
+    @Transactional
     public void finishLetter(Long letterId) {
         // 타이머 제거
         writeTimeManager.removeWriteTimer(letterId);
@@ -64,5 +65,8 @@ public class LetterProcessService {
         Letter letter = letterDomainService.findLetter(letterId);
         List<Participant> participants = participantDomainService.findAllParticipants(letterId);
         letterBoxDomainService.saveAllInParticipationLetterBox(participants, letter);
+
+        // 종료 시간 저장
+        letter.changeFinishedAt(LocalDateTime.now());
     }
 }
